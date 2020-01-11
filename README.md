@@ -1,2 +1,6 @@
-# comp3000gproj
-COMP3000B Group Project
+# COMP3000 Group Project
+Project Members:
+- Gavin Jackson
+- MacKenzie Bedard
+- Michael Ting
+- Ian Wilkinson
