@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,22 +8,60 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Today's Meal!"
-        android:textSize="85px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
-
     <SearchView
+        android:id="@+id/search"
         android:layout_width="409dp"
         android:layout_height="86dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="1dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:text="Main Page"
+        android:textSize="85px"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintVertical_bias="0.14" />
+
+    <Button
+        android:id="@+id/mealPlannerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="Meal Planner" />
+
+    <Button
+        android:id="@+id/groceryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mealPlannerButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="Grocery List" />
+
+    <Button
+        android:id="@+id/cookingAssistantButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groceryButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="Cooking Assistant" />
+
+    <Button
+        android:id="@+id/recipeBrowserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cookingAssistantButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="Recipe Browser" />
+
+
+</RelativeLayout>

@@ -12,7 +12,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.Button;
+import android.content.Intent;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Button groceryListButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,19 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        groceryListButton = (Button) findViewById(R.id.groceryButton);
+        groceryListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGroceryList();
+            }
+        });
+    }
+
+    public void openGroceryList(){
+        Intent intent = new Intent(this, GroceryList.class);
+        startActivity(intent);
     }
 
     @Override
