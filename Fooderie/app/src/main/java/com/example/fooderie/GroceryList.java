@@ -33,7 +33,7 @@ public class GroceryList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list);
 
-        grocerySearch = (SearchView) findViewById(R.id.searchGroceries);
+        grocerySearch = findViewById(R.id.searchGroceries);
         resultView = findViewById(R.id.resultItems);
         FloatingActionButton addItem = findViewById(R.id.addGroceryItem);
 

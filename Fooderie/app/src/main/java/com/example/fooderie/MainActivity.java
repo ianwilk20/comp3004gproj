@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import fooderie.mealPlanner.views.MealPlannerViewer;
 
 import android.view.View;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity {
 
     private Button groceryListButton;
+    private Button mealPlannerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        groceryListButton = (Button) findViewById(R.id.groceryButton);
+        groceryListButton = findViewById(R.id.groceryButton);
         groceryListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGroceryList();
+            }
+        });
+
+        final AppCompatActivity tmp = this;
+        mealPlannerButton = findViewById(R.id.mealPlannerButton);
+        mealPlannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(tmp, MealPlannerViewer.class);
+                startActivity(intent);
             }
         });
     }
