@@ -14,8 +14,8 @@
     </style>
 
 
-    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent ="@android:style/TextAppearance">
-        <item name="android:textSize">30dp</item>
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent="@android:style/TextAppearance">
+        <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/title_bar_color</item>
     </style>
 
