@@ -1,0 +1,49 @@
+Development Log – Week #1 
+Gavin Jackson, 101065531
+
+As this was the first week of development the goal for each person was quite broad and solely based on our functional requirements, as
+outlined in the pitch. I had the task of starting work on the Meal Planner. Everyone in the group was given the broad goal of reviewing
+the requirements and going about any rough implementation. The hope is to develop our project management skills and better outline
+weekly expectations as the weeks progress. As for the breakdown of my week:
+
+Sunday, Jan 26, 2020
+ - [1 Hr] Page Planning
+    o Spent the beginning parts of the day designing rough conceptual models of the Meal Planner, and different ways to store all of the
+    information.
+    
+    o Decided on a way to store the meal planner information in a 4-tiered system, starting from WeekMealPlan -> DayMealPlan -> Meal ->
+    Recipe. This accommodates for the complexities of everyone having the greatest possibility of fitting anyone’s schedule and needs
+    (multiple meals in a day, many recipes per dish, 7 different days a week, etc)
+    
+    o Briefly looked at the ways in which the information can be displayed to the user to be meaningful. Designs are tentative but the
+    solution is closer.
+    
+ - [0.75 Hr] Researched SQL related services in the context of Android Studio Development
+    o Developed a better understanding of making an entity using a class and how it interacts with the database.
+    
+    o SQL Databases would be the best for storing all parts of the meal plan and would make it much easier to use old collections (Meal,
+    DayMealPlan, and WeekMealPlan) for new meal plans.
+    
+ - [4 Hr] Developed Structure of the Meal Planner
+    o Converted the planned models into the designated classes.
+    
+    o Fluctuated between many ways of achieving the same outcome:
+         Using an interface versus an abstract class for all the Planner elements (Meal, DayMealPlan, and WeekMealPlan). Decided on
+        abstract class as it gave more versatility in making all the children have a certain set of class properties.
+         Debated using simple filesystem saving instead of Databases to avoid potential complications. As it stands there is a
+        filesystem saving and loading setup, yet highly subject to change.
+         Looked over having a strict naming convention system for new meals, each meal can have a standard name or custom name. Idea 
+        terminated.
+        
+ - [1 Hr] Testing and Understanding Android Studio
+    o Learned more about Android Studio, worked through errors arising from my code and familiarized myself with the various windows
+    
+    o Struggled with committing my work. Learned how to make a separate branch and how to commit to it. This made version controlling
+    our work easier as a pull request to merge with master is much easier to revert then committing directly to master and affecting
+    other branches. Also learned how to ensure a commit is pushed to git.
+    
+ - [0.75 Hr] Researched Android Page Views 
+    o Analyzed the various default views of an android page. Investigated Frame View, Bottom Navigation View, amongst others, to
+    identify what can work best to display the information to the user.
+    
+ - [0.5 Hr] Log Writing
