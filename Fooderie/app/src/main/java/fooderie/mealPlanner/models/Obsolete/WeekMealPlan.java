@@ -1,4 +1,4 @@
-package fooderie.mealPlanner.models;
+package fooderie.mealPlanner.models.Obsolete;
 
 import java.io.IOError;
 import java.util.ArrayList;
