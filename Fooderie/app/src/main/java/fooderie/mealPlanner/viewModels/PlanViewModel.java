@@ -11,4 +11,5 @@ public class PlanViewModel extends AndroidViewModel {
     public PlanViewModel (Application application) {
         super(application);
     }
+
 }
