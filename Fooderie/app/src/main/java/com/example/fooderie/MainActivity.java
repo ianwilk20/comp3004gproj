@@ -56,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void openRecipeBrowser(View rbView){
+        Intent rbIntent = new Intent(this, rbActivity.class);
+        startActivity(rbIntent);
+    }
+
     public void openGroceryList(){
         Intent intent = new Intent(this, GroceryList.class);
         startActivity(intent);

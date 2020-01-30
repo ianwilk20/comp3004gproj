@@ -61,6 +61,7 @@
         android:layout_below="@+id/cookingAssistantButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
+        android:onClick="openRecipeBrowser"
         android:text="Recipe Browser" />
 
 
