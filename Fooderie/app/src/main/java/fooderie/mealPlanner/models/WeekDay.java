@@ -1,4 +1,4 @@
-package fooderie.mealPlanner.models.Obsolete;
+package fooderie.mealPlanner.models;
 
 enum WeekDay {
     Monday,
