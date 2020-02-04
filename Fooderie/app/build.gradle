@@ -48,6 +48,7 @@ dependencies {
 
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
+
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // Test helpers

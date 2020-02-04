@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.GroceryList;
-import fooderie.mealPlanner.views.PlanRecyclerView;
+import fooderie.mealPlanner.views.MealPlannerViewer;
 
 import android.view.View;
 import android.view.Menu;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mealPlannerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(tmp, PlanRecyclerView.class);
+                Intent intent = new Intent(tmp, MealPlannerViewer.class);
                 startActivity(intent);
             }
         });
