@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
+import fooderie.groceryList.GroceryList;
 import fooderie.mealPlanner.views.MealPlannerViewer;
 
 import android.view.View;

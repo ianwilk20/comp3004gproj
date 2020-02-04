@@ -1,0 +1,35 @@
+Development Log – Week #2 
+Ian Wilkinson, 101073244
+
+The goal for this week for myself was to remodel how my GroceryList class interacts with the various things it gets returned from the API,
+as well as deserializing the API returns into Java objects. In addition, to add some flare to the UI and make it a more appealing exeperience 
+for our large user base (jk). As for the breakdown of my week:
+
+Saturday, Febuary 1, 2020
+ - [2 Hr] UI Alterations
+    o Spent the beginning parts of the day fixing my old design of the Grocery Page to now have a more simplistic and inviting UI
+    o Added a list view for grocery items
+    o A radio toggle switch to filter between "Aisles" and "Recipe" mode for grocery lists
+    o A pop-up dialogue that appears when a user wants to add an item
+    o Dialogue features "Add Item", "Cancel",  as well as a Search Bar to query the API for the ingredient
+    
+ - [1 Hr] Model Changes
+    o Implemented models and adjusted folder structure in order to prepare for the eventual parsing and deserialization of API responses
+    
+ - [3 Hr] Parsing of API Responses
+    o Converted the API responses to usable Java objects
+    o Java objects stored in HashMap for quick lookup via the key which is the ingredient name (will be store in db soon)
+        
+ - [1 Hr] Researching
+    o Learned more about Volley and how to wait for an API response to then be able to display information on the app
+    o Async and sync callback for Volley
+    o Struggled/ing with getting volley responses to be parsed then waiting on them, then displaying
+    o Investigated automatic toggle of focus for search views when the add ingredient button is pressesed 
+
+ - [1 Hr] Final Touches
+    o User can enter an ingredient, add it, it will appear in the list view
+    o BUT the ingredient is not queried with the API yet, as there is async issues preventing me from doing so
+    
+ - [0.5 Hr] Log Writing
+
+ 

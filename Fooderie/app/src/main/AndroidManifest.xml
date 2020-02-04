@@ -16,7 +16,7 @@
             android:name="fooderie.mealPlanner.views.MealPlannerViewer"
             android:label="@string/title_activity_meal_planner_viewer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".GroceryList" />
+        <activity android:name="fooderie.groceryList.GroceryList" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer"></activity>
         <activity
             android:name=".MainActivity"
