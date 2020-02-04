@@ -17,20 +17,19 @@ public class FooderieRepository {
     }
 
     /* Entity=Plan, repository interactions */
-    void insert(Plan p) {
+    public void insert(Plan p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.insert(p));
     }
 
-    List<Plan> getChildrenOfPlan(int id) {
+    public List<Plan> getChildrenOfPlan(int id) {
         return fooderieDao.getChildrenOfPlan(id);
     }
-
-    LiveData<List<Plan>> getWeeklyMealPlans() {
+    public LiveData<List<Plan>> getWeeklyMealPlans() {
         return fooderieDao.getWeeklyMealPlans();
     }
 
     /* Entity=PlanRecipe, repository interactions */
-    void insert(PlanRecipe pr) {
+    public void insert(PlanRecipe pr) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.insert(pr));
     }
 }

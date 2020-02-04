@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="fooderie.mealPlanner.views.MealPlannerViewer"
-            android:label="@string/title_activity_meal_planner_viewer"
+            android:name="fooderie.mealPlanner.views.MealPlanner"
+            android:label="@string/title_activity_meal_planner"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name="fooderie.mealPlanner.views.PlanRecyclerView"
+            android:label="@string/title_activity_mealplanner_recyclerview"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GroceryList" />
         <activity
             android:name=".MainActivity"

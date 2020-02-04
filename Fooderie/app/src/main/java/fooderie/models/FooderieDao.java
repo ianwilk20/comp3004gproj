@@ -21,10 +21,10 @@ public interface FooderieDao {
     @Query("DELETE FROM table_Plan")
     void deleteAllPlans();
 
-    @Query("SELECT * FROM table_Plan WHERE parentId == :id")
+    @Query("SELECT * FROM table_Plan WHERE parent_id == :id")
     List<Plan> getChildrenOfPlan(int id);
 
-    @Query("SELECT * FROM table_Plan WHERE parentId == 0")
+    @Query("SELECT * FROM table_Plan WHERE parent_id IS NULL")
     LiveData<List<Plan>>  getWeeklyMealPlans();
 
 
@@ -35,6 +35,6 @@ public interface FooderieDao {
     @Query("DELETE FROM table_PlanRecipe")
     void deleteAllPlanRecipes();
 
-    @Query("SELECT * FROM table_PlanRecipe, table_Recipe WHERE planId == :id AND table_Recipe.id == recipeId")
+    @Query("SELECT table_Recipe.recipe_id FROM table_PlanRecipe, table_Recipe WHERE table_PlanRecipe.plan_id == :id AND table_PlanRecipe.recipe_id == table_Recipe.recipe_id")
     List<Recipe> getRecipesForPlan(int id);
 }
