@@ -25,6 +25,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/rbResultItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text=""
+        android:textColor="@color/title_bar_color"
+        android:textSize="65px"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="191dp" />
+
     <SearchView
         android:id="@+id/rbSearchView"
         android:layout_width="match_parent"
