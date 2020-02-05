@@ -1,0 +1,9 @@
+COMP3004 Dev Log - Week #1
+Michael Ting - 101068936
+
+Weekly Progress:
+- Downloaded and set up Android Studio with the Git Repo
+- Did a test build to ensure everything was running smoothly
+- Made a rough sketch of the Cooking Assistant page to reference later
+- Created a new class and xml page for the Cooking Assistant page and linked the main page button to access
+- 
