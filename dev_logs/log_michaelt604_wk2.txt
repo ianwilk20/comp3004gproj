@@ -1,0 +1,8 @@
+COMP3004 Dev Log - Week #2
+Michael Ting - 101068936
+
+Weekly Progress:
+- Large about of research on HTML parsing to dynamically get recipe steps 
+- Started using JSoup to parse HTML
+- Successfully parsed an recipe step list from one recipe site
+- Reviewed and approved various group memeber merges
