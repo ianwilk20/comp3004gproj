@@ -1,6 +1,7 @@
 package fooderie.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,7 +33,7 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FooderieRoomDatabase.class, "fooderie_database")
-                            //.addCallback(roomDatabaseCallback)
+                            .addCallback(roomDatabaseCallback)
                             .build();
                 }
             }
@@ -60,14 +61,15 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
                 dao.deleteAllPlans();
-                dao.deleteAllPlanRecipes();
+                Log.d("FooderieRoomDatabase", "onOpen: Everything finished deleting...I think");
+                /*dao.deleteAllPlanRecipes();
 
                 Plan p = new Plan(null,"THIS IS A TEST");
                 Plan p1 = new Plan(null,"THIS IS NOT A TEST");
                 Plan p2 = new Plan(null,"THIS IS A MAYBE TEST");
                 dao.insert(p);
                 dao.insert(p1);
-                dao.insert(p2);
+                dao.insert(p2);*/
             });
         }
     };

@@ -26,14 +26,14 @@ public class FooderieRepository {
             Log.d("BANANA", "insert: plan:"+p.toString()+", Long:"+Long.toString(p_id));
 
             if (p.getParentId() == null) {
-                //List<Plan> plans = new ArrayList<Plan>();
+                List<Plan> plans = new ArrayList<Plan>();
                 for (DayOfWeek d : DayOfWeek.values()) {
-                    Plan day = new Plan(p_id, d.toString());
-                    //plans.add(day);
-                    Log.d("BANANA2", "insert: plan:"+day.toString());
-                    long c_id = fooderieDao.insert(day);
+                    Plan c = new Plan(p_id, d.toString());
+                    plans.add(c);
+                    Log.d("BANANA2", "insert: plan:"+c.toString());
+                    //long c_id = fooderieDao.insert(day);
                 }
-                //fooderieDao.insert(day);
+                fooderieDao.insert(plans);
             }
         });
     }
