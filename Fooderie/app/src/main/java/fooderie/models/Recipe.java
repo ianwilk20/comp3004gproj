@@ -10,12 +10,12 @@ import androidx.room.PrimaryKey;
 public class Recipe {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="recipe_id")
-    private int id;
+    private Long id;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

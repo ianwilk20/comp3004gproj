@@ -17,26 +17,28 @@ import androidx.room.PrimaryKey;
 public class Plan {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="plan_id")
-    private int id;
+    private Long id;
     @ColumnInfo(name="parent_id")
-    private Integer parentId;
-    private int level;
+    private Long parentId;
     private String name;
 
-    public Plan(Integer parentId, int level, String name) {
+    public Plan(Long parentId, String name) {
         this.parentId = parentId;
-        this.level = level;
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getParentId() {return parentId;}
-    public int getLevel() {return level;}
+    public Long getParentId() {return parentId;}
     public String getName() {return name;}
+
+    @Override
+    public String toString() {
+        return String.format("[id:%d, parentId:%d, name:%s]", id, parentId, name);
+    }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanRecipe;
@@ -30,27 +31,40 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            FooderieRoomDatabase.class, "fooderie_database").addCallback(roomDatabaseCallback).build();
+                            FooderieRoomDatabase.class, "fooderie_database")
+                            //.addCallback(roomDatabaseCallback)
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
 
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //database.execSQL("ALTER TABLE table_Plan DROP COLUMN level");
+            //database.execSQL("CREATE TABLE table_plan_new (plan_id INTEGER NOT NULL, parent_id INTEGER, name TEXT, "+
+             //               "PRIMARY KEY(plan_id)," +
+              //              "FOREIGN KEY (parent_id) REFERENCES table_plan_new(plan_id)");
+            //database.execSQL("INSERT INTO table_plan_new (plan_id, parent_id, name) SELECT plan_id, parent_id, name FROM table_Plan");
+            //database.execSQL("DROP TABLE table_Plan");
+            //database.execSQL("ALTER TABLE table_plan_new RENAME TO table_Plan");
+        }
+    };
+
     private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-
-            //TODO: ENSURE THIS BLOCK IS DELETED WHEN WE NEED DATABASE TO PERSIST
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
                 dao.deleteAllPlans();
                 dao.deleteAllPlanRecipes();
 
-                Plan p = new Plan(null,0,"THIS IS A TEST");
-                Plan p1 = new Plan(null,0,"THIS IS NOT A TEST");
-                Plan p2 = new Plan(null,0,"THIS IS A MAYBE TEST");
+                Plan p = new Plan(null,"THIS IS A TEST");
+                Plan p1 = new Plan(null,"THIS IS NOT A TEST");
+                Plan p2 = new Plan(null,"THIS IS A MAYBE TEST");
                 dao.insert(p);
                 dao.insert(p1);
                 dao.insert(p2);

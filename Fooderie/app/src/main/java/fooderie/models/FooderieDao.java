@@ -16,21 +16,26 @@ public interface FooderieDao {
 
     /* Entity=Plan, dao interactions */
     @Insert
-    void insert(Plan plan);
+    long insert(Plan plan);
+    @Insert
+    List<Long> insert(List<Plan> plans);
 
     @Query("DELETE FROM table_Plan")
     void deleteAllPlans();
 
     @Query("SELECT * FROM table_Plan WHERE parent_id == :id")
-    List<Plan> getChildrenOfPlan(int id);
+    LiveData<List<Plan>> getChildrenOfPlan(int id);
 
     @Query("SELECT * FROM table_Plan WHERE parent_id IS NULL")
     LiveData<List<Plan>>  getWeeklyMealPlans();
 
+    @Query("SELECT * FROM table_Plan")
+    LiveData<List<Plan>>  getAllPlans();
+
 
     /* Entity=PlanRecipe, dao interactions */
     @Insert
-    void insert(PlanRecipe planRecipe);
+    long insert(PlanRecipe planRecipe);
 
     @Query("DELETE FROM table_PlanRecipe")
     void deleteAllPlanRecipes();

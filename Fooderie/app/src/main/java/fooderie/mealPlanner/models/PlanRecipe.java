@@ -23,24 +23,24 @@ import fooderie.models.Recipe;
 public class PlanRecipe {
     @PrimaryKey (autoGenerate = true)
     @ColumnInfo(name="join_plan_recipe_id")
-    private int id;
+    private Long id;
     @ColumnInfo(name="plan_id")
-    private int planId;
+    private Long planId;
     @ColumnInfo(name="recipe_id")
-    private int recipeId;
+    private Long recipeId;
 
-    public PlanRecipe(int planId, int recipeId) {
+    public PlanRecipe(Long planId, Long recipeId) {
         this.planId = planId;
         this.recipeId = recipeId;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getPlanId() {return planId;}
-    public int getRecipeId() {return recipeId;}
+    public Long getPlanId() {return planId;}
+    public Long getRecipeId() {return recipeId;}
 }
