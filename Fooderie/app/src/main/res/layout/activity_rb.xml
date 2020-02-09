@@ -25,19 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/rbResultItems"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text=""
-        android:textColor="@color/title_bar_color"
-        android:textSize="65px"
-        tools:layout_editor_absoluteX="53dp"
-        tools:layout_editor_absoluteY="191dp" />
-
     <SearchView
         android:id="@+id/rbSearchView"
         android:layout_width="match_parent"
@@ -48,6 +35,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_below="@id/textView"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <ListView
+        android:id="@+id/rbListView"
+        android:layout_width="380dp"
+        android:layout_height="441dp"
+        android:layout_below="@id/rbSearchView"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"></ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

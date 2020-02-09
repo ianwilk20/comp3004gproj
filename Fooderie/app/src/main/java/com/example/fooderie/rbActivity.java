@@ -3,7 +3,10 @@ package com.example.fooderie;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,25 +24,36 @@ import org.json.JSONObject;
 import android.view.View;
 
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.ArrayList;
+
+import fooderie.models.Recipe;
 
 
 public class rbActivity extends AppCompatActivity {
 
     SearchView rbSearchView;
-    TextView rbResultView;
+    ListView rbListView;
     RequestQueue rbRequestQueue;
-
+    ArrayAdapter<String> rbArrAdapt;
+    ArrayList<String> rbResults = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb);
+        Log.e("IN ON CREATE", "we're in on create");
 
         rbSearchView = findViewById(R.id.rbSearchView);
-        rbResultView = findViewById(R.id.rbResultItems);
+        rbListView = findViewById(R.id.rbListView);
+        rbRequestQueue = Volley.newRequestQueue(this);
+        rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
+        rbListView.setAdapter(rbArrAdapt);
 
         rbSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -58,36 +72,46 @@ public class rbActivity extends AppCompatActivity {
     }
 
     public void jsonFetch(final String recipe){
-        String foodApiURL = "https://api.edamam.com/api/food-database/parser?ingr=basil&app_id=5bfe4f44&app_key=" +
-                "d98b79a1c20ab328a1fc73311be5d1ee";
-        String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
-        String queryParams;
-        String appKey = "d98b79a1c20ab328a1fc73311be5d1ee";
-        String appID = "5bfe4f44";
+        //String queryParams;
+        String appKey = "e58bb1dfb29eece35b4b33b46a084d56";
+        String appID = "63cfb724";
+        String rbApiUrl = "https://api.edamam.com/search?q=" + recipe + "&app_id=" + appID +"&app_key=" + appKey;// + "&from=0&to=3&calories=591-722&health=alcohol-free"
 
-        String foodApiURLProper = foodApiDomainNPath + "?ingr=" + recipe + "&app_id=" + appID + "&app_key=" + appKey;
+        //Log.e("API URL", foodApiURL);
 
-        Log.e("API URL", foodApiURL);
+        ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
 
         JsonObjectRequest objectReq = new JsonObjectRequest(
                 Request.Method.GET,
-                foodApiURLProper,
+                rbApiUrl,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("API SUCCESS response", response.toString());
                         try {
-//                            JSONObject responseTextObj = response.getJSONObject("text");
-//                            String foundItem = responseTextObj.getString("text");
-//                            JSONArray responseParsedObj = response.getJSONArray("parsed");
-//                            for (int i = 0; i < responseTextObj.length(); i++) {
-//                                JSONObject parsed = responseParsedObj.getJSONObject(i);
-//
-//                                String food = parsed.getString("food");
-                            Toast.makeText(rbActivity.this, "SUCCESS, found: " + recipe, Toast.LENGTH_SHORT).show();
-                            rbResultView.append("SUCCESS, found: " + recipe);
-                        //}
+                            JSONArray rbResponse = response.getJSONArray("hits");
+                            if (rbResponse.length() <= 0) {
+                                throw new Exception("No Results");
+                            }
+
+
+                            for (int i = 0; i < rbResponse.length(); ++i) {
+                                //parse object
+                                JSONObject recipeObj = rbResponse.getJSONObject(i);
+                                //JSONObject recipeParsed = recipeObj.getJSONObject("recipe");
+
+                                String stringifiedRecipe = recipeObj.getString("recipe");
+                                Gson gson = new GsonBuilder().create();
+
+                                Recipe recipe = gson.fromJson(stringifiedRecipe, Recipe.class);
+
+                                rbRecipeArr.add(recipe);
+                                rbResults.add(recipe.label);
+                            }
+
+                            rbArrAdapt.notifyDataSetChanged();
+                            return;
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
