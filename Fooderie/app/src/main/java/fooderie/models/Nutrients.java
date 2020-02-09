@@ -1,15 +1,22 @@
 package fooderie.models;
 
 public class Nutrients {
-    public double enerc_kcal;
-    public double procnt;
-    public double fat;
-    public double chocdf;
+    public double ENERC_KCAL;
+    public double PROCNT;
+    public double FAT;
+    public double CHOCDF;
 
     public Nutrients(){
-        enerc_kcal = 0.00;
-        procnt = 0.00;
-        fat = 0.00;
-        chocdf = 0.00;
+        ENERC_KCAL = 0.00;
+        PROCNT = 0.00;
+        FAT = 0.00;
+        CHOCDF = 0.00;
+    }
+
+    public Nutrients(double kcal, double proc, double fat_cont, double carbs){
+        ENERC_KCAL = kcal;
+        PROCNT = proc;
+        FAT = fat_cont;
+        CHOCDF = carbs;
     }
 }

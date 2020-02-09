@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -22,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.android.volley.RequestQueue;
@@ -71,9 +73,11 @@ public class GroceryList extends AppCompatActivity {
         groceryList = findViewById(R.id.groceryListDisplay);
         addItem = findViewById(R.id.addGroceryItem);
 
+        dialog = new ProgressDialog(GroceryList.this);
+
         requestQueue = Volley.newRequestQueue(this);
 
-        //arrayAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, new ArrayList<String>(myGroceryList.list.keySet()));
+        //arrayAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, new ArrayList<String>(storedGroceryList.keySet()));
         arrayAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(arrayAdapter);
 
@@ -81,6 +85,20 @@ public class GroceryList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addIngredient();
+            }
+        });
+
+        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemSelected = ((TextView) view).getText().toString(); // Gets the text of the selected item in list
+                if (itemSelected.equals(list.get(position))){
+                    //Make this send user a prompt to either edit or remove the element
+                    list.remove(position);
+                    arrayAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(GroceryList.this, "Problem Removing Element", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -103,19 +121,11 @@ public class GroceryList extends AppCompatActivity {
                 String query = grocerySearch.getQuery().toString();
 
                 if (query.length()>= 1 && query != null){
-                    //FetchIngredientAsync fetchIngredientTask = new FetchIngredientAsync();
-                    //fetchIngredientTask.execute(query);
-                    list.add(query);
-                    arrayAdapter.notifyDataSetChanged();
-//                    } else {
-//                        Toast.makeText(GroceryList.this, "We could not find your item" + query, Toast.LENGTH_SHORT).show();
-//                    }
+                    FetchIngredient(query);
                 } else if (query.length() == 0){
                     Toast.makeText(GroceryList.this, "Nothing was added" + query, Toast.LENGTH_SHORT).show();
                 }
             }
-
-
         });
 
         builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -128,6 +138,7 @@ public class GroceryList extends AppCompatActivity {
         builder.show();
     }
 
+
     public void FetchIngredient(final String ingredient){
 
         String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
@@ -139,103 +150,80 @@ public class GroceryList extends AppCompatActivity {
 
         Log.e("API URL", foodApiURL);
 
-        final Ingredient recIngredient = new Ingredient();
+        Ingredient recIngredient = new Ingredient();
 
+        dialog.setMessage("Please, wait while we find your ingredient");
+        dialog.show();
 
-        //Show progress dialog meanwhile
-        //ProgressBar progressDialog = new ProgressBar(getCallingActivity());
-    }
+        JsonObjectRequest objectReq = new JsonObjectRequest(
+                Request.Method.GET,
+                foodApiURLProper,
+                null,
+                new Response.Listener<JSONObject>() {
 
-    private class FetchIngredientAsync extends AsyncTask<String, Integer, String> {
-        public Ingredient recIngredient;
-        public String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
-        public String queryParams;
-        private String appKey = "d98b79a1c20ab328a1fc73311be5d1ee";
-        private String appID = "5bfe4f44";
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
+                        try {
+                            String text = response.getString("text"); //What user passes in and is parsed from API
 
-            dialog.setMessage("Please, wait while we find your ingredient");
-            dialog.show();
-        }
+                            JSONArray ingredientParsed = response.getJSONArray("parsed"); //The Array called "parsed"
 
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String foodApiURLProper = foodApiDomainNPath + "?ingr=" + strings[0] + "&app_id=" + appID + "&app_key=" + appKey;
-
-            JsonObjectRequest objectReq = new JsonObjectRequest(
-                    Request.Method.GET,
-                    foodApiURLProper,
-                    null,
-                    new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            try {
-                                String text = response.getString("text");
-                                text = text.toLowerCase();
-                                text = text.substring(0, 1).toUpperCase() + text.substring(1);
-
-                                JSONArray ingredientParsed = response.getJSONArray("parsed");
-                                JSONObject defReturnObj = ingredientParsed.getJSONObject(0);
-                                String ingredientObj = defReturnObj.getString("food");
-
-                                Gson gson = new GsonBuilder().create();
-                                recIngredient.ingredientName = text;
-                                recIngredient.ingredientParsed = gson.fromJson(ingredientObj, Food.class);
-
-                                JSONArray hintsParsed = response.getJSONArray("hints");
-                                for (int i = 0; i < hintsParsed.length(); i++){
-                                    JSONObject foodNMeasures = hintsParsed.getJSONObject(i);
-
-                                    JSONObject food = foodNMeasures.getJSONObject("food");
-                                    String foodObj = food.getString("food");
-                                    JSONObject measures = foodNMeasures.getJSONObject("measures");
-                                    String measuresObj = measures.getString("measures");
-
-                                    Food f = gson.fromJson(foodObj, Food.class);
-                                    Measures m = gson.fromJson(measuresObj, Measures.class);
-
-                                    Hints h = new Hints(f, m);
-                                    recIngredient.hintsParsed.add(h);
-                                }
-
-                                storedGroceryList.put(recIngredient.ingredientName, recIngredient);
-
-                                return;
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            if (ingredientParsed.length() == 0){
+                                dialog.dismiss();
+                                Toast.makeText(GroceryList.this, "Cannot find the ingredient: '" + text + "'", Toast.LENGTH_SHORT).show();
+                                throw new IngredientNotFoundException("Cannot find the ingredient: " + text);
                             }
+
+                            JSONObject defReturnObj = ingredientParsed.getJSONObject(0); //Gets the only element returned at 0 position in the "parsed" array
+                            JSONObject ingredientObj = defReturnObj.getJSONObject("food"); // The object at 0 in "parsed" array is called "food"
+                            String ingredientName = ingredientObj.getString("label"); // Gets the parsed name by the API of the ingredient we're looking for from the response
+
+                            String stringRespOfFoodObject = defReturnObj.getString("food");
+
+                            ingredientName = ingredientName.toLowerCase();
+                            ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
+
+
+                            Gson gson = new GsonBuilder().create();
+                            recIngredient.ingredientName = ingredientName;
+                            recIngredient.ingredientParsed = gson.fromJson(stringRespOfFoodObject, Food.class);
+
+                            JSONArray hintsParsed = response.getJSONArray("hints");
+                            for (int i = 0; i < hintsParsed.length(); i++){
+                                JSONObject foodNMeasures = hintsParsed.getJSONObject(i);
+
+                                String food = foodNMeasures.getString("food");
+                                String measures = foodNMeasures.getString("measures");
+
+                                Food f = gson.fromJson(food, Food.class);
+                                Measures[] m = gson.fromJson(measures, Measures[].class);
+
+                                Hints h = new Hints(f, m);
+                                recIngredient.hintsParsed.add(h);
+                            }
+
+                            storedGroceryList.put(recIngredient.ingredientName, recIngredient);
+                            list.add(recIngredient.ingredientName);
+                            arrayAdapter.notifyDataSetChanged();
+                            dialog.dismiss();
+                            return;
+
+                        } catch (IngredientNotFoundException ne){
+                            Log.e("INGRDIENT NOT FOUND", ne.toString());
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("API ERROR response", error.toString());
+                        catch (Exception e) {
+                            Log.e("ASYNCTASK ERROR", e.toString());
                         }
-                    });
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("API ERROR response", error.toString());
+                    }
+                });
 
-            //Add request to queue
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            requestQueue.add(objectReq);
-            return "Success";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Toast.makeText(GroceryList.this, s, Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        }
+        requestQueue.add(objectReq);
     }
 }
