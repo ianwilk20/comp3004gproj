@@ -1,0 +1,30 @@
+Development Log – Week #2
+Gavin Jackson, 101065531
+The goal of this week was to implement a versatile Database that we can all use to keep our data in. The hope of the Database would be to
+improve connection between our functional components. Rather than passing an entire dataset of instantiated objects (such as recipes), we
+can pass a list of recipe Ids. Additionally, using the Database makes for a much more convenient way of storing persistent information
+rather than constructing our own file storage system.
+
+Tuesday, Jan 28th, 2020
+	-	[1.5 Hr] Constructed Rough Model of the Database
+		o	Constructed entities for data storage. Plan, PlanRecipe, & Recipe
+		o	Created data access object (DAO) for direct SQL query support and database interaction
+		o	Implemented Database class to unify all database calls, ensuring only one database exists and that no time-consuming calls bog
+			down the main thread.
+		o	Created Repository for data acquisition. The hope is that the repository will be the able to distinguish whether a local cached
+			database call will suffice or if a call to the API is required.
+		o	Began implemented ViewModel with LiveData for future database testing.
+	-	[2.0 Hr] Worked on solving git related issues / android studio related issues. resolved problems
+		o	Consulted with group and had commits to master restricted to Pull Request with one other user review.
+		o	Learned the ways of git Bash.
+		
+Thursday, Jan 30th, 2020
+	-	[0.75 Hr] Read in greater depth an article on Room database. The article is as follows,
+		https://codelabs.developers.google.com/codelabs/android-room-with-a-view/?fbclid=IwAR0sece6KcyTpWDkgzcx17kUT-B3YUXHZOnPVbX71vlwMmeFRuwMDiusm-A#0
+		
+Monday, February 3rd, 2020
+	-	[3.0 Hr] Worked on implementing Database, resolved entity warnings, created recycler view layout, created viewModel. Added test
+		entries. 
+	-	[0.75 Hr] Debugged functional model, learned more SQL to identify null column entries, updated Gradle to work with newer functions 
+	-	[0.5 Hr] Log Writing
+
