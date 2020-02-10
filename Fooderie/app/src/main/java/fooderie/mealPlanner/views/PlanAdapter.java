@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fooderie.R;
@@ -12,25 +13,32 @@ import java.util.List;
 import java.util.function.Function;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder>{
     class PlanViewHolder extends RecyclerView.ViewHolder {
-        private final TextView text;
+        private final TextView title;
+        private final TextView recipeCount;
+        private final ImageView deleteButton;
+        private final ConstraintLayout layout;
         private PlanViewHolder(View item) {
             super(item);
-            text = item.findViewById(R.id.PlanItemText);
+            title = item.findViewById(R.id.planItemTitle);
+            recipeCount = item.findViewById(R.id.planItemRecipeCount);
+            deleteButton = item.findViewById(R.id.planItemDeleteButton);
+            layout = item.findViewById(R.id.planItem);
         }
     }
 
     private final LayoutInflater m_inflater;
     private List<Plan> m_displayPlans;
-    private Function<Long, Void> m_navigateToID;
+    private Function<Long, Void> m_displayChildrenPlansOfID;
 
     PlanAdapter(Context context, Function<Long, Void> func) {
         m_inflater = LayoutInflater.from(context);
-        m_navigateToID = func;
+        m_displayChildrenPlansOfID = func;
     }
 
     @Override
@@ -43,11 +51,16 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     public void onBindViewHolder(@NonNull PlanViewHolder holder, int pos) {
         if (m_displayPlans != null) {
             Plan p = m_displayPlans.get(pos);
-            holder.text.setText(p.getName());
+            holder.title.setText(p.getName().toUpperCase());
 
-            holder.text.setOnClickListener((View v)-> {
-                m_navigateToID.apply(p.getParentId());
+            holder.layout.setOnClickListener((View v)-> {
+                m_displayChildrenPlansOfID.apply(p.getId());
             });
+            holder.deleteButton.setOnClickListener((View v) -> {
+
+            });
+
+
         } else {
             holder.text.setText("N/A");
         }

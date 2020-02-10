@@ -41,19 +41,6 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //database.execSQL("ALTER TABLE table_Plan DROP COLUMN level");
-            //database.execSQL("CREATE TABLE table_plan_new (plan_id INTEGER NOT NULL, parent_id INTEGER, name TEXT, "+
-             //               "PRIMARY KEY(plan_id)," +
-              //              "FOREIGN KEY (parent_id) REFERENCES table_plan_new(plan_id)");
-            //database.execSQL("INSERT INTO table_plan_new (plan_id, parent_id, name) SELECT plan_id, parent_id, name FROM table_Plan");
-            //database.execSQL("DROP TABLE table_Plan");
-            //database.execSQL("ALTER TABLE table_plan_new RENAME TO table_Plan");
-        }
-    };
-
     private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {

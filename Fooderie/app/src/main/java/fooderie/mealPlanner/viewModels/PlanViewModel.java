@@ -5,6 +5,7 @@ import android.app.Application;
 import java.lang.reflect.Method;
 import java.security.acl.Owner;
 import java.util.List;
+import java.util.function.Function;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
@@ -15,7 +16,11 @@ import fooderie.models.FooderieRepository;
 
 public class PlanViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
-    public List<Plan> cachedPlans;
+    private List<Plan> m_cachedPlans;
+
+    public List<Plan> getAllPlans() {
+        return m_cachedPlans;
+    }
 
     public PlanViewModel (Application application) {
         super(application);
@@ -26,12 +31,12 @@ public class PlanViewModel extends AndroidViewModel {
     public void insert(Plan plan) { m_repo.insert(plan); }
     public void deleteAllPlans() {m_repo.deleteAllPlans();}
 
-    public LiveData<List<Plan>> getAllPlans(LifecycleOwner owner) {
+    public void plansObserver(LifecycleOwner owner, Function<Void, Void> update) {
         LiveData<List<Plan>> output = m_repo.getAllPlans();
         output.observe(owner, (List<Plan> plans)->{
-            cachedPlans = plans;
+            m_cachedPlans = plans;
+            update.apply(null);
         });
-        return output;
     }
 
     public LiveData<List<Plan>> getChildrenOfPlan(int i) {return m_repo.getChildrenOfPlan(i); }
