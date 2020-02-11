@@ -34,15 +34,17 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
 
     private final LayoutInflater m_inflater;
     private List<Plan> m_displayPlans;
-    private Function<Long, Void> m_displayChildrenPlansOfID;
+    private Function<Plan, Void> m_displayChildrenPlansOfID;
+    private Function<Plan, Void> m_deletePlan;
 
-    PlanAdapter(Context context, Function<Long, Void> func) {
+    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete) {
         m_inflater = LayoutInflater.from(context);
-        m_displayChildrenPlansOfID = func;
+        m_displayChildrenPlansOfID = display;
+        m_deletePlan = delete;
     }
 
     @Override
-    public PlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public @NonNull PlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item = m_inflater.inflate(R.layout.plan_recyclerview_item, parent, false);
         return new PlanViewHolder(item);
     }
@@ -52,17 +54,16 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         if (m_displayPlans != null) {
             Plan p = m_displayPlans.get(pos);
             holder.title.setText(p.getName().toUpperCase());
+            holder.recipeCount.setText(String.format("%d: Recipe(s)", (p.getRecipeCount())));
 
             holder.layout.setOnClickListener((View v)-> {
-                m_displayChildrenPlansOfID.apply(p.getId());
+                m_displayChildrenPlansOfID.apply(p);
             });
             holder.deleteButton.setOnClickListener((View v) -> {
-
+                m_deletePlan.apply(p);
             });
-
-
         } else {
-            holder.text.setText("N/A");
+            holder.title.setText("N/A");
         }
     }
 
@@ -75,6 +76,4 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         this.m_displayPlans = plans;
         notifyDataSetChanged();
     }
-
-
 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -20,12 +21,36 @@ public class Plan {
     private Long id;
     @ColumnInfo(name="parent_id")
     private Long parentId;
+    private int depth;
+    private int recipeCount;
     private String name;
 
-    public Plan(Long parentId, String name) {
+    public Plan(Long parentId, String name, int depth, int recipeCount) {
         this.parentId = parentId;
         this.name = name;
+        this.depth = depth;
+        this.recipeCount = recipeCount;
     }
+
+    @Ignore
+    public Plan(Long id, Long parentId, String name, int depth, int recipeCount) {
+        this.id = id;
+        this.parentId = parentId;
+        this.name = name;
+        this.depth = depth;
+        this.recipeCount = recipeCount;
+    }
+    @Ignore
+    public Plan(Plan p) {
+        this.id = p.id;
+        this.parentId = p.parentId;
+        this.name = p.name;
+        this.depth = p.depth;
+        this.recipeCount = p.recipeCount;
+    }
+
+    public Long getParentId() {return parentId;}
+    public String getName() {return name;}
 
     public Long getId() {
         return id;
@@ -33,9 +58,10 @@ public class Plan {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Long getParentId() {return parentId;}
-    public String getName() {return name;}
+    public int getDepth() {return depth;}
+    public void setDepth(int d) {this.depth = d;}
+    public int getRecipeCount() {return recipeCount;}
+    public void setRecipeCount(int r) {this.recipeCount = r;}
 
     @Override
     public String toString() {

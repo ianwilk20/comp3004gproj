@@ -1,13 +1,13 @@
 package fooderie.models;
 
 import android.app.Application;
-import android.util.Log;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import fooderie.mealPlanner.models.Depth;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanRecipe;
 
@@ -23,17 +23,15 @@ public class FooderieRepository {
     public void insert(Plan p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             long p_id = fooderieDao.insert(p);
-            Log.d("BANANA", "insert: plan:"+p.toString()+", Long:"+Long.toString(p_id));
 
-            if (p.getParentId() == null) {
+            // -- Week Plans Must Be PrePopulated With the Seven day Week -- //
+            if (Depth.isAtDepth(p, Depth.WEEK_PLAN)) {
                 List<Plan> plans = new ArrayList<Plan>();
                 for (DayOfWeek d : DayOfWeek.values()) {
-                    Plan c = new Plan(p_id, d.toString());
+                    Plan c = new Plan(p_id, d.toString(), Depth.getId(Depth.DAY_PLAN),0);
                     plans.add(c);
-                    Log.d("BANANA2", "insert: plan:"+c.toString());
-                    //long c_id = fooderieDao.insert(day);
                 }
-                fooderieDao.insert(plans);
+                insert(plans);
             }
         });
     }
@@ -45,15 +43,18 @@ public class FooderieRepository {
     public void deleteAllPlans() {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deleteAllPlans());
     }
+    public void deletePlan(Long id) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deletePlan(id));
+    }
 
     public LiveData<List<Plan>> getAllPlans() {
         return fooderieDao.getAllPlans();
     }
-    public LiveData<List<Plan>> getChildrenOfPlan(int id) {
-        return fooderieDao.getChildrenOfPlan(id);
-    }
-    public LiveData<List<Plan>> getWeeklyMealPlans() {
-        return fooderieDao.getWeeklyMealPlans();
+    public LiveData<List<Plan>> getChildrenOfPlan(Long id) {
+        if (id == null)
+            return fooderieDao.getWeeklyMealPlans();
+        else
+            return fooderieDao.getChildrenOfPlan(id);
     }
 
     /* Entity=PlanRecipe, repository interactions */

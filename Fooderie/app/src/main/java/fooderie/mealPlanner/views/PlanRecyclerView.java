@@ -9,22 +9,19 @@ import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import fooderie.mealPlanner.models.Level;
+import fooderie.mealPlanner.models.Depth;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.viewModels.PlanViewModel;
 
 
 import com.example.fooderie.R;
 
-import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +30,11 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     private PlanViewModel m_viewModel;
     private FloatingActionButton m_fab;
-    private Long m_parentId;
+
+    private Plan m_parentPlan;
     private PlanAdapter m_adaptor;
-    private List<Level> m_levels;
+
+    private final Plan ROOT = new Plan(null, null, "ROOT", -1,-1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,23 +43,21 @@ public class PlanRecyclerView extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        m_adaptor = new PlanAdapter(this, this::displayChildrenPlansOfID);
+        m_adaptor = new PlanAdapter(this, this::displayChildrenPlansOfID, this::deletePlan);
         RecyclerView recyclerView = findViewById(R.id.PlanRecyclerView);
         recyclerView.setAdapter(m_adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        m_parentId = null;
-
-        m_viewModel = new ViewModelProvider(this).get(PlanViewModel.class);
-        m_viewModel.plansObserver(this, this::updateChildrenPlansOfID);
+        m_parentPlan = ROOT;
 
         m_fab = findViewById(R.id.fab);
         m_fab.setOnClickListener((View view) -> addPlanDialog());
 
-        m_levels = new ArrayList<>();
-        m_levels.add(new Level(0L, "Week Plans", true));
-        m_levels.add(new Level(1L, "Day Plans", false));
-        m_levels.add(new Level(2L, "Meal Plans", true));
+        m_viewModel = new ViewModelProvider(this).get(PlanViewModel.class);
+        displayChildrenPlansOfID(m_parentPlan);
+        //m_viewModel.getChildrenOfPlan(m_parentId).observe(this, this::displayPlans);
+
+
 
         // -- Pre-populate Database -- //
         //m_viewModel.deleteAllPlans();
@@ -71,12 +68,7 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     private void addPlanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Level l = getLevelInfo(m_parentId);
-        if (l != null) {
-            builder.setTitle("New " + l.getName().substring(0, l.getName().length()-1) + " Name");
-        } else {
-            builder.setTitle("UNKNOWN");
-        }
+        builder.setTitle(Depth.getAddDialogText(m_parentPlan));
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -84,71 +76,39 @@ public class PlanRecyclerView extends AppCompatActivity {
 
         builder.setPositiveButton("OK", ((DialogInterface dialog, int which) -> {
             String planName = input.getText().toString();
-            m_viewModel.insert(new Plan(m_parentId, planName));
+            Plan p = new Plan(m_parentPlan.getId(), planName, m_parentPlan.getDepth()+1, 0);
+
+            m_viewModel.insert(p);
         }));
         builder.setNegativeButton("Cancel", ((DialogInterface dialog, int which) -> dialog.dismiss()));
 
         builder.show();
     }
 
-    private Void updateChildrenPlansOfID(Void v) {
-        displayChildrenPlansOfID(m_parentId);
-        return v;
+    private Void deletePlan(Plan p) {
+        m_viewModel.deletePlan(p.getId());
+        return null;
     }
 
-    private Void displayChildrenPlansOfID(Long p_id) {
-        List<Plan> plans = m_viewModel.getAllPlans();
-        m_parentId = p_id;
+    private Void displayChildrenPlansOfID(Plan p) {
+        // -- REMOVE OLD LIVEDATA OBSERVERS -- //
+        m_viewModel.getChildrenOfPlan(m_parentPlan.getId()).removeObservers(this);
+        Log.d("BANANA", "displayChildrenPlansOfID:" + m_viewModel.getChildrenOfPlan(m_parentPlan.getId()).hasActiveObservers());
+        // -- MAKE NEW OBSERVER FOR THE CHILDREN OF THE CURRENT PARENT PLAN -- //
+        m_parentPlan = (p == null) ? ROOT : p;
+        m_viewModel.getChildrenOfPlan(m_parentPlan.getId()).observe(this, this::displayPlans);
 
         // -- DISPLAY FAB IF REQUIRED -- //
-        Level l = getLevelInfo(p_id);
-        if (l != null) {
-            if (l.isEditable()) {
-                m_fab.show();
-            } else {
-                m_fab.hide();
-            }
+        if (Depth.isEditableDepth(m_parentPlan)) {
+            m_fab.show();
+        } else {
+            m_fab.hide();
         }
-
-        // -- FILTER PLANS TO THOSE WITH THE SAME PARENT ID AND LEVEL -- //
-        List<Plan> display_plans = plans.stream().filter(p -> {
-            if (m_parentId == null) {
-                return p.getParentId() == null;
-            } else {
-                return m_parentId.equals(p.getParentId());
-            }
-        }).collect(Collectors.toList());
-
-        // -- DISPLAY ONLY THE PLANS FOR THE GIVEN LEVEL -- //
-        m_adaptor.setPlans(display_plans);
 
         return null;
     }
 
-    private Level getLevelInfo(Long p_id) {
-        Long l_id = getCurrentLevel(p_id);
-        for (Level l : m_levels) {
-            if (l.getId().equals(l_id)) {
-                return l;
-            }
-        }
-        return null;
-    }
-
-    private Long getCurrentLevel(Long p_id) {
-        if (p_id == null)
-            return 0L;
-
-        for (Plan p : m_viewModel.getAllPlans()) {
-            if (p_id.equals(p.getId())) {
-                Long i = getCurrentLevel(p.getParentId());
-                if (i == null)
-                    return null;
-                else
-                    return 1L + i;
-            }
-        }
-
-        return null;
+    private void displayPlans(List<Plan> plans) {
+        m_adaptor.setPlans(plans);
     }
 }

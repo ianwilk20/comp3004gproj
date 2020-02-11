@@ -16,11 +16,6 @@ import fooderie.models.FooderieRepository;
 
 public class PlanViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
-    private List<Plan> m_cachedPlans;
-
-    public List<Plan> getAllPlans() {
-        return m_cachedPlans;
-    }
 
     public PlanViewModel (Application application) {
         super(application);
@@ -30,18 +25,13 @@ public class PlanViewModel extends AndroidViewModel {
     /* Entity=Plan, repository interactions */
     public void insert(Plan plan) { m_repo.insert(plan); }
     public void deleteAllPlans() {m_repo.deleteAllPlans();}
+    public void deletePlan(Long id) {m_repo.deletePlan(id);}
 
-    public void plansObserver(LifecycleOwner owner, Function<Void, Void> update) {
-        LiveData<List<Plan>> output = m_repo.getAllPlans();
-        output.observe(owner, (List<Plan> plans)->{
-            m_cachedPlans = plans;
-            update.apply(null);
-        });
-    }
-
-    public LiveData<List<Plan>> getChildrenOfPlan(int i) {return m_repo.getChildrenOfPlan(i); }
-    public LiveData<List<Plan>> getWeeklyMealPlans() {return m_repo.getWeeklyMealPlans(); }
+    public LiveData<List<Plan>> getChildrenOfPlan(Long i) {return m_repo.getChildrenOfPlan(i); }
 
     /* Entity=PlanRecipe, repository interactions */
     public void insert(PlanRecipe planRecipe) {m_repo.insert(planRecipe);}
+
+    /* Helper Functions */
+
 }
