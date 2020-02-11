@@ -1,13 +1,11 @@
 package fooderie.models;
 
 import java.io.Serializable;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class Nutrient implements Serializable {
 
     private static DecimalFormat df = new DecimalFormat("0.00");
-
 
     public String label;
     public double quantity;

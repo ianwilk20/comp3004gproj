@@ -1,22 +1,14 @@
 package com.example.fooderie;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import fooderie.models.Recipe;
 import fooderie.models.Tag;
 
@@ -26,12 +18,16 @@ public class rbSelected extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_selected);
+
+        //Get selected recipe from rbActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
 
+        //Recipe title
         TextView recipeLabel = findViewById(R.id.textView);
         recipeLabel.setText(selected.label);
 
+        //Add every image and their corresponding label
         ArrayList<Tag> dietTags = new ArrayList<>();
         ArrayList<Tag> healthTags = new ArrayList<>();
 
@@ -77,6 +73,8 @@ public class rbSelected extends AppCompatActivity {
         ImageView alcohol_free = findViewById(R.id.alcohol_free);
         healthTags.add(new Tag("Alcohol-Free", alcohol_free));
 
+        //If the recipe does not have those labels
+        //remove the corresponding image
         if(selected.dietLabels.size() == 0){
             for(int j = 0; j < dietTags.size(); ++j) {
                 dietTags.get(j).image.setVisibility(View.GONE);
@@ -108,11 +106,13 @@ public class rbSelected extends AppCompatActivity {
 
         //PICTURE
         //ImageView recipeImage = findViewById(R.id.recipeImage);
+
+        //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
         ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.ingredientLines);
         ingredientsView.setAdapter(rbArrAdapt);
 
-        //Log.e("Calories", Double.toString(selected.totalNutrients.ENERC_KCAL.quantity));
+        //Nutritional Information
         TextView calories = findViewById(R.id.ENERC_KCAL);
         TextView caloriesUnit = findViewById(R.id.ENERC_KCALunit);
         if(selected.totalNutrients.ENERC_KCAL != null) {
@@ -173,7 +173,5 @@ public class rbSelected extends AppCompatActivity {
             protein.setText("Unknown");
             proteinUnit.setText("");
         }
-
-
     }
 }

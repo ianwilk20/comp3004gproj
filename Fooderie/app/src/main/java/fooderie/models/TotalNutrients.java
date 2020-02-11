@@ -12,7 +12,6 @@ public class TotalNutrients implements Serializable {
     public Nutrient PROCNT;
 
     public TotalNutrients(Nutrient calories, Nutrient fat, Nutrient carbs, Nutrient fiber, Nutrient sugar, Nutrient protein){
-
         ENERC_KCAL = calories;
         FAT = fat;
         CHOCDF = carbs;

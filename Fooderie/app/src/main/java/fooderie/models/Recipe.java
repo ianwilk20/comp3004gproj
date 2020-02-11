@@ -1,18 +1,12 @@
 package fooderie.models;
 
-import android.graphics.Bitmap;
-import android.os.Parcelable;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 @SuppressWarnings("serial")
 @Entity (tableName = "table_Recipe",
@@ -51,15 +45,4 @@ public class Recipe implements Serializable {
         ingredients = i;
         totalNutrients = tn;
     }
-
-//    @Ignore public Recipe(Parcel source){
-//        label = source.readString();
-//        url = source.readString();
-//        dietLabels = source.createStringArrayList();
-//        healthLabels = source.createStringArrayList();
-//        ingredientLines = source.createStringArrayList();
-//        ingredients = source.createTypedArrayList();
-//    }
-
-
 }
