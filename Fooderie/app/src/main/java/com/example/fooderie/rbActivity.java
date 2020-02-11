@@ -2,10 +2,13 @@ package com.example.fooderie;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,8 +34,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import fooderie.models.Recipe;
+import fooderie.models.Tag;
 
 
 public class rbActivity extends AppCompatActivity {
@@ -42,6 +48,7 @@ public class rbActivity extends AppCompatActivity {
     RequestQueue rbRequestQueue;
     ArrayAdapter<String> rbArrAdapt;
     ArrayList<String> rbResults = new ArrayList<String>();
+    ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class rbActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length()>= 1 && query != "null"){
+                    rbListView.setVisibility(View.VISIBLE);
                     jsonFetch(query);
                 }
                 return false;
@@ -69,6 +77,27 @@ public class rbActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //Item Selected
+        rbListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("SELECTED", rbResults.get(position));
+                Recipe selected = null;
+                for (int i = 0; i < rbRecipeArr.size(); ++i){
+                    if(rbRecipeArr.get(i).label.equals(rbResults.get(position))){
+                        selected = rbRecipeArr.get(i);
+                        Log.e("SELECTED URL", selected.url);
+                    }
+                }
+                if (selected != null) {
+                    rbListView.setVisibility(View.GONE); //TEMPORARY
+                    openSelected(selected);
+                    rbResults.clear();
+                }
+            }
+        });
+
     }
 
     public void jsonFetch(final String recipe){
@@ -78,8 +107,6 @@ public class rbActivity extends AppCompatActivity {
         String rbApiUrl = "https://api.edamam.com/search?q=" + recipe + "&app_id=" + appID +"&app_key=" + appKey;// + "&from=0&to=3&calories=591-722&health=alcohol-free"
 
         //Log.e("API URL", foodApiURL);
-
-        ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
 
         JsonObjectRequest objectReq = new JsonObjectRequest(
                 Request.Method.GET,
@@ -126,5 +153,14 @@ public class rbActivity extends AppCompatActivity {
         );
 
         rbRequestQueue.add(objectReq);
+    }
+
+    public void openSelected(Recipe selected){
+        Intent rbIntent = new Intent(this, rbSelected.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
+//        rbSelected.newObject=item;
+//        Intent intent=new Intent(OldActivity.this, NewActivity.class);
+//        startActivity(intent);
     }
 }
