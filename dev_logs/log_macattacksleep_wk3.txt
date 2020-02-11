@@ -1,2 +1,8 @@
 2.5 hrs making recipe and recipeIngredient classes
 -connecting to API courtesy of Ian
+
+8hrs
+created and added images for recipe tags
+added 
+created new activity rbSelected and connected it to rbAcivity via setOnItemClickListener
+added recipe label and recipe tags to rbSelected

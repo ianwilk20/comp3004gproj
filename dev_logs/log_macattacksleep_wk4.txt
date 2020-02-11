@@ -1,0 +1,4 @@
+5hrs
+-created ingredients list UI
+-created nutritional info UI
+-created nutritional info model
