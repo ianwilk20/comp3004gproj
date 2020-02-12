@@ -13,9 +13,13 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import fooderie.mealPlanner.models.Plan;
+import fooderie.mealPlanner.models.PlanDay;
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
+import fooderie.mealPlanner.models.PlanRoot;
+import fooderie.mealPlanner.models.PlanWeek;
 
-@Database(entities = {Plan.class, PlanRecipe.class, Recipe.class},
+@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
@@ -33,7 +37,7 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FooderieRoomDatabase.class, "fooderie_database")
-                            .addCallback(roomDatabaseCallback)
+                            //.addCallback(roomDatabaseCallback)
                             .build();
                 }
             }
@@ -46,9 +50,9 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
-                FooderieDao dao = INSTANCE.fooderieDao();
-                dao.deleteAllPlans();
-                Log.d("FooderieRoomDatabase", "onOpen: Everything finished deleting...I think");
+                //FooderieDao dao = INSTANCE.fooderieDao();
+                //dao.deleteAllPlans();
+                //Log.d("FooderieRoomDatabase", "onOpen: Everything finished deleting...I think");
                 /*dao.deleteAllPlanRecipes();
 
                 Plan p = new Plan(null,"THIS IS A TEST");

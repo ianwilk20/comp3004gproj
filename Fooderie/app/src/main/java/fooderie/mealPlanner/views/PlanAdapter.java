@@ -1,6 +1,7 @@
 package fooderie.mealPlanner.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
+import fooderie.mealPlanner.models.PlanDay;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder>{
     class PlanViewHolder extends RecyclerView.ViewHolder {
@@ -59,9 +61,15 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             holder.layout.setOnClickListener((View v)-> {
                 m_displayChildrenPlansOfID.apply(p);
             });
-            holder.deleteButton.setOnClickListener((View v) -> {
-                m_deletePlan.apply(p);
-            });
+
+            if (p.isEditable()) {
+                holder.deleteButton.setVisibility(View.VISIBLE);
+                holder.deleteButton.setOnClickListener((View v) -> {
+                    m_deletePlan.apply(p);
+                });
+            } else {
+                holder.deleteButton.setVisibility(View.INVISIBLE);
+            }
         } else {
             holder.title.setText("N/A");
         }

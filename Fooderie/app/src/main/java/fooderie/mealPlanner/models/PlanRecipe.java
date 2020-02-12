@@ -1,46 +1,64 @@
 package fooderie.mealPlanner.models;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import fooderie.models.FooderieRepository;
 import fooderie.models.Recipe;
 
 @Entity(tableName = "table_PlanRecipe",
-        indices = {@Index("join_plan_recipe_id"), @Index("plan_id"), @Index("recipe_id")},
+        indices = {@Index("planId"), @Index("parentId"), @Index("recipeId")},
         foreignKeys = {
-            @ForeignKey(entity = Plan.class,
-                parentColumns = "plan_id",
-                childColumns = "plan_id",
+            @ForeignKey(entity = PlanMeal.class,
+                parentColumns = "planId",
+                childColumns = "parentId",
                 onDelete = ForeignKey.CASCADE),
             @ForeignKey(entity = Recipe.class,
                 parentColumns = "recipe_id",
-                childColumns = "recipe_id",
+                childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE)
         })
-public class PlanRecipe {
-    @PrimaryKey (autoGenerate = true)
-    @ColumnInfo(name="join_plan_recipe_id")
-    private Long id;
-    @ColumnInfo(name="plan_id")
-    private Long planId;
-    @ColumnInfo(name="recipe_id")
+public class PlanRecipe extends Plan{
     private Long recipeId;
+    public Long getRecipeId() {return recipeId;}
 
-    public PlanRecipe(Long planId, Long recipeId) {
-        this.planId = planId;
+    public PlanRecipe(Long parentId, String name, int recipeCount, Long recipeId) {
+        super(parentId, name, recipeCount);
         this.recipeId = recipeId;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
+        // -- TODO: Change to viewing recipes -- //
+        //children = repo.getDayPlans(planId);
+        //children.observe(owner, o);
     }
 
-    public Long getPlanId() {return planId;}
-    public Long getRecipeId() {return recipeId;}
+    @Override
+    public Plan makeChild(Long parentId, String name, int recipeCount) {
+        return null;
+    }
+    @Override
+    public boolean isEditable() {
+        return editable;
+    }
+    @Override
+    public boolean isParentEditable() {
+        return PlanMeal.editable;
+    }
+    @Override
+    public boolean isChildEditable() {
+        return false;
+    }
+    @Override
+    public String childName() {
+        return "UNKNOWN";
+    }
 }

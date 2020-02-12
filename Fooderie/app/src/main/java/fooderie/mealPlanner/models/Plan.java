@@ -1,70 +1,88 @@
 package fooderie.mealPlanner.models;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import fooderie.models.FooderieRepository;
 
-@Entity(tableName = "table_Plan",
-        indices = {@Index("plan_id"), @Index("parent_id")},
-        foreignKeys = @ForeignKey(entity = Plan.class,
-            parentColumns = "plan_id",
-            childColumns = "parent_id",
-            onDelete = ForeignKey.CASCADE)
-        )
-public class Plan {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="plan_id")
-    private Long id;
-    @ColumnInfo(name="parent_id")
-    private Long parentId;
-    private int depth;
-    private int recipeCount;
-    private String name;
+@Entity
+public abstract class Plan {
+    @PrimaryKey (autoGenerate = true)
+    protected Long planId;
+    protected Long parentId;
+    protected int recipeCount;
+    protected String name;
 
-    public Plan(Long parentId, String name, int depth, int recipeCount) {
+    @Ignore
+    public static final boolean editable = true;
+    @Ignore
+    public static final String planName = "UNKNOWN";
+    @Ignore
+    protected LiveData children;
+
+    public Plan(Long parentId, String name, int recipeCount) {
         this.parentId = parentId;
         this.name = name;
-        this.depth = depth;
         this.recipeCount = recipeCount;
     }
 
     @Ignore
-    public Plan(Long id, Long parentId, String name, int depth, int recipeCount) {
-        this.id = id;
+    public Plan(Long planId, Long parentId, String name, int recipeCount) {
+        this.planId = planId;
         this.parentId = parentId;
         this.name = name;
-        this.depth = depth;
         this.recipeCount = recipeCount;
     }
-    @Ignore
-    public Plan(Plan p) {
-        this.id = p.id;
-        this.parentId = p.parentId;
-        this.name = p.name;
-        this.depth = p.depth;
-        this.recipeCount = p.recipeCount;
-    }
 
-    public Long getParentId() {return parentId;}
     public String getName() {return name;}
 
-    public Long getId() {
-        return id;
+    public Long getPlanId() {
+        return planId;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setPlanId(Long planId) {
+        this.planId = planId;
     }
-    public int getDepth() {return depth;}
-    public void setDepth(int d) {this.depth = d;}
+    public Long getParentId() {
+        return parentId;
+    }
+    public void setParentId(Long id) {
+        this.parentId = id;
+    }
     public int getRecipeCount() {return recipeCount;}
     public void setRecipeCount(int r) {this.recipeCount = r;}
 
+    public abstract void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o);
+
+    public abstract Plan makeChild(Long parentId, String name, int recipeCount);
+
+    public abstract boolean isEditable();
+
+    public abstract boolean isParentEditable();
+
+    public abstract boolean isChildEditable();
+
+    public abstract String childName();
+
+    public void removeLiveData(@NonNull LifecycleOwner owner) {
+        if (children == null)
+            return;
+
+        children.removeObservers(owner);
+        children = null;
+    }
+
     @Override
-    public String toString() {
-        return String.format("[id:%d, parentId:%d, name:%s]", id, parentId, name);
+    @SuppressWarnings("All")
+    public @NonNull String toString() {
+        return String.format("[id:%d, parentId:%d, name:%s]", planId, parentId, name);
     }
 }
