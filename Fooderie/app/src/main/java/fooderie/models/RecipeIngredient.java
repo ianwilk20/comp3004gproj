@@ -1,6 +1,8 @@
 package fooderie.models;
 
-public class RecipeIngredient {
+import java.io.Serializable;
+
+public class RecipeIngredient implements Serializable{
 
     public String text;
     public double weight;

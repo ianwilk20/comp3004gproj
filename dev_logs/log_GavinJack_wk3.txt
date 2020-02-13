@@ -1,0 +1,36 @@
+Development Log – Week #3
+Gavin Jackson, 101065531
+
+Work for this week pertained to the implementation of adding new Plans at the various depths (Week, Day, individual meal). There was many
+problems stemming from my git commits which required time to fix. Moreover, working with Android Studio has been more challenging then 
+anticipated, especially that of the ‘Room’ database.
+
+Tuesday, Feb 4th, 2020
+    -	[1.0 Hr] Merge conflict resolution. Reverted revert of week 2 work. Fixed null references a that were supposed to have been 
+    deleted. Got Master in functional state.
+    
+Wednesday, Feb 5th, 2020
+    -	[1.0 Hr] Conceptualized how to retrieve plans and simulate the level of plans, from week -> day -> meal -> recipes. Began slowly
+    implementing ‘Create’ functionality for the various levels of planning.
+
+Thursday, Feb 6th, 2020
+    -	[1.0 Hr] Continued working on implementing the ‘Create’ functionality.
+    -	[1.0 Hr] Worked on debugging. Decided to delete the level property from the Plan class. This led to a need for a migration route
+    for new database. After many failed attempts of creating a migration route it was found (after many searches) that the app on the VM
+    could be deleted and no schema references would be saved. Migration to the new schema would no longer be required.
+    -	[3.0 Hr] Worked on debugging Foreign Key Error. Whenever new Week Meal plans were inserted into the database upon initial set up,
+    it would abruptly give a foreign key error.
+        o	Attempted changing order of thread operation between inserting the parent ‘Week Meal Plan,’ and the children ‘Day Meal Plan.’
+        o	Modified the schema of the database as multiple sources suggested the Android database room does not properly auto generate IDs
+        when given a default value of zero. Instead migrated over to using Long, as default value is null and that is was the database
+        gives back after an insert.
+        o	The root of the problem stemmed from a race condition when the app started. Initially it would try to delete all the plans and 
+        prepopulate the database. However, both actions were done in two different threads. The solution was to stop deleting all the plans 
+        and to stop prepopulating the database at the start. 
+
+Saturday, Feb 8th, 2020
+    -	[0.5 Hr] Retrieved lost log files. 
+
+Sunday, Feb 9th, 2020
+    -	[1.0 Hr] Continued working on implementing the ‘Create’ functionality.
+    -	[0.5 Hr] Log Writing
