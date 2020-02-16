@@ -3,11 +3,13 @@ package fooderie.CookingAssistant.views;
 import com.example.fooderie.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.IOException;
@@ -24,12 +26,19 @@ public class CookingAssistantViewer extends AppCompatActivity
     ListView insList;
     String instructionList[] = {"1. Boil Water", "2. Open Raman Pack", "3. Pour half of water into a bowl", "4. Put Raman into boiling water to cook", "5. Put flavour packets into bowl water", "6. Wait until Raman cooked", "7. Strain raman and put into bowl"};
 
+    private ViewPager mSlideViewPager;
+    private LinearLayout mDotLayer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant_viewer);
         tstTestView = findViewById(R.id.tempList);
+
+        mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
+        mDotLayer = (LinearLayout) findViewById(R.id.dotsLayout);
 
         Log.d(TAG,"\n\n\n ----------------");
         new jSoupParse().execute();
