@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,14 @@ public class rbSelected extends AppCompatActivity {
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
 
+        //Click Listener for website button
+        Button websiteButton = findViewById(R.id.website);
+        websiteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                goToWebsite(selected);
+            }
+        });
+
         //Recipe title
         TextView recipeLabel = findViewById(R.id.textView);
         recipeLabel.setText(selected.label);
@@ -31,45 +40,19 @@ public class rbSelected extends AppCompatActivity {
         ArrayList<Tag> dietTags = new ArrayList<>();
         ArrayList<Tag> healthTags = new ArrayList<>();
 
-        ImageView balanced = findViewById(R.id.balanced);
-        dietTags.add(new Tag("Balanced", balanced));
-        ImageView high_protein = findViewById(R.id.high_protein);
-        dietTags.add(new Tag("High-Protein", high_protein));
-        ImageView high_fiber = findViewById(R.id.high_fiber);
-        dietTags.add(new Tag("High-Fiber", high_fiber));
         ImageView low_fat = findViewById(R.id.low_fat);
         dietTags.add(new Tag("Low-Fat", low_fat));
         ImageView low_carb = findViewById(R.id.low_carb);
         dietTags.add(new Tag("Low-Carb", low_carb));
-        ImageView low_sodium = findViewById(R.id.low_sodium);
-        dietTags.add(new Tag("Low-Sodium", low_sodium));
 
         ImageView vegan = findViewById(R.id.vegan);
         healthTags.add(new Tag("Vegan", vegan));
         ImageView vegetarian = findViewById(R.id.vegetarian);
         healthTags.add(new Tag("Vegetarian", vegetarian));
-        ImageView paleo = findViewById(R.id.paleo);
-        healthTags.add(new Tag("Paleo", paleo));
-        ImageView dairy_free = findViewById(R.id.dairy_free);
-        healthTags.add(new Tag("Dairy-Free", dairy_free));
-        ImageView gluten_free = findViewById(R.id.gluten_free);
-        healthTags.add(new Tag("Gluten-Free", gluten_free));
-        ImageView fat_free = findViewById(R.id.fat_free);
-        healthTags.add(new Tag("Fat-Free", fat_free));
-        ImageView low_sugar = findViewById(R.id.low_sugar);
-        healthTags.add(new Tag("Low-Sugar", low_sugar));
-        ImageView egg_free = findViewById(R.id.egg_free);
-        healthTags.add(new Tag("Egg-Free", egg_free));
         ImageView peanut_free = findViewById(R.id.peanut_free);
         healthTags.add(new Tag("Peanut-Free", peanut_free));
         ImageView tree_nut_free = findViewById(R.id.tree_nut_free);
         healthTags.add(new Tag("Tree-Nut-Free", tree_nut_free));
-        ImageView soy_free = findViewById(R.id.soy_free);
-        healthTags.add(new Tag("Soy-Free", soy_free));
-        ImageView fish_free = findViewById(R.id.fish_free);
-        healthTags.add(new Tag("Fish-Free", fish_free));
-        ImageView shellfish_free = findViewById(R.id.shellfish_free);
-        healthTags.add(new Tag("Shellfish-Free", shellfish_free));
         ImageView alcohol_free = findViewById(R.id.alcohol_free);
         healthTags.add(new Tag("Alcohol-Free", alcohol_free));
 
@@ -173,5 +156,13 @@ public class rbSelected extends AppCompatActivity {
             protein.setText("Unknown");
             proteinUnit.setText("");
         }
+    }
+
+    //Redirect to rbWebsite activity
+    //and pass selected recipe
+    public void goToWebsite(Recipe selected){
+        Intent rbIntent = new Intent(this, rbWebsite.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
     }
 }

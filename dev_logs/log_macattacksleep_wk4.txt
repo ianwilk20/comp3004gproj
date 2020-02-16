@@ -2,3 +2,10 @@
 -created ingredients list UI
 -created nutritional info UI
 -created nutritional info model
+
+4hrs
+-added search restriction
+-added url restriction - michael
+-toggle buttons for dietary preferences - new xml
+-no results error message
+-website button - new activity + xml
