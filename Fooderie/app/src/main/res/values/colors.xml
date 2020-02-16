@@ -7,5 +7,6 @@
     <color name="text_shadow">#7F000000</color>
     <color name="rbutton_color">#f4f4f4</color>
     <color name="addbutton_color">#f4f4f4</color>
-    <color name="colorPrimary_Dark">#383838</color>
+    <color name="colorPrimary_Dark">#3C3C3C</color>
+    <color name="colorSelected_Dark">#87DBF3</color>
 </resources>

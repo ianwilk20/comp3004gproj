@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -27,27 +28,75 @@ public class CookingAssistantViewer extends AppCompatActivity
     String instructionList[] = {"1. Boil Water", "2. Open Raman Pack", "3. Pour half of water into a bowl", "4. Put Raman into boiling water to cook", "5. Put flavour packets into bowl water", "6. Wait until Raman cooked", "7. Strain raman and put into bowl"};
 
     private ViewPager mSlideViewPager;
-    private LinearLayout mDotLayer;
+    private LinearLayout mDotLayout;
+    private SliderAdapter sliderAdapter;
+    private TextView[] mDots;
 
+    int numSteps = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cooking_assistant_viewer);
-        tstTestView = findViewById(R.id.tempList);
+        //setContentView(R.layout.activity_cooking_assistant_viewer);
+        //tstTestView = findViewById(R.id.tempList);
+
+        setContentView(R.layout.activity_cooking_assistant);
 
         mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
-        mDotLayer = (LinearLayout) findViewById(R.id.dotsLayout);
+        mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
 
-        Log.d(TAG,"\n\n\n ----------------");
-        new jSoupParse().execute();
+        sliderAdapter = new SliderAdapter(this);
+        mSlideViewPager.setAdapter((sliderAdapter));
 
+        //Log.d(TAG,"\n\n\n ----------------");
+        //new jSoupParse().execute();
 
-        //insList = findViewById(R.id.lstInstructions);
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.activity_cooking_assistant_viewer, R.id.txtInsOverview, instructionList);
-        //insList.setAdapter(arrayAdapter);
+        addStepStatus(numSteps, 0);
+
+        mSlideViewPager.addOnPageChangeListener(viewListener);
     }
+
+    public void addStepStatus(int stepLength, int position) // From https://www.youtube.com/watch?v=byLKoPgB7yA
+    {
+        mDots = new TextView[stepLength];
+        mDotLayout.removeAllViews();    //Removes old dots and colours
+        
+        for(int i = 0; i < mDots.length; i++)
+        {
+            mDots[i] = new TextView(this);
+            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setTextSize(40);
+            if (i == position)
+                mDots[i].setTextColor(getResources().getColor(R.color.colorSelected_Dark));
+            else
+                mDots[i].setTextColor(getResources().getColor(R.color.colorPrimary_Dark));
+
+            mDotLayout.addView(mDots[i]);
+        }
+
+    }
+
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener()
+    {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+        {
+
+        }
+
+        @Override
+        public void onPageSelected(int position)
+        {
+            addStepStatus(numSteps, position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state)
+        {
+
+        }
+    };
 
     public class jSoupParse extends AsyncTask<Void, Void, Void>
     {

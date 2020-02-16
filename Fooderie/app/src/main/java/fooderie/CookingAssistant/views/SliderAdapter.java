@@ -22,7 +22,7 @@ public class SliderAdapter extends PagerAdapter {
         this.context = context;
     }
 
-    //Arrays
+    //Arrays for steps (need to get from parsing still
     public String[] headings = {"1.", "2.", "3."};
     public String[] instructionSteps = {"This is a sentence of stuff", "More stuff here", "End of all of the stuffz"};
 
@@ -42,15 +42,27 @@ public class SliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position)
     {
+        //Get our layout
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.activity_cooking_assistant_slide, container, false);
 
+        //Get our elements
         TextView slideTitle = (TextView) view.findViewById(R.id.slideStepNumber);
         TextView slideInstructions = (TextView) view.findViewById(R.id.slideInstructions);
 
+        //Set element values
         slideTitle.setText(headings[position]);
         slideInstructions.setText(instructionSteps[position]);
-        
+
+        //Add view and return
+        container.addView(view);
         return view;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object)
+    {
+        //Remove defined object from instantiation
+        container.removeView((RelativeLayout)object);
     }
 }
