@@ -64,7 +64,7 @@ public class rbActivity extends AppCompatActivity {
                 }
                 return false;
             }
-            
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 rbResults.clear();
