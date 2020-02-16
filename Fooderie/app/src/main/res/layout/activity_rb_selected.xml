@@ -36,29 +36,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/balanced"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:padding="15dp"
-                android:src="@drawable/balanced" />
-
-            <ImageView
-                android:id="@+id/high_protein"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/high_protein" />
-
-            <ImageView
-                android:id="@+id/high_fiber"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/high_fiber" />
-
-            <ImageView
                 android:id="@+id/low_fat"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
@@ -73,14 +50,6 @@
                 android:layout_gravity="center"
                 android:padding="15dp"
                 android:src="@drawable/low_carb" />
-
-            <ImageView
-                android:id="@+id/low_sodium"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/low_sodium" />
 
             <ImageView
                 android:id="@+id/vegan"
@@ -99,54 +68,6 @@
                 android:src="@drawable/vegetarian" />
 
             <ImageView
-                android:id="@+id/paleo"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/paleo" />
-
-            <ImageView
-                android:id="@+id/dairy_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/dairy_free" />
-
-            <ImageView
-                android:id="@+id/gluten_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/gluten_free" />
-
-            <ImageView
-                android:id="@+id/fat_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/fat_free" />
-
-            <ImageView
-                android:id="@+id/low_sugar"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/low_sugar" />
-
-            <ImageView
-                android:id="@+id/egg_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/egg_free" />
-
-            <ImageView
                 android:id="@+id/peanut_free"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
@@ -161,30 +82,6 @@
                 android:layout_gravity="center"
                 android:padding="15dp"
                 android:src="@drawable/tree_nut_free" />
-
-            <ImageView
-                android:id="@+id/soy_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/soy_free" />
-
-            <ImageView
-                android:id="@+id/fish_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/fish_free" />
-
-            <ImageView
-                android:id="@+id/shellfish_free"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:padding="15dp"
-                android:src="@drawable/shellfish_free" />
 
             <ImageView
                 android:id="@+id/alcohol_free"
@@ -205,6 +102,18 @@
 <!--        android:layout_gravity="center"-->
 <!--        android:padding="15dp"-->
 <!--        android:src="@drawable/fat_free" />-->
+
+    <Button
+        android:id="@+id/website"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="172dp"
+        android:text="Website"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
