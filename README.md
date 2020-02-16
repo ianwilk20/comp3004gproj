@@ -1,4 +1,4 @@
-# COMP3000 Group Project
+# COMP3004 Group Project
 Project Members:
 - Gavin Jackson
 - MacKenzie Bedard
