@@ -21,9 +21,10 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="222dp"
-        android:layout_marginLeft="222dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginTop="110dp"
+        android:fontFamily="@font/montserrat_bold"
         android:shadowColor="@color/text_shadow"
         android:shadowDx="1"
         android:shadowDy="1"
@@ -37,13 +38,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentRight="false"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="181dp"
-        android:layout_marginRight="181dp"
-        android:layout_marginBottom="41dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_centerHorizontal="false"
         android:clickable="true"
+        android:gravity="bottom|right"
         app:elevation="8dp"
         app:fabSize="normal"
         app:maxImageSize="28dp"
@@ -64,28 +65,38 @@
             android:id="@+id/filterAisles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:layout_marginLeft="10dp"
-            android:text="Aisles"
             android:buttonTint="@color/rbutton_color"
-            android:textColor="@color/colorPrimary"/>
+            android:checked="true"
+            android:fontFamily="@font/montserrat"
+            android:text="Aisles"
+            android:textColor="@color/colorPrimary" />
 
         <RadioButton
             android:id="@+id/filterRecipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Recipe"
             android:buttonTint="@color/rbutton_color"
-            android:textColor="@color/colorPrimary"/>
+            android:fontFamily="@font/montserrat"
+            android:text="Recipe"
+            android:textColor="@color/colorPrimary" />
     </RadioGroup>
 
     <ListView
-        android:id="@+id/groceryListDisplay"
+    android:id="@+id/groceryListDisplay"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_below="@id/filterGroup"
+    android:layout_marginTop="1dp"></ListView>
+
+    <ListView
+        android:id="@+id/gotItListDisplay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/filterGroup"
-        android:layout_marginTop="3dp"></ListView>
+        android:layout_below="@id/groceryListDisplay"
+        android:layout_marginTop="1dp"
+        android:visibility="invisible"></ListView>
 
 
 </RelativeLayout>
