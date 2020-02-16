@@ -53,8 +53,8 @@ public class rbActivity extends AppCompatActivity {
         rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
         rbListView.setAdapter(rbArrAdapt);
 
-        //make Query
         rbSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            //make Query
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length()>= 1 && query != "null"){
@@ -64,9 +64,11 @@ public class rbActivity extends AppCompatActivity {
                 }
                 return false;
             }
-
+            
             @Override
             public boolean onQueryTextChange(String newText) {
+                rbResults.clear();
+                rbListView.setVisibility(View.GONE);
                 return false;
             }
         });
