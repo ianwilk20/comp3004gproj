@@ -9,6 +9,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import androidx.room.Update;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
@@ -30,6 +31,15 @@ public interface FooderieDao {
     @Insert
     long insert(PlanRecipe p);
 
+    @Update
+    void update(PlanWeek p);
+    @Update
+    void update(PlanDay p);
+    @Update
+    void update(PlanMeal p);
+    @Update
+    void update(PlanRecipe p);
+
     @Delete
     void delete(PlanWeek p);
     @Delete
@@ -47,6 +57,8 @@ public interface FooderieDao {
 
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     LiveData<List<PlanMeal>>  getMealPlans(Long id);
+    @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
+    List<PlanMeal>  getAllMealPlans(Long id);
 
     @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :id")
     LiveData<List<PlanRecipe>>  getRecipePlans(Long id);

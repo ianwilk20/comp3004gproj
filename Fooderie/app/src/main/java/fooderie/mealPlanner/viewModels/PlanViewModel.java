@@ -8,6 +8,7 @@ import java.security.acl.Owner;
 import java.util.List;
 import java.util.function.Function;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -32,18 +33,8 @@ public class PlanViewModel extends AndroidViewModel {
         p.setLiveData(m_repo, owner, o);
     }
 
-    public void deletePlan(Plan p) {
-        if (p instanceof PlanWeek) {
-            m_repo.delete((PlanWeek) p);
-        } else if (p instanceof PlanDay) {
-            m_repo.delete((PlanDay) p);
-        } else if (p instanceof PlanMeal) {
-            m_repo.delete((PlanMeal) p);
-        } else if (p instanceof PlanRecipe) {
-            m_repo.delete((PlanRecipe) p);
-        } else {
-            Log.d("BANANA", "insertPlan: Plan was not deleted. "+ p.toString());
-        }
+    public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
+        m_repo.updatePlanMealsOrder(id, moves);
     }
 
     public void insertPlan(Plan p) {
@@ -53,10 +44,32 @@ public class PlanViewModel extends AndroidViewModel {
             m_repo.insert((PlanDay) p);
         } else if (p instanceof PlanMeal) {
             m_repo.insert((PlanMeal) p);
-        } else if (p instanceof PlanRecipe) {
-            m_repo.insert((PlanRecipe) p);
         } else {
             Log.d("BANANA", "insertPlan: Plan was not inserted. "+ p.toString());
+        }
+    }
+
+    public void updatePlan(Plan p) {
+        if (p instanceof PlanWeek) {
+            m_repo.update((PlanWeek) p);
+        } else if (p instanceof PlanDay) {
+            m_repo.update((PlanDay) p);
+        } else if (p instanceof PlanMeal) {
+            m_repo.update((PlanMeal) p);
+        } else {
+            Log.d("BANANA", "updatePlan: Plan was not updated. "+ p.toString());
+        }
+    }
+
+    public void deletePlan(Plan p) {
+        if (p instanceof PlanWeek) {
+            m_repo.delete((PlanWeek) p);
+        } else if (p instanceof PlanDay) {
+            m_repo.delete((PlanDay) p);
+        } else if (p instanceof PlanMeal) {
+            m_repo.delete((PlanMeal) p);
+        } else {
+            Log.d("BANANA", "insertPlan: Plan was not deleted. "+ p.toString());
         }
     }
 }

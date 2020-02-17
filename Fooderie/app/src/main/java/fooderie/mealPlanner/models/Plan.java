@@ -25,6 +25,8 @@ public abstract class Plan {
     @Ignore
     public static final boolean editable = true;
     @Ignore
+    public static final boolean draggable = false;
+    @Ignore
     public static final String planName = "UNKNOWN";
     @Ignore
     protected LiveData children;
@@ -44,7 +46,6 @@ public abstract class Plan {
     }
 
     public String getName() {return name;}
-
     public Long getPlanId() {
         return planId;
     }
@@ -62,13 +63,11 @@ public abstract class Plan {
 
     public abstract void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o);
 
-    public abstract Plan makeChild(Long parentId, String name, int recipeCount);
-
     public abstract boolean isEditable();
-
-    public abstract boolean isParentEditable();
-
     public abstract boolean isChildEditable();
+
+    public abstract boolean isDraggable();
+    public abstract boolean isChildDraggable();
 
     public abstract String childName();
 

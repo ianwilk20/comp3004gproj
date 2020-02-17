@@ -25,40 +25,37 @@ import fooderie.models.Recipe;
                 childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE)
         })
-public class PlanRecipe extends Plan{
+public class PlanRecipe {
+    @PrimaryKey (autoGenerate = true)
+    private Long planId;
+    private Long parentId;
     private Long recipeId;
-    public Long getRecipeId() {return recipeId;}
 
-    public PlanRecipe(Long parentId, String name, int recipeCount, Long recipeId) {
-        super(parentId, name, recipeCount);
+    public Long getPlanId() {
+        return planId;
+    }
+    public void setPlanId(Long planId) {
+        this.planId = planId;
+    }
+    public Long getParentId() {
+        return parentId;
+    }
+    public void setParentId(Long id) {
+        this.parentId = id;
+    }
+    public Long getRecipeId() {return recipeId;}
+    public void setRecipeId(Long id) {
+        this.recipeId = id;
+    }
+
+    public PlanRecipe(Long parentId, Long recipeId) {
+        this.parentId = parentId;
         this.recipeId = recipeId;
     }
 
-    @Override
     public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
         // -- TODO: Change to viewing recipes -- //
         //children = repo.getDayPlans(planId);
         //children.observe(owner, o);
-    }
-
-    @Override
-    public Plan makeChild(Long parentId, String name, int recipeCount) {
-        return null;
-    }
-    @Override
-    public boolean isEditable() {
-        return editable;
-    }
-    @Override
-    public boolean isParentEditable() {
-        return PlanMeal.editable;
-    }
-    @Override
-    public boolean isChildEditable() {
-        return false;
-    }
-    @Override
-    public String childName() {
-        return "UNKNOWN";
     }
 }

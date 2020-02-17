@@ -18,18 +18,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
+import fooderie.mealPlanner.models.PlanMeal;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder>{
     class PlanViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView recipeCount;
         private final ImageView deleteButton;
+        private final ImageView orderButton;
         private final ConstraintLayout layout;
+
         private PlanViewHolder(View item) {
             super(item);
             title = item.findViewById(R.id.planItemTitle);
             recipeCount = item.findViewById(R.id.planItemRecipeCount);
             deleteButton = item.findViewById(R.id.planItemDeleteButton);
+            orderButton = item.findViewById(R.id.planItemOrderButton);
             layout = item.findViewById(R.id.planItem);
         }
     }
@@ -38,11 +42,19 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     private List<Plan> m_displayPlans;
     private Function<Plan, Void> m_displayChildrenPlansOfID;
     private Function<Plan, Void> m_deletePlan;
+    private Function<Plan, Void> m_updatePlan;
 
-    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete) {
+
+    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete, Function<Plan, Void> update) {
         m_inflater = LayoutInflater.from(context);
         m_displayChildrenPlansOfID = display;
         m_deletePlan = delete;
+        m_updatePlan = update;
+    }
+
+    void setPlans(List<Plan> plans) {
+        this.m_displayPlans = plans;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -70,6 +82,13 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             } else {
                 holder.deleteButton.setVisibility(View.INVISIBLE);
             }
+
+            if (p.isDraggable()) {
+                holder.orderButton.setVisibility(View.VISIBLE);
+            } else {
+                holder.orderButton.setVisibility(View.INVISIBLE);
+            }
+
         } else {
             holder.title.setText("N/A");
         }
@@ -78,10 +97,5 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     @Override
     public int getItemCount() {
         return (m_displayPlans != null) ? m_displayPlans.size() : 0;
-    }
-
-    void setPlans(List<Plan> plans) {
-        this.m_displayPlans = plans;
-        notifyDataSetChanged();
     }
 }

@@ -29,20 +29,20 @@ public class PlanWeek extends Plan{
     }
 
     @Override
-    public Plan makeChild(Long parentId, String name, int recipeCount) {
-        return new PlanDay(parentId, name, recipeCount);
-    }
-    @Override
     public boolean isEditable() {
         return editable;
     }
     @Override
-    public boolean isParentEditable() {
-        return PlanRoot.editable;
-    }
-    @Override
     public boolean isChildEditable() {
         return PlanDay.editable;
+    }
+    @Override
+    public boolean isDraggable() {
+        return draggable;
+    }
+    @Override
+    public boolean isChildDraggable() {
+        return PlanDay.draggable;
     }
     @Override
     public String childName() {

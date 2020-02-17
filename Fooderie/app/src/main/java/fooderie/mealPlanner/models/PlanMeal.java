@@ -17,12 +17,16 @@ import fooderie.models.FooderieRepository;
                 childColumns = "parentId",
                 onDelete = ForeignKey.CASCADE)
 )
-public class PlanMeal extends Plan {
+public class PlanMeal extends Plan implements Comparable<PlanMeal>{
+    private int order;
     @Ignore
     public static final String planName = "Meal Plan";
+    @Ignore
+    public static final boolean draggable = true;
 
-    public PlanMeal(Long parentId, String name, int recipeCount) {
+    public PlanMeal(Long parentId, String name, int recipeCount, int order) {
         super(parentId, name, recipeCount);
+        this.order = order;
     }
 
     @Override
@@ -31,24 +35,36 @@ public class PlanMeal extends Plan {
         children.observe(owner, o);
     }
 
-    @Override
-    public Plan makeChild(Long parentId, String name, int recipeCount) {
-        return new PlanMeal(parentId, name, recipeCount);
+    public void setOrder(int order) {
+        this.order = order;
     }
+    public int getOrder() {
+        return order;
+    }
+
     @Override
     public boolean isEditable() {
         return editable;
     }
     @Override
-    public boolean isParentEditable() {
-        return PlanDay.editable;
+    public boolean isChildEditable() {
+        return false;
     }
     @Override
-    public boolean isChildEditable() {
-        return PlanRecipe.editable;
+    public boolean isDraggable() {
+        return draggable;
+    }
+    @Override
+    public boolean isChildDraggable() {
+        return false;
     }
     @Override
     public String childName() {
-        return PlanRecipe.planName;
+        return "UNKNOWN";
+    }
+
+    @Override
+    public int compareTo(PlanMeal a) {
+        return order - a.order;
     }
 }

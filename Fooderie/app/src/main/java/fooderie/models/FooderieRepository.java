@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
@@ -42,6 +43,46 @@ public class FooderieRepository {
     }
     public void insert(PlanRecipe p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.insert(p));
+    }
+
+    public void update(PlanWeek p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(p);
+        });
+    }
+    public void update(PlanDay p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(p);
+        });
+    }
+    public void update(PlanMeal p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(p);
+        });
+    }
+    public void update(PlanRecipe p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(p);
+        });
+    }
+    public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            List<PlanMeal> plans = fooderieDao.getAllMealPlans(id);
+
+            for (Pair<Integer, Integer> m : moves) {
+                if (m.first == null || m.second == null) continue;
+                PlanMeal p1 = (PlanMeal) plans.stream().filter(p -> m.first.equals(p.getOrder())).toArray()[0];
+                PlanMeal p2 = (PlanMeal) plans.stream().filter(p -> m.second.equals(p.getOrder())).toArray()[0];
+
+                int tmp = p1.getOrder();
+                p1.setOrder(p2.getOrder());
+                p2.setOrder(tmp);
+            }
+
+            for (PlanMeal p : plans) {
+                fooderieDao.update(p);
+            }
+        });
     }
 
     public void delete(PlanWeek p) {

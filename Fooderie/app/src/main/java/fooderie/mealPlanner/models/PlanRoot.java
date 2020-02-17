@@ -9,6 +9,7 @@ import fooderie.models.FooderieRepository;
 
 public class PlanRoot extends Plan {
     public static final boolean editable = false;
+
     public PlanRoot() {
         super(null, null, null,0);
     }
@@ -20,20 +21,20 @@ public class PlanRoot extends Plan {
     }
 
     @Override
-    public Plan makeChild(Long parentId, String name, int recipeCount) {
-        return new PlanWeek(parentId, name, recipeCount);
-    }
-    @Override
     public boolean isEditable() {
         return editable;
     }
     @Override
-    public boolean isParentEditable() {
-        return false;
-    }
-    @Override
     public boolean isChildEditable() {
         return PlanWeek.editable;
+    }
+    @Override
+    public boolean isDraggable() {
+        return draggable;
+    }
+    @Override
+    public boolean isChildDraggable() {
+        return PlanWeek.draggable;
     }
     @Override
     public String childName() {
