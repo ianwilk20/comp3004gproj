@@ -1,0 +1,30 @@
+COMP3004 Dev Log - Week #4
+Michael Ting - 101068936
+
+Overview: The goal for this week was to implement sliding screens (via touch) and create a foundation to build upon
+during reading week.
+
+Weekly Progress:
+[2 hr]
+- Reserach Swiping through sliding screens
+- Test implementation in a standalone app to get the basic concept
+
+[1.5 hr]
+- Implementing a swiping screen into the app with fake data
+
+[7 hr] 
+- Took steps towards implementing the swipping screen with real data through JSoup
+- Many issues caused by JSoup having to be called asyncronously and trying to immediately create the sliding ui without
+any data available
+- Upon much testing and research it became apparent that the current solution was not going to work as android studio
+doesn't like waiting for async tasks to complete in the background
+- Got a general solution working by drawing an empty ui and then having the async task result redraw the ui with new 
+values when it returns, will need to discuss with group members a solution to the starting blank screen delay
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
+
