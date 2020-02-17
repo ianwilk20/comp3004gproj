@@ -9,14 +9,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,8 +28,8 @@ public class CookingAssistantViewer extends AppCompatActivity
     //TextView tstTestView;
     //ListView insList;
     //String instructionList[] = {"1. Boil Water", "2. Open Raman Pack", "3. Pour half of water into a bowl", "4. Put Raman into boiling water to cook", "5. Put flavour packets into bowl water", "6. Wait until Raman cooked", "7. Strain raman and put into bowl"};
-    ArrayList<String> instructionList = new ArrayList<String>();
-
+    ArrayList<String> instructionList = null;
+    //JSoupParse jSoupParse;
     int numSteps = 3;
 
     private ViewPager mSlideViewPager;
@@ -39,23 +37,26 @@ public class CookingAssistantViewer extends AppCompatActivity
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        Log.d(TAG,"\n\n\n --------");
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "\n\n\n --------");
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_cooking_assistant_viewer);
-        //tstTestView = findViewById(R.id.tempList);
-
         setContentView(R.layout.activity_cooking_assistant);
 
-        //Parse with JSoup
-        Log.d(TAG,"\n Start JSoup Parse");
-        new jSoupParse().execute();
+        boolean running = false;
+        try
+        {
+            //Parse with JSoup
+            new jSoupParse().execute().get();
+        }
+        catch(Exception e)
+        {
 
-        Log.d(TAG,"\n Finished JSoup parse...");
+        }
+
+
+
         Log.d(TAG, instructionList.toString());
 
         mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
@@ -67,6 +68,144 @@ public class CookingAssistantViewer extends AppCompatActivity
         addStepStatus(numSteps, 0);
 
         mSlideViewPager.addOnPageChangeListener(viewListener);
+    }
+
+    private void getParse()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+        }).start();
+    }
+
+    public class jSoupParse extends AsyncTask<Void, Void, Void>
+    {
+        String listText = "";
+        String url = "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html";
+        String val = "";
+        ArrayList<String> returnIns = new ArrayList<String>();
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            try
+            {
+                Document doc = Jsoup.connect(url).get();
+
+                if (url.contains("food52"))
+                {
+                    Elements recipeList = doc.select("ol");
+                    int count = 0;
+                    for (Element recipeL : recipeList)
+                    {
+                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
+                        {
+                            count++;
+
+                            Node step1 = recipeL.childNode(i);
+                            Node step2 = step1.childNode(1);
+                            Node step3 = step2.childNode(0);
+                            String val = step3.toString();
+                            //listText += count + ". " + val + "\n\n";
+                            returnIns.add(val);
+                        }
+                    }
+                }
+                else if (url.contains("foodnetwork"))
+                {
+                    Elements recipeList = doc.select("ol");
+                    int count = 0;
+                    for (Element recipeL : recipeList)
+                    {
+                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
+                        {
+                            count++;
+
+                            Node step1 = recipeL.childNode(i);
+                            Node step3 = step1.childNode(0);
+                            String val = step3.toString();
+                            //listText += count + ". " + val + "\n\n";
+                            returnIns.add(val);
+                        }
+                    }
+                }
+
+                else if (url.contains("seriouseats"))
+                {
+                    Elements recipeList = doc.select("ol");
+                    int count = 0;
+                    for (Element recipeL : recipeList)
+                    {
+                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
+                        {
+                            count++;
+
+                            Node step1 = recipeL.childNode(i);
+                            Node step2 = step1.childNode(3).childNode(2).childNode(0);
+                            if (step2.toString().contains("<strong>"))
+                            {
+                                Node step3 = step2.childNode(0); //Get actual step info
+                                Node step4 = step1.childNode(3).childNode(2).childNode(1); //Get actual step info
+
+                                val = step3.toString() + ":" + step4.toString();
+                            }
+                            else
+                            {
+                                Node step4 = step1.childNode(3).childNode(2).childNode(0); //Get actual step info
+
+                                val = step4.toString();
+                            }
+                            //listText += count + " - " + val + "\n\n";
+                            returnIns.add(val);
+                        }
+                    }
+                }
+                else
+                {
+                    Log.d(TAG, "Non parsable website, do something here...");
+
+                }
+            }
+            catch(Exception e)
+            {
+                //e.printStackTrace();
+                Log.d(TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.d(TAG, "done");
+            instructionList = returnIns;
+            Log.d(TAG, listText);
+        }
+    }
+
+    public String getUrl()
+    {
+        Random rng = new Random();
+
+        String[] urls = {
+                "https://food52.com/recipes/22633-strawberry-basil-lemonade",
+                "https://www.foodnetwork.com/recipes/food-network-kitchen/strawberries-with-basil-granita-recipe-1928457",
+                "https://www.seriouseats.com/recipes/2013/06/whole-wheat-oatmeal-pancakes-maple-roast-rhubarb-recipe.html",
+                "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html"
+        };
+
+        return "https://food52.com/recipes/22633-strawberry-basil-lemonade";
     }
 
     public void addStepStatus(int stepLength, int position) // From https://www.youtube.com/watch?v=byLKoPgB7yA
@@ -108,131 +247,4 @@ public class CookingAssistantViewer extends AppCompatActivity
 
         }
     };
-
-    public class jSoupParse extends AsyncTask<Void, Void, Void>
-    {
-        Random rng = new Random();
-
-        String words;
-        String title;
-        String listText = "";
-        String[] urls = {
-                "https://food52.com/recipes/22633-strawberry-basil-lemonade",
-                "https://www.foodnetwork.com/recipes/food-network-kitchen/strawberries-with-basil-granita-recipe-1928457",
-                "https://www.seriouseats.com/recipes/2013/06/whole-wheat-oatmeal-pancakes-maple-roast-rhubarb-recipe.html",
-                "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html"
-        };
-
-        String url = "";
-        String val = "";
-        ArrayList<String> steps;
-
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            url = urls[rng.nextInt(urls.length)];
-            steps = new ArrayList<String>();
-
-            try
-            {
-                Document doc = Jsoup.connect(url).get();
-                //Elements recipe = doc.select("#recipeDirectionsRoot > div:eq(1) > ol");
-
-                if (url.contains("food52"))
-                {
-                    Elements recipeList = doc.select("ol");
-                    int count = 0;
-                    for (Element recipeL : recipeList)
-                    {
-                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
-                        {
-                            count++;
-
-                            Node step1 = recipeL.childNode(i);
-                            Node step2 = step1.childNode(1);
-                            Node step3 = step2.childNode(0);
-                            String val = step3.toString();
-                            //listText += count + ". " + val + "\n\n";
-                            steps.add(val);
-                        }
-                    }
-                }
-                else if (url.contains("foodnetwork"))
-                {
-                    Elements recipeList = doc.select("ol");
-                    int count = 0;
-                    for (Element recipeL : recipeList)
-                    {
-                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
-                        {
-                            count++;
-
-                            Node step1 = recipeL.childNode(i);
-                            Node step3 = step1.childNode(0);
-                            String val = step3.toString();
-                            //listText += count + ". " + val + "\n\n";
-                            steps.add(val);
-                        }
-                    }
-                }
-
-                else if (url.contains("seriouseats"))
-                {
-                    Elements recipeList = doc.select("ol");
-                    int count = 0;
-                    for (Element recipeL : recipeList)
-                    {
-                        for(int i = 1; i < recipeL.childNodeSize(); i += 2) //Skip over the empty child nodes
-                        {
-                            count++;
-
-                            Node step1 = recipeL.childNode(i);
-                            Node step2 = step1.childNode(3).childNode(2).childNode(0);
-                            if (step2.toString().contains("<strong>"))
-                            {
-                                Node step3 = step2.childNode(0); //Get actual step info
-                                Node step4 = step1.childNode(3).childNode(2).childNode(1); //Get actual step info
-
-                                val = step3.toString() + ":" + step4.toString();
-
-                            }
-                            else
-                            {
-                                Node step4 = step1.childNode(3).childNode(2).childNode(0); //Get actual step info
-
-
-                                val = step4.toString();
-
-                            }
-
-                            //listText += count + " - " + val + "\n\n";
-                            steps.add(val);
-                        }
-                    }
-                }
-                else
-                {
-                    Log.d(TAG, "Non parsable website, do something here...");
-                }
-            }
-            catch(Exception e)
-            {
-                //e.printStackTrace();
-                Log.d(TAG, e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Log.d(TAG, "Finished Parse");
-            instructionList = steps;
-            Log.d(TAG, "Finished save");
-            Log.d(TAG, instructionList.toString());
-
-            //tstTestView.setText(listText);
-            //Log.d(TAG, listText);
-        }
-    }
 }
