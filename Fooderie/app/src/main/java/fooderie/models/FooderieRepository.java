@@ -102,4 +102,6 @@ public class FooderieRepository {
     public LiveData<List<PlanDay>> getDayPlans(Long id) { return fooderieDao.getDayPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long id) { return fooderieDao.getMealPlans(id); }
     public LiveData<List<PlanRecipe>> getRecipePlans(Long id) { return fooderieDao.getRecipePlans(id); }
+
+    public LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id) { return fooderieDao.getAllRecipesFromWeeklyMealPlanId(id); }
 }

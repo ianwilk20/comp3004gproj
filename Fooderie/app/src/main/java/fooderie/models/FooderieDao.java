@@ -61,8 +61,11 @@ public interface FooderieDao {
     List<PlanMeal>  getAllMealPlans(Long id);
 
     @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :id")
-    LiveData<List<PlanRecipe>>  getRecipePlans(Long id);
+    LiveData<List<PlanRecipe>> getRecipePlans(Long id);
 
-    //@Query("SELECT table_Recipe.recipe_id FROM table_PlanRecipe, table_Recipe WHERE table_PlanRecipe.plan_id == :id AND table_PlanRecipe.recipe_id == table_Recipe.recipe_id")
-    //List<Recipe> getRecipesForPlan(Long id);
+
+    @Query("SELECT * FROM table_PlanWeek w, table_PlanDay d, table_PlanMeal m, table_PlanRecipe pr, table_Recipe r " +
+            "WHERE w.planId == :id AND d.parentId == w.planId AND m.parentId == d.planId AND pr.parentId == m.planId " +
+            "AND pr.recipeId == r.recipe_id")
+    LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id);
 }
