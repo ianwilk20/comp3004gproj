@@ -5,6 +5,7 @@ import com.example.fooderie.R;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -25,74 +26,29 @@ import org.jsoup.select.Elements;
 public class CookingAssistantViewer extends AppCompatActivity
 {
     private static final String TAG = CookingAssistantViewer.class.getSimpleName();
-    //TextView tstTestView;
-    //ListView insList;
-    //String instructionList[] = {"1. Boil Water", "2. Open Raman Pack", "3. Pour half of water into a bowl", "4. Put Raman into boiling water to cook", "5. Put flavour packets into bowl water", "6. Wait until Raman cooked", "7. Strain raman and put into bowl"};
-    ArrayList<String> instructionList = null;
-    //JSoupParse jSoupParse;
-    int numSteps = 3;
+    ArrayList<String> instructionList = new ArrayList<>();
+    int numSteps = 0;
 
     private ViewPager mSlideViewPager;
     private LinearLayout mDotLayout;
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "\n\n\n --------");
+        new jSoupParse().execute();
+        context = this;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant);
 
-        boolean running = false;
-        try
-        {
-            //Parse with JSoup
-            new jSoupParse().execute().get();
-        }
-        catch(Exception e)
-        {
-
-        }
-
-
-
-        Log.d(TAG, instructionList.toString());
-
-        mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
-        mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
-
-        sliderAdapter = new SliderAdapter(this, instructionList);
-        mSlideViewPager.setAdapter((sliderAdapter));
-        numSteps = instructionList.size();
-        addStepStatus(numSteps, 0);
-
-        mSlideViewPager.addOnPageChangeListener(viewListener);
-    }
-
-    private void getParse()
-    {
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-
-                }
-                catch (Exception e)
-                {
-
-                }
-            }
-        }).start();
     }
 
     public class jSoupParse extends AsyncTask<Void, Void, Void>
     {
-        String listText = "";
-        String url = "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html";
+        String url = getUrl();
         String val = "";
         ArrayList<String> returnIns = new ArrayList<String>();
 
@@ -188,9 +144,21 @@ public class CookingAssistantViewer extends AppCompatActivity
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d(TAG, "done");
             instructionList = returnIns;
-            Log.d(TAG, listText);
+
+            setContentView(R.layout.activity_cooking_assistant);
+
+            Log.d(TAG, instructionList.toString());
+
+            mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
+            mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
+
+            sliderAdapter = new SliderAdapter(context, instructionList);
+            mSlideViewPager.setAdapter((sliderAdapter));
+            numSteps = instructionList.size();
+            addStepStatus(numSteps, 0);
+
+            mSlideViewPager.addOnPageChangeListener(viewListener);
         }
     }
 
@@ -205,7 +173,7 @@ public class CookingAssistantViewer extends AppCompatActivity
                 "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html"
         };
 
-        return "https://food52.com/recipes/22633-strawberry-basil-lemonade";
+        return urls[rng.nextInt(urls.length)];
     }
 
     public void addStepStatus(int stepLength, int position) // From https://www.youtube.com/watch?v=byLKoPgB7yA

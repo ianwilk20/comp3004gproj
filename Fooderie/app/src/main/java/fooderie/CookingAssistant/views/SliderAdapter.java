@@ -19,31 +19,17 @@ public class SliderAdapter extends PagerAdapter {
     Context context;
     LayoutInflater layoutInflater;
     ArrayList<String> steps;
-
-    //Arrays for steps (need to get from parsing still
-    public String[] headings = {"1.", "2.", "3."};
-    public String[] instructionSteps = {"This is a sentence of stuff", "More stuff here", "End of all of the stuffz"};
-
+    
     public SliderAdapter(Context context, ArrayList<String> instructions)
     {
         this.context = context;
-
         this.steps = instructions;
-        //this.steps.add("This is first step");
-        //this.steps.add("This is second step");
-        //this.steps.add("this is third step");
-        //this.steps = steps;
-        //Log.d(TAG, steps.toString());
     }
-
-
-
-
 
     @Override
     public int getCount()
     {
-        return headings.length;
+        return steps.size();
     }
 
     @Override
