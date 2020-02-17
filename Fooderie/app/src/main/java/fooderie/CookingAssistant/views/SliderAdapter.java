@@ -12,19 +12,33 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.fooderie.R;
 
+import java.util.ArrayList;
+
 public class SliderAdapter extends PagerAdapter {
 
     Context context;
     LayoutInflater layoutInflater;
-
-    public SliderAdapter(Context context)
-    {
-        this.context = context;
-    }
+    ArrayList<String> steps;
 
     //Arrays for steps (need to get from parsing still
     public String[] headings = {"1.", "2.", "3."};
     public String[] instructionSteps = {"This is a sentence of stuff", "More stuff here", "End of all of the stuffz"};
+
+    public SliderAdapter(Context context, ArrayList<String> instructions)
+    {
+        this.context = context;
+
+        this.steps = instructions;
+        //this.steps.add("This is first step");
+        //this.steps.add("This is second step");
+        //this.steps.add("this is third step");
+        //this.steps = steps;
+        //Log.d(TAG, steps.toString());
+    }
+
+
+
+
 
     @Override
     public int getCount()
@@ -51,8 +65,10 @@ public class SliderAdapter extends PagerAdapter {
         TextView slideInstructions = (TextView) view.findViewById(R.id.slideInstructions);
 
         //Set element values
-        slideTitle.setText(headings[position]);
-        slideInstructions.setText(instructionSteps[position]);
+        //slideTitle.setText(headings[position]);
+        slideTitle.setText((position + 1) + ".");
+        //slideInstructions.setText(instructionSteps[position]);
+        slideInstructions.setText(steps.get(position));
 
         //Add view and return
         container.addView(view);
