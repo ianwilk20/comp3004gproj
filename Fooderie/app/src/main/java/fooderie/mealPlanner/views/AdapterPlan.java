@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.fooderie.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -40,14 +39,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     private List<Plan> m_displayPlans;
     private Function<Plan, Void> m_displayChildrenPlansOfID;
     private Function<Plan, Void> m_deletePlan;
-    private Function<Plan, Void> m_updatePlan;
 
 
-    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete, Function<Plan, Void> update) {
+    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete) {
         m_inflater = LayoutInflater.from(context);
         m_displayChildrenPlansOfID = display;
         m_deletePlan = delete;
-        m_updatePlan = update;
     }
 
     void setPlans(List<Plan> plans) {
@@ -71,15 +68,11 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             String suffix = (count == 0 || count > 1) ? "s" : "";
             holder.recipeCount.setText(Integer.toString(count) + " Recipe" + suffix);
 
-            holder.layout.setOnClickListener((View v)-> {
-                m_displayChildrenPlansOfID.apply(p);
-            });
+            holder.layout.setOnClickListener((View v) -> m_displayChildrenPlansOfID.apply(p));
 
             if (p.isEditable()) {
                 holder.deleteButton.setVisibility(View.VISIBLE);
-                holder.deleteButton.setOnClickListener((View v) -> {
-                    m_deletePlan.apply(p);
-                });
+                holder.deleteButton.setOnClickListener((View v) -> m_deletePlan.apply(p));
             } else {
                 holder.deleteButton.setVisibility(View.INVISIBLE);
             }

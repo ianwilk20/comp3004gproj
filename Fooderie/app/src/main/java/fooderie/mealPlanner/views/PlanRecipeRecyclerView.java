@@ -1,21 +1,20 @@
 package fooderie.mealPlanner.views;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SearchView;
 
+import com.example.fooderie.rbActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanViewModel;
@@ -43,7 +41,6 @@ public class PlanRecyclerView extends AppCompatActivity {
     private FloatingActionButton m_fab;
 
     private Toolbar m_toolbar;
-    //private SearchView m_searchbar;
 
     private ItemTouchHelper m_itemOrderTouchHelper;
     private PlanAdapter m_planAdaptor;
@@ -54,6 +51,11 @@ public class PlanRecyclerView extends AppCompatActivity {
     private final Plan ROOT = new PlanRoot();
     private Plan m_current() {return m_path.peek();}
     private Stack<Plan> m_path = new Stack<>();
+
+    private static final int RECIPE_REQUEST_VIEW = 1;
+    private static final String REQUEST_RECIPE = "FROMPLAN";
+    private static final String REQUEST_RECIPE_VALUE = "yes";
+    private static final String GET_RECIPE = "RECIPE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +76,15 @@ public class PlanRecyclerView extends AppCompatActivity {
                     ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0) {
                 private List<Pair<Integer, Integer>> moves;
                 @Override
+                @SuppressWarnings("all")
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder from, @NonNull RecyclerView.ViewHolder to) {
-                    final RecyclerView.Adapter adapter = (PlanAdapter) recyclerView.getAdapter();
+                    final RecyclerView.Adapter adapter = recyclerView.getAdapter();
                     final int fromPos = from.getAdapterPosition();
                     final int toPos = to.getAdapterPosition();
 
-                    Pair<Integer, Integer> move = new Pair<Integer, Integer>(fromPos, toPos);
+                    Pair<Integer, Integer> move = new Pair<>(fromPos, toPos);
                     if (moves == null) {
-                        moves = new ArrayList<Pair<Integer, Integer>>();
+                        moves = new ArrayList<>();
                     }
                     moves.add(move);
 
@@ -101,7 +104,7 @@ public class PlanRecyclerView extends AppCompatActivity {
                 }
         });
 
-        m_planAdaptor = new PlanAdapter(this, this::selectPlan, this::deletePlan, this::updatePlan);
+        m_planAdaptor = new PlanAdapter(this, this::selectPlan, this::deletePlan);
         m_planRecipeAdaptor = new PlanRecipeAdapter(this, getResources(), this::deletePlanRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
@@ -121,17 +124,26 @@ public class PlanRecyclerView extends AppCompatActivity {
         updateDisplay();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RECIPE_REQUEST_VIEW) {
+            if (resultCode != RESULT_OK)
+                return;
+
+            // -- Get recipe to put into database -- //
+            Recipe r = (Recipe) data.getSerializableExtra(GET_RECIPE);
+            m_viewModel.insertRecipeAndPlanRecipe(m_current().getPlanId(), r);
+        }
+    }
+
     private Void deletePlan(Plan p) {
         m_viewModel.deletePlan(p);
         return null;
     }
+
     private Void deletePlanRecipe(Long r) {
         m_viewModel.deletePlanRecipe(m_current().getPlanId(), r);
-        return null;
-    }
-
-    private Void updatePlan(Plan p) {
-        m_viewModel.updatePlan(p);
         return null;
     }
 
@@ -202,11 +214,10 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     private void addPlanDialog() {
         if (m_current() instanceof PlanMeal) {
-            // -- Addition at the recipe level -- //
-            // -- Get recipe id to make a new PlanRecipe link -- //
-            Long recipeId = 0L; //TODO: Get a unique identifier of a single recipe
-            PlanRecipe pr = new PlanRecipe(m_current().getPlanId(), recipeId);
-            m_viewModel.insertPlanRecipe(pr);
+            // -- Addition at the recipe level, make activity to get recipe from recipe browser -- //
+            Intent rbIntent = new Intent(this, rbActivity.class);
+            rbIntent.putExtra(REQUEST_RECIPE, REQUEST_RECIPE_VALUE);
+            startActivityForResult(rbIntent, RECIPE_REQUEST_VIEW);
 
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

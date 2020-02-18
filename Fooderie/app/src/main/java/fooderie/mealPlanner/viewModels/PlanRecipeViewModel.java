@@ -45,8 +45,9 @@ public class PlanViewModel extends AndroidViewModel {
         m_repo.deletePlanRecipe(p_id, r_id);
     }
 
-    public LiveData<List<PlanWeek>> getAllWeeklyMealPlans() {
-        return m_repo.getWeekPlans();
+    // -- Makes new recipe entity in database, and makes new link to it -- //
+    public void insertRecipeAndPlanRecipe(Long p_id, Recipe r) {
+        m_repo.insert(p_id, r);
     }
 
     public void insertPlan(Plan p) {
