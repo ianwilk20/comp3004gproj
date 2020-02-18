@@ -62,6 +62,7 @@ public abstract class Plan {
     public void setRecipeCount(int r) {this.recipeCount = r;}
 
     public abstract void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o);
+    public abstract void removeLiveData(LifecycleOwner owner);
 
     public abstract boolean isEditable();
     public abstract boolean isChildEditable();
@@ -70,14 +71,6 @@ public abstract class Plan {
     public abstract boolean isChildDraggable();
 
     public abstract String childName();
-
-    public void removeLiveData(@NonNull LifecycleOwner owner) {
-        if (children == null)
-            return;
-
-        children.removeObservers(owner);
-        children = null;
-    }
 
     @Override
     @SuppressWarnings("All")

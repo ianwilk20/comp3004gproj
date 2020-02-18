@@ -19,6 +19,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.models.FooderieRepository;
+import fooderie.models.Recipe;
 
 public class PlanViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
@@ -35,6 +36,17 @@ public class PlanViewModel extends AndroidViewModel {
 
     public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
         m_repo.updatePlanMealsOrder(id, moves);
+    }
+
+    public void insertPlanRecipe(PlanRecipe pr) {
+        m_repo.insert(pr);
+    }
+
+    public LiveData<List<Recipe>> getAllRecipes() {
+        return m_repo.getAllRecipes();
+    }
+    public LiveData<List<PlanWeek>> getAllWeeklyMealPlans() {
+        return m_repo.getWeekPlans();
     }
 
     public void insertPlan(Plan p) {

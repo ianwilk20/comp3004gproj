@@ -3,6 +3,7 @@ package fooderie.models;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,7 +38,7 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FooderieRoomDatabase.class, "fooderie_database")
-                            //.addCallback(roomDatabaseCallback)
+                            .addCallback(roomDatabaseCallback)
                             .build();
                 }
             }
@@ -50,7 +51,15 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
-                //FooderieDao dao = INSTANCE.fooderieDao();
+                FooderieDao dao = INSTANCE.fooderieDao();
+
+                dao.deleteAllRecipes();
+
+                Recipe r = new Recipe();
+                r.setId(0L);
+                dao.insert(r);
+
+
                 //dao.deleteAllPlans();
                 //Log.d("FooderieRoomDatabase", "onOpen: Everything finished deleting...I think");
                 /*dao.deleteAllPlanRecipes();

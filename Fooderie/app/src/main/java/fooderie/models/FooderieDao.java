@@ -9,6 +9,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import androidx.room.RoomWarnings;
 import androidx.room.Update;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
@@ -19,7 +20,7 @@ import fooderie.mealPlanner.models.PlanWeek;
 @Dao
 public interface FooderieDao {
 
-    /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, dao interactions */
+    /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
     @Insert
     long insert(PlanWeek p);
     @Insert
@@ -60,12 +61,23 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     List<PlanMeal>  getAllMealPlans(Long id);
 
-    @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :id")
-    LiveData<List<PlanRecipe>> getRecipePlans(Long id);
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
+    LiveData<List<Recipe>> getRecipes(Long id);
 
-
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanWeek w, table_PlanDay d, table_PlanMeal m, table_PlanRecipe pr, table_Recipe r " +
             "WHERE w.planId == :id AND d.parentId == w.planId AND m.parentId == d.planId AND pr.parentId == m.planId " +
             "AND pr.recipeId == r.recipe_id")
     LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id);
+
+
+    /* Entity=Recipe dao interactions */
+    @Insert
+    Long insert(Recipe r);
+
+    @Query("DELETE FROM table_Recipe")
+    void deleteAllRecipes();
+    @Query("SELECT * FROM table_Recipe")
+    LiveData<List<Recipe>> getAllRecipes();
 }

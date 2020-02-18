@@ -21,10 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
+import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanViewModel;
-import kotlin.TuplesKt;
+import fooderie.models.Recipe;
 
 
 import com.example.fooderie.R;
@@ -40,7 +41,9 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     private ItemTouchHelper m_itemOrderTouchHelper;
     private PlanAdapter m_planAdaptor;
-    private RecyclerView m_recyclerView;
+    private PlanRecipeAdapter m_planRecipeAdaptor;
+    private RecyclerView m_planRecyclerView;
+    private RecyclerView m_planRecipeRecyclerView;
 
     private final Plan ROOT = new PlanRoot();
     private Plan m_current() {return m_path.peek();}
@@ -86,10 +89,17 @@ public class PlanRecyclerView extends AppCompatActivity {
                     moves = null;
                 }
         });
+
         m_planAdaptor = new PlanAdapter(this, this::selectPlan, this::deletePlan, this::updatePlan);
-        m_recyclerView = findViewById(R.id.PlanRecyclerView);
-        m_recyclerView.setAdapter(m_planAdaptor);
-        m_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        m_planRecipeAdaptor = new PlanRecipeAdapter(this, getResources());
+
+        m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
+        m_planRecipeRecyclerView.setAdapter(m_planRecipeAdaptor);
+        m_planRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        m_planRecyclerView = findViewById(R.id.PlanRecyclerView);
+        m_planRecyclerView.setAdapter(m_planAdaptor);
+        m_planRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         m_fab = findViewById(R.id.fab);
         m_fab.setOnClickListener((View view) -> addPlanDialog());
@@ -128,17 +138,29 @@ public class PlanRecyclerView extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     private void updateDisplay() {
         m_viewModel.setupDisplay(m_current(), this, obj -> {
-            try {
-                List plans = (List<Plan>) obj;
-                if (plans.size() != 0) {
-                    Plan first = (Plan) plans.get(0);
-                    if (first instanceof PlanMeal) {
-                        Collections.sort((List<PlanMeal>)plans);
+            if (m_current() instanceof PlanMeal) {
+                // -- Displaying at the recipe level. Need to display information differently -- //
+                m_planRecyclerView.setVisibility(View.INVISIBLE);
+                m_planRecipeRecyclerView.setVisibility(View.VISIBLE);
+
+                m_planRecipeAdaptor.setPlanRecipes((List<Recipe>) obj);
+
+            } else {
+                m_planRecyclerView.setVisibility(View.VISIBLE);
+                m_planRecipeRecyclerView.setVisibility(View.INVISIBLE);
+
+                try {
+                    List plans = (List<Plan>) obj;
+                    if (plans.size() != 0) {
+                        Plan first = (Plan) plans.get(0);
+                        if (first instanceof PlanMeal) {
+                            Collections.sort((List<PlanMeal>) plans);
+                        }
                     }
+                    m_planAdaptor.setPlans(plans);
+                } catch (Exception e) {
+                    Log.d("BANANA", "Observer onCreate: plans not of type List<Plans>");
                 }
-                m_planAdaptor.setPlans(plans);
-            } catch (Exception e) {
-                Log.d("BANANA", "Observer onCreate: plans not of type List<Plans>");
             }
         });
 
@@ -149,43 +171,48 @@ public class PlanRecyclerView extends AppCompatActivity {
         }
 
         if (m_current().isChildDraggable()) {
-            m_itemOrderTouchHelper.attachToRecyclerView(m_recyclerView);
+            m_itemOrderTouchHelper.attachToRecyclerView(m_planRecyclerView);
         } else {
             m_itemOrderTouchHelper.attachToRecyclerView(null);
         }
+
     }
 
     private void addPlanDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New "+ m_current().childName()+":");
+        if (m_current() instanceof PlanMeal) {
+            // -- Additions at the recipe level. Need to acquire information differently and store differently -- //
+            Long recipeId = 0L; //TODO: Get a unique identifier of a single recipe
+            PlanRecipe pr = new PlanRecipe(m_current().getPlanId(), recipeId);
+            m_viewModel.insertPlanRecipe(pr);
 
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("New " + m_current().childName() + ":");
 
-        builder.setPositiveButton("OK", ((DialogInterface dialog, int which) -> {
-            String planName = input.getText().toString();
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
 
-            Plan p = null;
-            if (m_current() instanceof PlanMeal) {
-                // -- Additions at the recipe level. Need to acquire information differently and store differently -- //
+            builder.setPositiveButton("OK", ((DialogInterface dialog, int which) -> {
+                String planName = input.getText().toString();
 
-            } else if (m_current() instanceof PlanDay) {
-                // -- Additions at the meal plan level. Need to add order attribute.
-                p = new PlanMeal(m_current().getPlanId(), planName, 0, m_planAdaptor.getItemCount());
+                Plan p = null;
+                if (m_current() instanceof PlanDay) {
+                    // -- Additions at the meal plan level. Need to add order attribute.
+                    p = new PlanMeal(m_current().getPlanId(), planName, 0, m_planAdaptor.getItemCount());
+                } else if (m_current() instanceof PlanWeek) {
+                    p = new PlanDay(m_current().getPlanId(), planName, 0);
+                } else if (m_current() instanceof PlanRoot) {
+                    p = new PlanWeek(m_current().getPlanId(), planName, 0);
+                }
 
-            } else if (m_current() instanceof PlanWeek) {
-                p = new PlanDay(m_current().getPlanId(), planName, 0);
-            } else if (m_current() instanceof PlanRoot) {
-                p = new PlanWeek(m_current().getPlanId(), planName, 0);
-            }
+                if (p != null)
+                    m_viewModel.insertPlan(p);
 
-            if (p != null)
-                m_viewModel.insertPlan(p);
+            }));
+            builder.setNegativeButton("Cancel", ((DialogInterface dialog, int which) -> dialog.dismiss()));
 
-        }));
-        builder.setNegativeButton("Cancel", ((DialogInterface dialog, int which) -> dialog.dismiss()));
-
-        builder.show();
+            builder.show();
+        }
     }
 }

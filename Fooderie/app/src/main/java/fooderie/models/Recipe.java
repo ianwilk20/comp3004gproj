@@ -12,7 +12,7 @@ public class Recipe {
     @ColumnInfo(name="recipe_id")
     private Long id;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public void setId(Long id) {

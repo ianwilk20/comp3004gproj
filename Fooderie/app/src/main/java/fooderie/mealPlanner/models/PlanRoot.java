@@ -21,6 +21,15 @@ public class PlanRoot extends Plan {
     }
 
     @Override
+    public void removeLiveData(LifecycleOwner owner){
+        if (children == null)
+            return;
+
+        children.removeObservers(owner);
+        children = null;
+    }
+
+    @Override
     public boolean isEditable() {
         return editable;
     }
