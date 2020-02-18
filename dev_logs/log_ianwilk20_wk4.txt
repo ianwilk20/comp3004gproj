@@ -1,0 +1,55 @@
+Development Log – Week #4
+Ian Wilkinson, 101073244
+
+The goal for this week was to futher enhance usability through enhancing the grocery list to allow users to delete/alter the ingredients they add to the list as well as implement a more efficient way to store API results either through a HashMap or some other fast lookup manner that can be connected to an ArrayAdapter. 
+
+Saturday, Febuary 14, 2020
+ - [4 Hr] Got It List
+	o Added inflated items headers to special grocery items
+	o Upon clicking any item in the grocery list it is added to a Got It list
+	o This temporary store acts a backup
+		a) If the user intended to delete the item, they have one more step to delete it
+		b) If the item was accidentally pressed, no harm is done, it is added to the Got It list
+	o Upon being added to the Got It list
+		a) The user can click back on the item in the case that it was an accident and the item will be readded to the grocery list (if they didn't mean to remove it from their proper grocery list)
+		b) The user can clear the got it list, thus acting as a two factor verification that they did intend to delete said item
+
+
+ - [3 Hr] Custom Adapter 
+   	o Defined a customized adapter so the grocery list can have additional functionality such as:
+		- A "Edit" button
+		- A "Delete" button
+	o Made a link between the GroceryList Activity and CustomAdapter via an interface to allow for data changes to be persisted across layouts:
+		
+	o Started development on what happens when a user clicks on the "Edit" button
+		- So far it will allow for the following fields to be added/updated:
+			o Ingredient
+			o Quantity
+			o Notes (on the item, in case they want to remind themselves it's for a specific recipe)
+			o Department (since the API doesn't provide specific food categories, the user can type in a category if desired)
+		- Each field has a text hint so user's are aware of what to add to which field
+ 
+- [1.5 Hr] Custom Dialogs and Layouts
+	o Defined a Item Header Layout in order for an item added to the grocery list's "Got It" list to have the "Got It" title, and "Clear" clickable text
+	o Edit/Delete Layout a special wrapper in order used for the CustomAdpater, to allow each ingredient to be accompanied by an edit button and delete button
+	o Edit Grocery Dialog to allow users to update/add certain additional information to already added ingredients
+	
+- [0.5] Enhanced UI
+	o Added custom fonts to make the text pop and be differentiated from the standard sans serif font
+	o Added custom icons for the "Edit" and "Delete" button
+
+- [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+
+- Continuing the development of edit, and delete on the side of the custom adapter. 
+- Making fields from the edit be captured and stored and transfered to the grocery list view (upon pressing "Update" on the dialog)
+- Making said captured fields appear on the display below the ingredient (quantity, notes, department) -> possibily filtering by department
+- Utilizing the custom adapter on the Got it List too, in the case that we deem it necessary for users to be able to edit Got It List items or delete them individually (instead of clearing them)
+- Figuring out how to store data in the database:
+ -- Possibly a table for the users current grocery list |food_id|item|quantity|category|notes|
+ -- Another table for API responses of ingredients to be saved in DB for first lookup
+
+- Also making my grocery list first look at DB then the API for ingredients
+- If not in DB, go to API and add the API response to the DB for reduce API reliance

@@ -13,10 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="fooderie.mealPlanner.views.PlanRecyclerView"/>
-        <activity android:name="fooderie.groceryList.GroceryList" />
-        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer"></activity>
 
+        <activity android:name="fooderie.mealPlanner.views.PlanRecyclerView"/>
+
+        <activity android:name=".rbWebsite"></activity>
+        <activity android:name=".rbSelected" />
+        <activity android:name=".rbActivity" />
+        <activity
+            android:name="fooderie.mealPlanner.views.MealPlannerViewer"
+            android:label="@string/title_activity_meal_planner_viewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".GroceryList" />
+        <activity
+            android:name="fooderie.mealPlanner.views.PlanRecyclerView"
+            android:label="@string/title_activity_mealplanner_recyclerview"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name="fooderie.groceryList.GroceryList" />
+        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -27,6 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

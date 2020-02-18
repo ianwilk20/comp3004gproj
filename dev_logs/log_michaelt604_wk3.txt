@@ -1,0 +1,28 @@
+COMP3004 Dev Log - Week #3
+Michael Ting - 101068936
+
+Overview: The goal for this week was to extend the parsing coverage for websites to get the instruction steps
+as well as find a good way to display to the UI without a final UI finished for the cooking assistant.
+
+Weekly Progress:
+[1.5 Hr]
+- More reserach on in depth JSoup usage as well as better practices
+
+[2 Hr]
+- Refactored parsing code to increase readibility and effciency
+- Refactored UI to better display the temporary recipe steps on the first page
+- Added two more sites that can be parsed aside from food52. Those were seriouseats and foodnetwork.
+
+[1 Hr] 
+- Debugging issues caused by changes made with parsing
+
+[1 Hr]
+- Started to research Finger swipping to be implemented next week
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
+

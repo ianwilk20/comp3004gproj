@@ -1,0 +1,32 @@
+Development Log – Week #3 
+Ian Wilkinson, 101073244
+
+The goal for this week for myself was to enable full functionality of the API through the grocery search meaning that when a ingredient was looked up, it wait until it would be able to be found by the API, then would be added to the containers we have and displayed to the user. Another key functionality was enabling the deletion and edits of grocery items. 
+
+Saturday, Febuary 8, 2020
+ - [3 Hr] Proper Parsing of API Fields
+	o API responses were not being properly parsed and converted to models
+	o Enabled the use of our models and changed existing ones to conform to the standards of the response by changing attributes, and storage containers
+	o Fixed Volley Response parsing to use gson to convert our response to our model classes
+
+
+ - [2 Hr] API Connection 
+   	o Defined a customized exception for when no ingredient can be found as opposed to a general error message
+	o Made a link between the API and our code so when a user types in a ingredient:
+		a) The ingredient is sent to the API
+		b) A wait dialog is displayed
+		c) If the ingredient is found:
+			i) The dialog is closed
+			ii) The HashMap containing unique API responses for parsed ingredients
+			iii) The List of stored ingredients is too updated
+			iv) The ArrayAdapter updated and subsequently the view too
+		d) If the ingredient is NOT found:
+			i) The dialog is closed
+			ii) A toast message is displayed saying the ingredient cannot be found
+			iii) A IngredientNotFoundException is generated and smoothly allows for the continuation of the program
+			iv) The ArrayAdapater remains the same since no updates to either data structures are made since no ingredients could be found
+	o Started development on what happens when a user clicks on the item in their grocery list
+
+ - [0.5 Hr] Log Writing
+
+ 

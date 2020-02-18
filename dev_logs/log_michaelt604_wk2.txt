@@ -1,0 +1,31 @@
+COMP3004 Dev Log - Week #2
+Michael Ting - 101068936
+
+Overview: The goal of this week was to get the recipe instructions parsed from one website provider, 
+in this case, "food52". This was accomplished through the use of a library called jSoup which turns the website into a
+tree which can be searched and parsed to get ui elements.
+
+
+
+Weekly Progress:
+
+[2 Hr]
+- Large about of research on HTML parsing to dynamically get recipe steps 
+- Googling and youtube to figure out how to implement JSoup with Android Studio
+
+[1.5 Hr]
+- Created a test project to experiment with JSoup parsing
+
+[2.5 Hr]
+- Started using JSoup to parse HTML for recipe steps in the main project
+- Successfully parsed a recipe step list from one recipe site
+- Used that recipe to parse and select various elements and subelements from the site
+
+[1.5 Hr]
+- Implemented a basic UI to ensure that parsing was done properly and a proof of concept to display to the screen
+
+[0.5 Hr]
+- Reviewed and approved various group memeber merges
+
+[0.5 Hr]
+- Wrote Dev Log
