@@ -6,6 +6,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -40,6 +43,8 @@ public class PlanRecyclerView extends AppCompatActivity {
     private FloatingActionButton m_fab;
 
     private Toolbar m_toolbar;
+    //private SearchView m_searchbar;
+
     private ItemTouchHelper m_itemOrderTouchHelper;
     private PlanAdapter m_planAdaptor;
     private PlanRecipeAdapter m_planRecipeAdaptor;
@@ -57,7 +62,9 @@ public class PlanRecyclerView extends AppCompatActivity {
 
         m_toolbar = findViewById(R.id.toolbar);
         m_toolbar.setTitle("");
-        //setSupportActionBar(m_toolbar);
+        //m_searchbar = new SearchView(this);
+        //m_searchbar
+        //m_toolbar.addView(m_searchbar);
 
         m_toolbar.setNavigationOnClickListener( v -> selectParentPlan());
         m_toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
@@ -95,7 +102,7 @@ public class PlanRecyclerView extends AppCompatActivity {
         });
 
         m_planAdaptor = new PlanAdapter(this, this::selectPlan, this::deletePlan, this::updatePlan);
-        m_planRecipeAdaptor = new PlanRecipeAdapter(this, getResources());
+        m_planRecipeAdaptor = new PlanRecipeAdapter(this, getResources(), this::deletePlanRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
         m_planRecipeRecyclerView.setAdapter(m_planRecipeAdaptor);
@@ -110,23 +117,29 @@ public class PlanRecyclerView extends AppCompatActivity {
 
         m_viewModel = new ViewModelProvider(this).get(PlanViewModel.class);
 
-        selectPlan(ROOT);
-    }
-
-    private Void selectPlan(Plan p) {
-        m_path.add(p);
+        m_path.add(ROOT);
         updateDisplay();
-
-        return null;
     }
 
     private Void deletePlan(Plan p) {
         m_viewModel.deletePlan(p);
         return null;
     }
+    private Void deletePlanRecipe(Long r) {
+        m_viewModel.deletePlanRecipe(m_current().getPlanId(), r);
+        return null;
+    }
 
     private Void updatePlan(Plan p) {
         m_viewModel.updatePlan(p);
+        return null;
+    }
+
+    private Void selectPlan(Plan p) {
+        m_current().removeLiveData(this);
+        m_path.add(p);
+        updateDisplay();
+
         return null;
     }
 
@@ -189,7 +202,8 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     private void addPlanDialog() {
         if (m_current() instanceof PlanMeal) {
-            // -- Additions at the recipe level. Need to acquire information differently and store differently -- //
+            // -- Addition at the recipe level -- //
+            // -- Get recipe id to make a new PlanRecipe link -- //
             Long recipeId = 0L; //TODO: Get a unique identifier of a single recipe
             PlanRecipe pr = new PlanRecipe(m_current().getPlanId(), recipeId);
             m_viewModel.insertPlanRecipe(pr);

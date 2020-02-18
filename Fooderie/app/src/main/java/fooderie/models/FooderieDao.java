@@ -51,15 +51,26 @@ public interface FooderieDao {
     void delete(PlanRecipe p);
 
     @Query("SELECT * FROM table_PlanWeek")
-    LiveData<List<PlanWeek>>  getWeekPlans();
+    LiveData<List<PlanWeek>> getWeekPlans();
+    @Query("SELECT * FROM table_PlanWeek WHERE planId == :id")
+    PlanWeek getPlanWeek(Long id);
 
     @Query("SELECT * FROM table_PlanDay WHERE parentId == :id")
-    LiveData<List<PlanDay>>  getDayPlans(Long id);
+    LiveData<List<PlanDay>> getDayPlans(Long id);
+    @Query("SELECT * FROM table_PlanDay WHERE planId == :id")
+    PlanDay getPlanDay(Long id);
 
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
-    LiveData<List<PlanMeal>>  getMealPlans(Long id);
+    LiveData<List<PlanMeal>> getMealPlans(Long id);
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
-    List<PlanMeal>  getAllMealPlans(Long id);
+    List<PlanMeal> getAllMealPlans(Long id);
+    @Query("SELECT * FROM table_PlanMeal WHERE planId == :id")
+    PlanMeal getPlanMeal(Long id);
+
+    @Query ("DELETE FROM table_PlanRecipe")
+    void deleteAllPlanRecipes();
+    @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :p_id AND recipeId == :r_id")
+    PlanRecipe getPlanRecipe(Long p_id, Long r_id);
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
@@ -79,5 +90,5 @@ public interface FooderieDao {
     @Query("DELETE FROM table_Recipe")
     void deleteAllRecipes();
     @Query("SELECT * FROM table_Recipe")
-    LiveData<List<Recipe>> getAllRecipes();
+    List<Recipe> getAllRecipes();
 }

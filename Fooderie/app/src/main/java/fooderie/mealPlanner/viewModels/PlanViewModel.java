@@ -41,10 +41,10 @@ public class PlanViewModel extends AndroidViewModel {
     public void insertPlanRecipe(PlanRecipe pr) {
         m_repo.insert(pr);
     }
-
-    public LiveData<List<Recipe>> getAllRecipes() {
-        return m_repo.getAllRecipes();
+    public void deletePlanRecipe(Long p_id, Long r_id) {
+        m_repo.deletePlanRecipe(p_id, r_id);
     }
+
     public LiveData<List<PlanWeek>> getAllWeeklyMealPlans() {
         return m_repo.getWeekPlans();
     }
@@ -76,8 +76,6 @@ public class PlanViewModel extends AndroidViewModel {
     public void deletePlan(Plan p) {
         if (p instanceof PlanWeek) {
             m_repo.delete((PlanWeek) p);
-        } else if (p instanceof PlanDay) {
-            m_repo.delete((PlanDay) p);
         } else if (p instanceof PlanMeal) {
             m_repo.delete((PlanMeal) p);
         } else {

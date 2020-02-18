@@ -72,6 +72,12 @@ public abstract class Plan {
 
     public abstract String childName();
 
+    public void changeCount(int value) {
+        recipeCount += value;
+        if (recipeCount < 0)
+            recipeCount = 0;
+    }
+
     @Override
     @SuppressWarnings("All")
     public @NonNull String toString() {

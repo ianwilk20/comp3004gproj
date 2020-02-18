@@ -1,7 +1,6 @@
 package fooderie.mealPlanner.views;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.fooderie.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,10 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
-import fooderie.mealPlanner.models.PlanDay;
-import fooderie.mealPlanner.models.PlanMeal;
 
-public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder>{
+public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder> {
     class PlanViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView recipeCount;
@@ -68,7 +66,10 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
         if (m_displayPlans != null) {
             Plan p = m_displayPlans.get(pos);
             holder.title.setText(p.getName().toUpperCase());
-            holder.recipeCount.setText(String.format("%d: Recipe(s)", (p.getRecipeCount())));
+
+            int count = p.getRecipeCount();
+            String suffix = (count == 0 || count > 1) ? "s" : "";
+            holder.recipeCount.setText(Integer.toString(count) + " Recipe" + suffix);
 
             holder.layout.setOnClickListener((View v)-> {
                 m_displayChildrenPlansOfID.apply(p);
