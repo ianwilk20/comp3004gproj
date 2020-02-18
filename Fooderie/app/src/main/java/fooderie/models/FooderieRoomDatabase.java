@@ -38,7 +38,7 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             FooderieRoomDatabase.class, "fooderie_database")
-                            .addCallback(roomDatabaseCallback)
+                            //.addCallback(roomDatabaseCallback)
                             .build();
                 }
             }
@@ -51,13 +51,13 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
-                FooderieDao dao = INSTANCE.fooderieDao();
+                //FooderieDao dao = INSTANCE.fooderieDao();
 
-                dao.deleteAllRecipes();
+                //dao.deleteAllRecipes();
 
-                Recipe r = new Recipe();
-                r.setId(0L);
-                dao.insert(r);
+                //Recipe r = new Recipe();
+                //r.setId(0L);
+                //dao.insert(r);
 
 
                 //dao.deleteAllPlans();

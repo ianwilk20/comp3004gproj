@@ -80,7 +80,7 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     }
     @Override
     public String childName() {
-        return "UNKNOWN";
+        return PlanRecipe.planName;
     }
 
     @Override

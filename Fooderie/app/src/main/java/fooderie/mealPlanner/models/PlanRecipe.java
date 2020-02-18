@@ -31,6 +31,8 @@ public class PlanRecipe {
     private Long parentId;
     private Long recipeId;
 
+    public static final String planName = "Recipe";
+
     public Long getPlanId() {
         return planId;
     }

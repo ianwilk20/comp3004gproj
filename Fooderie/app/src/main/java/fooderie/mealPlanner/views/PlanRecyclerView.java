@@ -39,6 +39,7 @@ public class PlanRecyclerView extends AppCompatActivity {
     private PlanViewModel m_viewModel;
     private FloatingActionButton m_fab;
 
+    private Toolbar m_toolbar;
     private ItemTouchHelper m_itemOrderTouchHelper;
     private PlanAdapter m_planAdaptor;
     private PlanRecipeAdapter m_planRecipeAdaptor;
@@ -53,14 +54,17 @@ public class PlanRecyclerView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_recyclerview);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_right_black_24dp);
-        toolbar.setNavigationOnClickListener( v -> selectParentPlan());
+        m_toolbar = findViewById(R.id.toolbar);
+        m_toolbar.setTitle("");
+        //setSupportActionBar(m_toolbar);
+
+        m_toolbar.setNavigationOnClickListener( v -> selectParentPlan());
+        m_toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
         m_itemOrderTouchHelper = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0) {
+            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0) {
                 private List<Pair<Integer, Integer>> moves;
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder from, @NonNull RecyclerView.ViewHolder to) {
@@ -83,7 +87,7 @@ public class PlanRecyclerView extends AppCompatActivity {
                     // -- NOT REQUIRED -- //
                 }
                 @Override
-                public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
                     m_viewModel.updatePlanMealsOrder(m_current().getPlanId(), moves);
                     moves = null;
@@ -106,8 +110,7 @@ public class PlanRecyclerView extends AppCompatActivity {
 
         m_viewModel = new ViewModelProvider(this).get(PlanViewModel.class);
 
-        m_path.add(ROOT);
-        selectPlan(m_current());
+        selectPlan(ROOT);
     }
 
     private Void selectPlan(Plan p) {
@@ -128,8 +131,10 @@ public class PlanRecyclerView extends AppCompatActivity {
     }
 
     private void selectParentPlan() {
-        if (m_path.size() <= 1)
+        if (m_path.size() <= 1) {
+            finish();
             return;
+        }
 
         m_path.pop().removeLiveData(this);
         updateDisplay();
@@ -137,6 +142,10 @@ public class PlanRecyclerView extends AppCompatActivity {
 
     @SuppressWarnings("unchecked")
     private void updateDisplay() {
+        // -- Update the display in the toolbar -- //
+        m_toolbar.setTitle(m_current().childName() + "s");
+
+        // -- Set up the callback function to properly display the current level of plans -- //
         m_viewModel.setupDisplay(m_current(), this, obj -> {
             if (m_current() instanceof PlanMeal) {
                 // -- Displaying at the recipe level. Need to display information differently -- //
@@ -164,6 +173,7 @@ public class PlanRecyclerView extends AppCompatActivity {
             }
         });
 
+        // -- Set up additional features based on the level of plan's set attributes -- //
         if (m_current().isChildEditable()) {
             m_fab.show();
         } else {
@@ -175,7 +185,6 @@ public class PlanRecyclerView extends AppCompatActivity {
         } else {
             m_itemOrderTouchHelper.attachToRecyclerView(null);
         }
-
     }
 
     private void addPlanDialog() {
