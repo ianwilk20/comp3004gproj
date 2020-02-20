@@ -1,46 +1,63 @@
 package fooderie.mealPlanner.models;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import fooderie.models.FooderieRepository;
 import fooderie.models.Recipe;
 
 @Entity(tableName = "table_PlanRecipe",
-        indices = {@Index("join_plan_recipe_id"), @Index("plan_id"), @Index("recipe_id")},
+        indices = {@Index("planId"), @Index("parentId"), @Index("recipeId")},
         foreignKeys = {
-            @ForeignKey(entity = Plan.class,
-                parentColumns = "plan_id",
-                childColumns = "plan_id",
+            @ForeignKey(entity = PlanMeal.class,
+                parentColumns = "planId",
+                childColumns = "parentId",
                 onDelete = ForeignKey.CASCADE),
             @ForeignKey(entity = Recipe.class,
                 parentColumns = "recipe_id",
-                childColumns = "recipe_id",
+                childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE)
         })
 public class PlanRecipe {
     @PrimaryKey (autoGenerate = true)
-    @ColumnInfo(name="join_plan_recipe_id")
-    private int id;
-    @ColumnInfo(name="plan_id")
-    private int planId;
-    @ColumnInfo(name="recipe_id")
-    private int recipeId;
+    private Long planId;
+    private Long parentId;
+    private Long recipeId;
 
-    public PlanRecipe(int planId, int recipeId) {
+    public static final String planName = "Recipe";
+
+    public Long getPlanId() {
+        return planId;
+    }
+    public void setPlanId(Long planId) {
         this.planId = planId;
+    }
+    public Long getParentId() {
+        return parentId;
+    }
+    public void setParentId(Long id) {
+        this.parentId = id;
+    }
+    public Long getRecipeId() {return recipeId;}
+    public void setRecipeId(Long id) {
+        this.recipeId = id;
+    }
+
+    public PlanRecipe(Long parentId, Long recipeId) {
+        this.parentId = parentId;
         this.recipeId = recipeId;
     }
 
-    public int getId() {
-        return id;
+    public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
+        // -- TODO: Change to viewing recipes -- //
+        //children = repo.getDayPlans(planId);
+        //children.observe(owner, o);
     }
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPlanId() {return planId;}
-    public int getRecipeId() {return recipeId;}
 }

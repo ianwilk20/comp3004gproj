@@ -98,6 +98,10 @@
     <string name="hello">hello</string>
     <string name="radiobutton">RadioButton</string>
     <string name="cooking_assistant">Cooking Assistant</string>
+
+    <string name="placeHolder">PLACEHOLDER</string>
+
     <string name="title_activity_rb_selected">rbSelected</string>
+
 
 </resources>

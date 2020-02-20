@@ -1,7 +1,9 @@
 package fooderie.models;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,11 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import fooderie.mealPlanner.models.Plan;
+import fooderie.mealPlanner.models.PlanDay;
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
+import fooderie.mealPlanner.models.PlanRoot;
+import fooderie.mealPlanner.models.PlanWeek;
 
-@Database(entities = {Plan.class, PlanRecipe.class, Recipe.class},
+@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
@@ -30,7 +37,9 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            FooderieRoomDatabase.class, "fooderie_database").addCallback(roomDatabaseCallback).build();
+                            FooderieRoomDatabase.class, "fooderie_database")
+                            .addCallback(roomDatabaseCallback)
+                            .build();
                 }
             }
         }
@@ -41,19 +50,34 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-
-            //TODO: ENSURE THIS BLOCK IS DELETED WHEN WE NEED DATABASE TO PERSIST
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
-                dao.deleteAllPlans();
-                dao.deleteAllPlanRecipes();
+                List<Recipe> recipes = dao.getAllRecipes();
 
-                Plan p = new Plan(null,0,"THIS IS A TEST");
-                Plan p1 = new Plan(null,0,"THIS IS NOT A TEST");
-                Plan p2 = new Plan(null,0,"THIS IS A MAYBE TEST");
+                //dao.deleteAllPlanRecipes();
+
+                if (recipes.size() == 0) {
+                    Recipe r = new Recipe();
+                    r.setId(0L);
+                    dao.insert(r);
+                }
+                //dao.deleteAllRecipes();
+
+                //Recipe r = new Recipe();
+                //r.setId(0L);
+                //dao.insert(r);
+
+
+                //dao.deleteAllPlans();
+                //Log.d("FooderieRoomDatabase", "onOpen: Everything finished deleting...I think");
+                /*dao.deleteAllPlanRecipes();
+
+                Plan p = new Plan(null,"THIS IS A TEST");
+                Plan p1 = new Plan(null,"THIS IS NOT A TEST");
+                Plan p2 = new Plan(null,"THIS IS A MAYBE TEST");
                 dao.insert(p);
                 dao.insert(p1);
-                dao.insert(p2);
+                dao.insert(p2);*/
             });
         }
     };
