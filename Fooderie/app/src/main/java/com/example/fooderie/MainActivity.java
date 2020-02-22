@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.GroceryList;
 import fooderie.mealPlanner.views.PlanRecyclerView;
+import fooderie.recipeBrowser.rbActivity;
 
 import android.util.Log;
 import android.view.View;

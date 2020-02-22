@@ -1,4 +1,4 @@
-package com.example.fooderie;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 import android.view.View;
 import com.android.volley.toolbox.Volley;
+import com.example.fooderie.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
@@ -38,6 +39,7 @@ public class rbActivity extends AppCompatActivity {
     ArrayList<String> rbResults = new ArrayList<String>();
     ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
     String preferencesUrl = "";
+    String units = "Metric";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class rbActivity extends AppCompatActivity {
                 }
                 if (selected != null) {
                     rbListView.setVisibility(View.GONE);
-                    openSelected(selected);
+                    openSelected(selected, units);
                     rbResults.clear();
                 }
             }
@@ -159,6 +161,7 @@ public class rbActivity extends AppCompatActivity {
 
     //Show set_preferences xml in an Alert Dialog
     private void setPreferences() {
+        units = "Metric";
         preferencesUrl = "";
 
         //Set Dialog Title
@@ -168,6 +171,20 @@ public class rbActivity extends AppCompatActivity {
         //Set View layout to set_preferences.xml
         View v = LayoutInflater.from(rbActivity.this).inflate(R.layout.set_preferences, null, false);
         builder.setView(v);
+
+        //If units toggle button is checked, set units to imperial
+        //Otherwise, set units to metric
+        ToggleButton unitstoggle = v.findViewById(R.id.units_toggle_button);
+        unitstoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    units = "Imperial";
+                }
+                else {
+                    units = "Metric";
+                }
+            }
+        });
 
         //If a toggle button is checked, add its query parameter
         //Otherwise, remove its query parameter
@@ -267,10 +284,11 @@ public class rbActivity extends AppCompatActivity {
     }
 
     //Redirect to rbSelected activity
-    //and pass selected recipe
-    public void openSelected(Recipe selected){
+    //and pass selected recipe, and metric/imperial units
+    public void openSelected(Recipe selected, String units){
         Intent rbIntent = new Intent(this, rbSelected.class);
         rbIntent.putExtra("RECIPE", selected);
+        rbIntent.putExtra("UNITS", units);
         startActivity(rbIntent);
     }
 }
