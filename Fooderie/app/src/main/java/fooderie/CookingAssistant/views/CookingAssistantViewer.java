@@ -1,18 +1,20 @@
 package fooderie.CookingAssistant.views;
 
 import com.example.fooderie.R;
+import fooderie.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -23,11 +25,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+
 public class CookingAssistantViewer extends AppCompatActivity
 {
     private static final String TAG = CookingAssistantViewer.class.getSimpleName();
     ArrayList<String> instructionList = new ArrayList<>();
     int numSteps = 0;
+    String selectedUrl = "";
 
     private ViewPager mSlideViewPager;
     private LinearLayout mDotLayout;
@@ -38,6 +42,11 @@ public class CookingAssistantViewer extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "\n\n\n --------");
+
+        //Get selected recipe from rbActivity
+        Intent intent = getIntent();
+        Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+        selectedUrl = selected.url;
         new jSoupParse().execute();
         context = this;
 
@@ -48,7 +57,8 @@ public class CookingAssistantViewer extends AppCompatActivity
 
     public class jSoupParse extends AsyncTask<Void, Void, Void>
     {
-        String url = getUrl();
+        //String url = getUrl();
+        String url = selectedUrl;
         String val = "";
         ArrayList<String> returnIns = new ArrayList<String>();
 
