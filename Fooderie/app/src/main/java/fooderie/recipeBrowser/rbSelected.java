@@ -25,6 +25,13 @@ public class rbSelected extends AppCompatActivity {
         //Get selected recipe from rbActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+        String units = (String)intent.getSerializableExtra("UNITS");
+        if(units.equals("Metric")){
+            units = "g";
+        }
+        if(units.equals("Imperial")){
+            units = "oz";
+        }
 
         //Click Listener for website button
         Button websiteButton = findViewById(R.id.website);
@@ -119,6 +126,7 @@ public class rbSelected extends AppCompatActivity {
         TextView fat = findViewById(R.id.FAT);
         TextView fatUnit = findViewById(R.id.FATunit);
         if(selected.totalNutrients.FAT != null) {
+            selected.totalNutrients.FAT.setUnits(units);
             fat.setText(selected.totalNutrients.FAT.round());
             fatUnit.setText(selected.totalNutrients.FAT.unit);
         }
@@ -129,6 +137,7 @@ public class rbSelected extends AppCompatActivity {
         TextView carbs = findViewById(R.id.CHOCDF);
         TextView carbsUnit = findViewById(R.id.CHOCDFunit);
         if(selected.totalNutrients.CHOCDF != null) {
+            selected.totalNutrients.CHOCDF.setUnits(units);
             carbs.setText(selected.totalNutrients.CHOCDF.round());
             carbsUnit.setText(selected.totalNutrients.CHOCDF.unit);
         }
@@ -139,6 +148,7 @@ public class rbSelected extends AppCompatActivity {
         TextView fiber = findViewById(R.id.FIBTG);
         TextView fiberUnit = findViewById(R.id.FIBTGunit);
         if(selected.totalNutrients.FIBTG != null) {
+            selected.totalNutrients.FIBTG.setUnits(units);
             fiber.setText(selected.totalNutrients.FIBTG.round());
             fiberUnit.setText(selected.totalNutrients.FIBTG.unit);
         }
@@ -149,6 +159,7 @@ public class rbSelected extends AppCompatActivity {
         TextView sugar = findViewById(R.id.SUGAR);
         TextView sugarUnit = findViewById(R.id.SUGARunit);
         if(selected.totalNutrients.SUGAR != null) {
+            selected.totalNutrients.SUGAR.setUnits(units);
             sugar.setText(selected.totalNutrients.SUGAR.round());
             sugarUnit.setText(selected.totalNutrients.SUGAR.unit);
         }
@@ -159,6 +170,7 @@ public class rbSelected extends AppCompatActivity {
         TextView protein = findViewById(R.id.PROCNT);
         TextView proteinUnit = findViewById(R.id.PROCNTunit);
         if(selected.totalNutrients.PROCNT != null) {
+            selected.totalNutrients.PROCNT.setUnits(units);
             protein.setText(selected.totalNutrients.PROCNT.round());
             proteinUnit.setText(selected.totalNutrients.PROCNT.unit);
         }
