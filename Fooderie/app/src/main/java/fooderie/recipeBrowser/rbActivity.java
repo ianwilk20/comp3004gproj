@@ -1,4 +1,4 @@
-package com.example.fooderie;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 import android.view.View;
 import com.android.volley.toolbox.Volley;
+import com.example.fooderie.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;

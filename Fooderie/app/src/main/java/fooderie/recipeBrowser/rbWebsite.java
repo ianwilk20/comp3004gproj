@@ -1,9 +1,12 @@
-package com.example.fooderie;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
+
+import com.example.fooderie.R;
+
 import fooderie.models.Recipe;
 
 public class rbWebsite extends AppCompatActivity {

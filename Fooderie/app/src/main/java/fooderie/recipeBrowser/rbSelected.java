@@ -1,4 +1,4 @@
-package com.example.fooderie;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.fooderie.R;
+
 import java.util.ArrayList;
 import fooderie.models.Recipe;
 import fooderie.models.Tag;
@@ -29,6 +32,14 @@ public class rbSelected extends AppCompatActivity {
         websiteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 goToWebsite(selected);
+            }
+        });
+
+        //Click Listener for cooking steps button
+        Button stepsButton = findViewById(R.id.steps);
+        stepsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                goToSteps(selected);
             }
         });
 
@@ -164,5 +175,13 @@ public class rbSelected extends AppCompatActivity {
         Intent rbIntent = new Intent(this, rbWebsite.class);
         rbIntent.putExtra("RECIPE", selected);
         startActivity(rbIntent);
+    }
+
+    //Redirect to __ activity
+    //and pass selected recipe
+    public void goToSteps(Recipe selected){
+//        Intent rbIntent = new Intent(this, __.class);
+//        rbIntent.putExtra("RECIPE", selected);
+//        startActivity(rbIntent);
     }
 }

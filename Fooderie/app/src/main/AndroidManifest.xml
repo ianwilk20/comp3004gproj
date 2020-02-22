@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".rbWebsite"></activity>
-        <activity android:name=".rbSelected" />
-        <activity android:name=".rbActivity" />
+        <activity android:name="fooderie.recipeBrowser.rbWebsite"></activity>
+        <activity android:name="fooderie.recipeBrowser.rbSelected" />
+        <activity android:name="fooderie.recipeBrowser.rbActivity" />
         <activity
             android:name="fooderie.mealPlanner.views.MealPlannerViewer"
             android:label="@string/title_activity_meal_planner_viewer"
