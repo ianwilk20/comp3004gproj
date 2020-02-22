@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.fooderie.R;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.models.Recipe;
@@ -104,8 +106,9 @@ public class rbSelected extends AppCompatActivity {
             }
         }
 
-        //PICTURE
-        //ImageView recipeImage = findViewById(R.id.recipeImage);
+        //Image
+        ImageView recipeImage = findViewById(R.id.recipeImage);
+        Picasso.get().load(selected.image).into(recipeImage);
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);

@@ -4,5 +4,6 @@
 -implemented unit conversion
 -added unit toggle button
 
-0.5hrs
+1.5hrs
 -added loading dialog (stolen from Ian)
+-added recipe image (stolen from Gavin)
