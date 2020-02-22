@@ -1,42 +1,86 @@
 package fooderie.mealPlanner.models;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import fooderie.models.FooderieRepository;
 
-@Entity(tableName = "table_Plan",
-        indices = {@Index("plan_id"), @Index("parent_id")},
-        foreignKeys = @ForeignKey(entity = Plan.class,
-            parentColumns = "plan_id",
-            childColumns = "parent_id",
-            onDelete = ForeignKey.CASCADE)
-        )
-public class Plan {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="plan_id")
-    private int id;
-    @ColumnInfo(name="parent_id")
-    private Integer parentId;
-    private int level;
-    private String name;
+@Entity
+public abstract class Plan {
+    @PrimaryKey (autoGenerate = true)
+    protected Long planId;
+    protected Long parentId;
+    protected int recipeCount;
+    protected String name;
 
-    public Plan(Integer parentId, int level, String name) {
+    @Ignore
+    public static final boolean editable = true;
+    @Ignore
+    public static final boolean draggable = false;
+    @Ignore
+    public static final String planName = "UNKNOWN";
+    @Ignore
+    protected LiveData children;
+
+    public Plan(Long parentId, String name, int recipeCount) {
         this.parentId = parentId;
-        this.level = level;
         this.name = name;
+        this.recipeCount = recipeCount;
     }
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
+    @Ignore
+    public Plan(Long planId, Long parentId, String name, int recipeCount) {
+        this.planId = planId;
+        this.parentId = parentId;
+        this.name = name;
+        this.recipeCount = recipeCount;
     }
 
-    public Integer getParentId() {return parentId;}
-    public int getLevel() {return level;}
     public String getName() {return name;}
+    public Long getPlanId() {
+        return planId;
+    }
+    public void setPlanId(Long planId) {
+        this.planId = planId;
+    }
+    public Long getParentId() {
+        return parentId;
+    }
+    public void setParentId(Long id) {
+        this.parentId = id;
+    }
+    public int getRecipeCount() {return recipeCount;}
+    public void setRecipeCount(int r) {this.recipeCount = r;}
+
+    public abstract void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o);
+    public abstract void removeLiveData(LifecycleOwner owner);
+
+    public abstract boolean isEditable();
+    public abstract boolean isChildEditable();
+
+    public abstract boolean isDraggable();
+    public abstract boolean isChildDraggable();
+
+    public abstract String childName();
+
+    public void changeCount(int value) {
+        recipeCount += value;
+        if (recipeCount < 0)
+            recipeCount = 0;
+    }
+
+    @Override
+    @SuppressWarnings("All")
+    public @NonNull String toString() {
+        return String.format("[id:%d, parentId:%d, name:%s]", planId, parentId, name);
+    }
 }

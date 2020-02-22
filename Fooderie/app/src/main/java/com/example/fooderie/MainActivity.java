@@ -13,6 +13,7 @@ import fooderie.groceryList.GroceryList;
 import fooderie.mealPlanner.views.PlanRecyclerView;
 import fooderie.recipeBrowser.rbActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,12 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         final AppCompatActivity tmp = this;
         mealPlannerButton = findViewById(R.id.mealPlannerButton);
-        mealPlannerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(tmp, PlanRecyclerView.class);
-                startActivity(intent);
-            }
+        mealPlannerButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(tmp, PlanRecyclerView.class);
+            startActivity(intent);
         });
     }
 

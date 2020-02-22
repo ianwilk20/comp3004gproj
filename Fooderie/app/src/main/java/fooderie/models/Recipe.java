@@ -14,12 +14,12 @@ import java.util.ArrayList;
 public class Recipe implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="recipe_id")
-    private int id;
+    private Long id;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
