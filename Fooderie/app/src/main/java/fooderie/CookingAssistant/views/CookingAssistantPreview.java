@@ -24,6 +24,7 @@ public class CookingAssistantPreview extends AppCompatActivity
 {
     private Button startButton;
     private TextView ingridentText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,15 +38,14 @@ public class CookingAssistantPreview extends AppCompatActivity
         ingridentText = findViewById(R.id.txtIngridents);
 
         /*
-        FILL IN IMAGE PREVIEW HERE
+        TODO: FILL IN IMAGE PREVIEW HERE
          */
 
         ArrayList<RecipeIngredient> ingredients = selected.ingredients;
-        String steps = "";
-        int count = 1;
+        String steps = "Ingredients: \n";
         for (RecipeIngredient ingredient : ingredients)
         {
-            steps += count + ". " + ingredient.weight + " - " + ingredient.text + "\n";
+            steps += "- " + ingredient.text + "\n";
         }
         ingridentText.setText(steps);   //Set text to steps
 

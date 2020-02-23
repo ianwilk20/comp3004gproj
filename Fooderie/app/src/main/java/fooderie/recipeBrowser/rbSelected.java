@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.example.fooderie.R;
 import java.util.ArrayList;
-import fooderie.CookingAssistant.views.CookingAssistantViewer;
+import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.models.Recipe;
 import fooderie.models.Tag;
 
@@ -191,7 +191,7 @@ public class rbSelected extends AppCompatActivity {
     //Redirect to CookingAssistantViewer activity
     //and pass selected recipe
     public void goToSteps(Recipe selected){
-        Intent rbIntent = new Intent(this, CookingAssistantViewer.class);
+        Intent rbIntent = new Intent(this, CookingAssistantPreview.class);
         rbIntent.putExtra("RECIPE", selected);
         startActivity(rbIntent);
     }

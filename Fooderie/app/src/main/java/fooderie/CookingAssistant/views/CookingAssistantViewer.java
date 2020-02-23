@@ -25,7 +25,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
-
+/* TODO: fix for this 'https://www.seriouseats.com/recipes/2013/04/eggs-in-a-bacon-basket-recipe.html' */
 public class CookingAssistantViewer extends AppCompatActivity
 {
     private static final String TAG = CookingAssistantViewer.class.getSimpleName();
