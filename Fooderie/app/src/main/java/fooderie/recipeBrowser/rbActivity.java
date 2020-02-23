@@ -29,9 +29,11 @@ import java.util.ArrayList;
 import fooderie.models.Recipe;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.app.ProgressDialog;
 
 public class rbActivity extends AppCompatActivity {
 
+    ProgressDialog dialog;
     SearchView rbSearchView;
     ListView rbListView;
     RequestQueue rbRequestQueue;
@@ -50,6 +52,7 @@ public class rbActivity extends AppCompatActivity {
         rbSearchView = findViewById(R.id.rbSearchView);
         rbListView = findViewById(R.id.rbListView);
         rbRequestQueue = Volley.newRequestQueue(this);
+        dialog = new ProgressDialog(rbActivity.this);
 
         //put search results into list
         rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
@@ -108,6 +111,9 @@ public class rbActivity extends AppCompatActivity {
         String appID = "63cfb724";
         String rbApiUrl = "https://api.edamam.com/search?q=" + recipe + "&app_id=" + appID +"&app_key=" + appKey + "&from=0&to=30" + preferencesUrl;
 
+        dialog.setMessage("Please, wait while we find recipes");
+        dialog.show();
+
         JsonObjectRequest objectReq = new JsonObjectRequest(
                 Request.Method.GET,
                 rbApiUrl,
@@ -119,6 +125,7 @@ public class rbActivity extends AppCompatActivity {
                         try {
                             JSONArray rbResponse = response.getJSONArray("hits");
                             if (rbResponse.length() <= 0) {
+                                dialog.dismiss();
                                 Toast.makeText(rbActivity.this, "No Results", Toast.LENGTH_SHORT).show();
                                 throw new Exception("No Results");
                             }
@@ -143,6 +150,7 @@ public class rbActivity extends AppCompatActivity {
                             }
 
                             rbArrAdapt.notifyDataSetChanged();
+                            dialog.dismiss();
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();

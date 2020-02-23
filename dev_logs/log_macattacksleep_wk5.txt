@@ -3,3 +3,7 @@
 -redirected to cooking assistant activity
 -implemented unit conversion
 -added unit toggle button
+
+1.5hrs
+-added loading dialog (stolen from Ian)
+-added recipe image (stolen from Gavin)
