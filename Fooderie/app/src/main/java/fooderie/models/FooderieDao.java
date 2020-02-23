@@ -6,16 +6,19 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import androidx.room.RoomWarnings;
 import androidx.room.Update;
-import fooderie.mealPlanner.models.Plan;
+
+import fooderie.groceryList.models.Food;
+import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface FooderieDao {
@@ -91,4 +94,50 @@ public interface FooderieDao {
     void deleteAllRecipes();
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
+
+
+    /* Entity=Food dao interactions */
+    @Insert(onConflict = REPLACE)
+    void insert(Food f);
+    @Update
+    void update(Food f);
+    @Delete
+    void delete(Food f);
+
+    @Query("DELETE FROM table_APIIngredient")
+    void deleteAllFoodFromAPI();
+
+    @Query("SELECT * FROM table_APIIngredient")
+    LiveData<List<Food>> getAllAPIIngredients();
+
+    @Query("SELECT * FROM table_APIIngredient " +
+            "WHERE table_APIIngredient.food_id = :food_id")
+    LiveData<Food> getFoodByID(String food_id);
+
+    @Query("SELECT * FROM table_APIIngredient " +
+            "WHERE table_APIIngredient.label LIKE :label")
+    LiveData<List<Food>> getFoodByLabel(String label); //MUST enter label as "apple%" to get all results with apples
+
+    /* Entity=UserGroceryListItem dao interactions */
+    @Insert
+    void insert(UserGroceryListItem item);
+    @Update
+    void update(UserGroceryListItem item);
+    @Delete
+    void delete(UserGroceryListItem item);
+
+    @Query("DELETE FROM table_userGroceryList")
+    void deleteAllGroceryItems();
+
+    @Query("DELETE FROM table_userGroceryList " +
+            "WHERE table_userGroceryList.food_name = :ingredientName")
+    void deleteGroceryItemByName(String ingredientName);
+
+    @Query("SELECT * FROM table_userGroceryList")
+    LiveData<List<UserGroceryListItem>> getAllGroceryItems();
+
+    @Query("UPDATE table_userGroceryList " +
+            "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department " +
+            "WHERE table_userGroceryList.food_name = :prevName")
+    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department);
 }

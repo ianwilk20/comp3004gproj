@@ -1,7 +1,6 @@
 package fooderie.models;
 
 import android.app.Application;
-import android.util.Log;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -9,11 +8,14 @@ import java.util.List;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
-import fooderie.mealPlanner.models.Plan;
+
+import fooderie.groceryList.models.Food;
+import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+
 
 public class FooderieRepository {
     private FooderieDao fooderieDao;
@@ -47,6 +49,16 @@ public class FooderieRepository {
             updatePlanMealRecipeCount(p.getParentId(), 1);
         });
     }
+    public void insert(Food f){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.insert(f);
+        });
+    }
+    public void insert(UserGroceryListItem item){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.insert(item);
+        });
+    }
 
     public void update(PlanWeek p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -66,6 +78,22 @@ public class FooderieRepository {
     public void update(PlanRecipe p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.update(p);
+        });
+    }
+    //Necessary? To update food if only populated once
+    public void update(Food f){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(f);
+        });
+    }
+    public void update(UserGroceryListItem item){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(item);
+        });
+    }
+    public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.updateGroceryItemAttributes(prevName, newName, quantity, notes, department);
         });
     }
     public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
@@ -99,6 +127,21 @@ public class FooderieRepository {
             updatePlanDayRecipeCount(pm.getParentId(), pm.getRecipeCount() * -1);
         });
     }
+    public void delete(Food f){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.delete(f));
+    }
+    public void delete(UserGroceryListItem item){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.delete(item));
+    }
+    public void deleteAllFoodFromAPI(){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deleteAllFoodFromAPI());
+    }
+    public void deleteAllGroceryItems(){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deleteAllGroceryItems());
+    }
+    public void deleteGroceryItemByName(String ingredientName){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deleteGroceryItemByName(ingredientName));
+    }
     public void deletePlanRecipe(Long p_id, Long r_id) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
@@ -112,6 +155,10 @@ public class FooderieRepository {
     public LiveData<List<PlanDay>> getDayPlans(Long id) { return fooderieDao.getDayPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long id) { return fooderieDao.getMealPlans(id); }
     public LiveData<List<Recipe>> getRecipes(Long id) { return fooderieDao.getRecipes(id); }
+    public LiveData<List<Food>> getAllAPIIngredients() { return  fooderieDao.getAllAPIIngredients(); }
+    public LiveData<Food> getFoodByID(String food_id) { return fooderieDao.getFoodByID(food_id); }
+    public LiveData<List<Food>> getFoodByLabel(String label) {return fooderieDao.getFoodByLabel(label); }
+    public LiveData<List<UserGroceryListItem>> getAllGroceryItems() { return fooderieDao.getAllGroceryItems(); }
 
     public LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id) { return fooderieDao.getAllRecipesFromWeeklyMealPlanId(id); }
 
@@ -134,4 +181,5 @@ public class FooderieRepository {
         pw.changeCount(change);
         update(pw);
     }
+
 }
