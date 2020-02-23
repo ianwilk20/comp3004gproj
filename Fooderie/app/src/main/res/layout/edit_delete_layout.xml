@@ -3,35 +3,54 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/groceryItem"
-        android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:textSize="18sp"
-        android:fontFamily="@font/montserrat"
-        android:paddingStart="15dp"
-        android:paddingTop="12dp"
-        android:textColor="@color/text_color"
-        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-    <ImageButton
-        android:id="@+id/editButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/edit_button"
-        android:layout_marginLeft="10dp"
-        android:background="@null"/>
+        <TextView
+            android:id="@+id/groceryItem"
+            android:layout_width="280dp"
+            android:layout_height="32dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/montserrat"
+            android:paddingStart="0dp"
+            android:paddingTop="3dp"
+            android:textColor="@color/text_color"
+            android:text=""
+            />
 
-    <ImageButton
-        android:id="@+id/deleteButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@null"
-        android:padding="16dp"
-        android:scaleType="fitCenter"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/trash_button" />
+        <TextView
+            android:id="@+id/groceryItemInfo"
+            android:layout_width="280dp"
+            android:layout_height="18dp"
+            android:paddingStart="10dp"
+            android:layout_below="@id/groceryItem"
+            android:fontFamily="@font/montserrat"
+            android:text=""/>
+
+        <ImageButton
+            android:id="@+id/editButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@id/groceryItemInfo"
+            android:scaleType="fitCenter"
+            android:padding="16dp"
+            android:src="@drawable/edit_button"
+            android:layout_marginLeft="10dp"
+            android:background="@null"/>
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@id/editButton"
+            android:background="@null"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/trash_button" />
+
+    </RelativeLayout>
 
 </LinearLayout>
