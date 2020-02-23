@@ -1,7 +1,6 @@
 package fooderie.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -11,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import fooderie.mealPlanner.models.Plan;
+
+import fooderie.groceryList.models.Food;
+import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
-import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 
-@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
+@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
