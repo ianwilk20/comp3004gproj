@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openRecipeBrowser(View rbView){
         Intent rbIntent = new Intent(this, rbActivity.class);
+        rbIntent.putExtra("FROMPLAN", "no");
         startActivity(rbIntent);
     }
 

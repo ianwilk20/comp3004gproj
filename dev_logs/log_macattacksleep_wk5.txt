@@ -7,3 +7,7 @@
 1.5hrs
 -added loading dialog (stolen from Ian)
 -added recipe image (stolen from Gavin)
+
+3.5hrs
+-added redirection to Meal Planner
+-added button to Selected xml

@@ -1,6 +1,8 @@
 package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,15 +26,32 @@ public class rbSelected extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_selected);
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe and units from rbActivity
+        //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+        String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
         String units = (String)intent.getSerializableExtra("UNITS");
         if(units.equals("Metric")){
             units = "g";
         }
         if(units.equals("Imperial")){
             units = "oz";
+        }
+
+        //Click Listener for Add button
+        Button addButton = findViewById(R.id.add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //add recipe to db
+                goBackToPlan(selected);
+            }
+        });
+
+        //If directed to this activity from Meal Plan
+        //Make Add button visible
+        if(fromPlan.equals("yes")){
+            addButton.setVisibility(View.VISIBLE);
         }
 
         //Click Listener for website button
@@ -197,5 +216,17 @@ public class rbSelected extends AppCompatActivity {
         Intent rbIntent = new Intent(this, CookingAssistantPreview.class);
         rbIntent.putExtra("RECIPE", selected);
         startActivity(rbIntent);
+    }
+
+    //Redirect back to Meal Plan
+    //and pass selected recipe
+    //and pass recipe ID
+    public void goBackToPlan(Recipe selected){
+        //go back twice
+        Intent rbIntent = new Intent();
+        rbIntent.putExtra("RECIPE", selected);
+        rbIntent.putExtra("RECIPEID", selected.url);
+        setResult(RESULT_OK, rbIntent);
+        finish();
     }
 }
