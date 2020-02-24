@@ -1,0 +1,38 @@
+Development Log – Week #5
+Gavin Jackson, 101065531
+Goal for the week was finishing up the groundwork of our activities in preparation for connecting our components together. Wanted to 
+ensure the Meal Planner was fully functional and ready to accept recipes. 
+
+      Monday, Feb 24th, 2020
+    -	[5.0 Hr] Worked on making recipe recyclerView(fancy list of recipes). Required loads of debugging to resolve numerous problems. 
+        Struggles:
+        o	Recipes required their own adaptor to be displayed to the user. Needed to remake loads of functionality used for the Plans, 
+            to now be used with the recipes.
+        o	Added the ability to add recipes [Temporary]. Can show the image, title, and allows for deletion. Still need to link to the 
+            recipe browser to get proper recipes instead of temp recipe.
+    -	[4.0 Hr] Added order column to PlanMeal. Allows for reordering. Essential for displaying meals for the given day in the order in 
+        which the user likes. Ex. When on the main screen of the application there will be a widget to display meals for that day. 
+        The order those meals are displayed in is based on their order inside the meal planner. Struggles:
+        o	Every time an item shifted by one position it would trigger the command to update database and immediately prevent the user 
+            from moving the item any further. Solution was to log list of moves and call update database after the shifting ended.
+        o	Had to work with ItemTouchHelper, required research. Needed to know which functions required overriding and which function 
+            were optional. Learned the way in which the various functions are called, required for previous point.
+    -	[2.0 Hr] Implemented recipe counter for the MealPlanner, shows how many recipes exist in the current plan, shows on each level 
+        of the plan. Struggles:
+        o	Only thought to implement at the recipe level, when a recipe is added, plus one to higher levels, when a recipe is deleted, 
+            minus one from higher levels. Forgot if a meal is deleted then minus the number recipes from the meal from the higher levels.
+        o	Realized that not all LiveData was properly being deleted. Every time recipe counter was updated higher level plans were 
+            updated, because of this their LiveData observers were triggered. The problem was found in not deleting the LiveData of the 
+            current item in the stack before adding another item to the stack. LiveData was only being deleted when items were popped 
+            from the stack.
+        o	Changed the way in which the counter was displayed, it didn’t look good enough.
+    -	[1.0 Hr] Worked on displaying the level of plan and allowing backwards navigation. Struggles:
+        o	Needed to double hit back button when on Weekly meal plans page to pop the activity and go back to main. Problem was found 
+            in plan stack, two roots existing at the base of the stack. Therefore, needed to hit the button twice before going back
+        o	Hard to implement “finish” which allows activity popping. Application was just closing and not going back to main page. 
+            Had to change manifest.
+    -	[1.0 Hr] During pull request had to resolve merge error, problem with the application. Finally discovered it was a problem with 
+        the manifest referring to one activity two times. Made change, committed, informed team that it is good to accept PR.
+
+    Sunday, Feb 23rd, 2020
+    -	[0.5 Hr] Log Writing
