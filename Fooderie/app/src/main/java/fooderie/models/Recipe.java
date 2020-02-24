@@ -1,4 +1,4 @@
-package fooderie.recipeBrowser.models;
+package fooderie.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -17,7 +17,6 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
-import fooderie.recipeBrowser.models.Recipe;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
