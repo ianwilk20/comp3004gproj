@@ -12,8 +12,8 @@ import com.example.fooderie.R;
 
 import java.util.ArrayList;
 
-import fooderie.models.Recipe;
-import fooderie.models.RecipeIngredient;
+import fooderie.recipeBrowser.models.Recipe;
+import fooderie.recipeBrowser.models.RecipeIngredient;
 
 
 public class CookingAssistantPreview extends AppCompatActivity

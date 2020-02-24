@@ -1,8 +1,7 @@
 package fooderie.CookingAssistant.views.views;
 
 import com.example.fooderie.R;
-
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
