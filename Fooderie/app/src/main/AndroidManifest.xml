@@ -22,8 +22,8 @@
 
         <activity android:name="fooderie.mealPlanner.views.PlanRecyclerView"/>
         <activity android:name="fooderie.groceryList.views.GroceryListView"/>
-        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
-        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantPreview" />
+        <activity android:name="fooderie.CookingAssistant.views.Views.CookingAssistantViewer" />
+        <activity android:name="fooderie.CookingAssistant.views.Views.CookingAssistantPreview" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

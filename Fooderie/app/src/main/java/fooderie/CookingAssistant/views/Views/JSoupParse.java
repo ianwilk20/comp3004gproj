@@ -1,4 +1,4 @@
-package fooderie.CookingAssistant.views;
+package fooderie.CookingAssistant.views.Views;
 
 import android.util.Log;
 

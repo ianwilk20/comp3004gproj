@@ -1,4 +1,4 @@
-package fooderie.CookingAssistant.views;
+package fooderie.CookingAssistant.views.Views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
