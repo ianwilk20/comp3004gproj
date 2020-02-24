@@ -86,9 +86,14 @@ public interface FooderieDao {
     /* Entity=Recipe dao interactions */
     @Insert
     Long insert(Recipe r);
+    @Delete
+    void delete(Recipe r);
 
     @Query("DELETE FROM table_Recipe")
     void deleteAllRecipes();
+
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :id")
+    Recipe getRecipeLongID(Long id);
 }

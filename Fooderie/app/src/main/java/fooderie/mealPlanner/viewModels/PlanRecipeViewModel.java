@@ -21,10 +21,10 @@ import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.models.FooderieRepository;
 import fooderie.models.Recipe;
 
-public class PlanViewModel extends AndroidViewModel {
+public class PlanRecipeViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
 
-    public PlanViewModel (Application application) {
+    public PlanRecipeViewModel(Application application) {
         super(application);
         m_repo = new FooderieRepository(application);
     }

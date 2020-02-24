@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.fooderie.rbActivity;
+import com.example.fooderie.rbSelected;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,7 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
-import fooderie.mealPlanner.viewModels.PlanViewModel;
+import fooderie.mealPlanner.viewModels.PlanRecipeViewModel;
 import fooderie.models.Recipe;
 
 
@@ -36,15 +37,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-public class PlanRecyclerView extends AppCompatActivity {
-    private PlanViewModel m_viewModel;
+public class PlanRecipeRecyclerView extends AppCompatActivity {
+    private PlanRecipeViewModel m_viewModel;
     private FloatingActionButton m_fab;
 
     private Toolbar m_toolbar;
 
     private ItemTouchHelper m_itemOrderTouchHelper;
-    private PlanAdapter m_planAdaptor;
-    private PlanRecipeAdapter m_planRecipeAdaptor;
+    private AdapterPlan m_planAdaptor;
+    private AdapterRecipe m_planRecipeAdaptor;
     private RecyclerView m_planRecyclerView;
     private RecyclerView m_planRecipeRecyclerView;
 
@@ -53,9 +54,12 @@ public class PlanRecyclerView extends AppCompatActivity {
     private Stack<Plan> m_path = new Stack<>();
 
     private static final int RECIPE_REQUEST_VIEW = 1;
-    private static final String REQUEST_RECIPE = "FROMPLAN";
-    private static final String REQUEST_RECIPE_VALUE = "yes";
-    private static final String GET_RECIPE = "RECIPE";
+    private static final String UNIT_TYPE_KEY = "UNIT";
+    private static final String UNIT_TYPE_VALUE_METRIC = "Metric";
+    private static final String RECIPE_KEY = "RECIPE";
+    private static final String REQUEST_RECIPE_KEY = "FROMPLAN";
+    private static final String REQUEST_RECIPE_VALUE_YES = "yes";
+    private static final String REQUEST_RECIPE_VALUE_NO = "no";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +108,8 @@ public class PlanRecyclerView extends AppCompatActivity {
                 }
         });
 
-        m_planAdaptor = new PlanAdapter(this, this::selectPlan, this::deletePlan);
-        m_planRecipeAdaptor = new PlanRecipeAdapter(this, getResources(), this::deletePlanRecipe);
+        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan);
+        m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayPlanRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
         m_planRecipeRecyclerView.setAdapter(m_planRecipeAdaptor);
@@ -118,7 +122,7 @@ public class PlanRecyclerView extends AppCompatActivity {
         m_fab = findViewById(R.id.fab);
         m_fab.setOnClickListener((View view) -> addPlanDialog());
 
-        m_viewModel = new ViewModelProvider(this).get(PlanViewModel.class);
+        m_viewModel = new ViewModelProvider(this).get(PlanRecipeViewModel.class);
 
         m_path.add(ROOT);
         updateDisplay();
@@ -132,7 +136,7 @@ public class PlanRecyclerView extends AppCompatActivity {
                 return;
 
             // -- Get recipe to put into database -- //
-            Recipe r = (Recipe) data.getSerializableExtra(GET_RECIPE);
+            Recipe r = (Recipe) data.getSerializableExtra(RECIPE_KEY);
             m_viewModel.insertRecipeAndPlanRecipe(m_current().getPlanId(), r);
         }
     }
@@ -142,8 +146,18 @@ public class PlanRecyclerView extends AppCompatActivity {
         return null;
     }
 
-    private Void deletePlanRecipe(Long r) {
-        m_viewModel.deletePlanRecipe(m_current().getPlanId(), r);
+    private Void deletePlanRecipe(Long r_id) {
+        m_viewModel.deletePlanRecipe(m_current().getPlanId(), r_id);
+        return null;
+    }
+
+    private Void displayPlanRecipe(Recipe r) {
+        // -- Connect to recipe browser(rb) selected (rbSelected) -- //
+        Intent rbIntent = new Intent(this, rbSelected.class);
+        rbIntent.putExtra(RECIPE_KEY, r);
+        rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_NO);
+        rbIntent.putExtra(UNIT_TYPE_KEY, UNIT_TYPE_VALUE_METRIC);
+        startActivity(rbIntent);
         return null;
     }
 
@@ -216,7 +230,7 @@ public class PlanRecyclerView extends AppCompatActivity {
         if (m_current() instanceof PlanMeal) {
             // -- Addition at the recipe level, make activity to get recipe from recipe browser -- //
             Intent rbIntent = new Intent(this, rbActivity.class);
-            rbIntent.putExtra(REQUEST_RECIPE, REQUEST_RECIPE_VALUE);
+            rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_YES);
             startActivityForResult(rbIntent, RECIPE_REQUEST_VIEW);
 
         } else {

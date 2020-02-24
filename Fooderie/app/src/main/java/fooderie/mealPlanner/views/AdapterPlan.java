@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 
-public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder> {
+public class AdapterPlan extends RecyclerView.Adapter<AdapterPlan.PlanViewHolder> {
     class PlanViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView recipeCount;
@@ -41,7 +41,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     private Function<Plan, Void> m_deletePlan;
 
 
-    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete) {
+    AdapterPlan(Context context, Function<Plan, Void> display, Function<Plan, Void> delete) {
         m_inflater = LayoutInflater.from(context);
         m_displayChildrenPlansOfID = display;
         m_deletePlan = delete;

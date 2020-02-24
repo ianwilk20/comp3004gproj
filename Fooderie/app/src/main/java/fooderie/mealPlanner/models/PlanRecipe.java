@@ -54,10 +54,4 @@ public class PlanRecipe {
         this.parentId = parentId;
         this.recipeId = recipeId;
     }
-
-    public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
-        // -- TODO: Change to viewing recipes -- //
-        //children = repo.getDayPlans(planId);
-        //children.observe(owner, o);
-    }
 }

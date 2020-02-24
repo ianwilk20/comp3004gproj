@@ -27,9 +27,9 @@ public class FooderieRepository {
     public void insert(PlanWeek p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             long id = fooderieDao.insert(p);
-            List<PlanDay> plans = new ArrayList<PlanDay>();
+            List<PlanDay> plans = new ArrayList<>();
             for (DayOfWeek d : DayOfWeek.values()) {
-                PlanDay day = new PlanDay((Long) id, d.toString(), p.getRecipeCount());
+                PlanDay day = new PlanDay(id, d.toString(), p.getRecipeCount());
                 plans.add(day);
             }
             fooderieDao.insert(plans);
@@ -42,10 +42,19 @@ public class FooderieRepository {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.insert(p));
     }
     public void insert(PlanRecipe p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() ->
+            insertPlanRecipe(p)
+        );
+    }
+    public void insert(Long p_id, Recipe r) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            fooderieDao.insert(p);
-            updatePlanMealRecipeCount(p.getParentId(), 1);
+            Long r_id = fooderieDao.insert(r);
+            insertPlanRecipe(new PlanRecipe(p_id, r_id));
         });
+    }
+    private void insertPlanRecipe(PlanRecipe p) {
+        fooderieDao.insert(p);
+        updatePlanMealRecipeCount(p.getParentId(), 1);
     }
 
     public void update(PlanWeek p) {
@@ -101,9 +110,15 @@ public class FooderieRepository {
     }
     public void deletePlanRecipe(Long p_id, Long r_id) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            // -- Get and delete the PlanRecipe -- //
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
             fooderieDao.delete(pr);
 
+            // -- Get and delete the Recipe -- //
+            Recipe r = fooderieDao.getRecipeLongID(r_id);
+            fooderieDao.delete(r);
+
+            // -- Update the recipe count of all parents -- //
             updatePlanMealRecipeCount(pr.getParentId(), -1);
         });
     }

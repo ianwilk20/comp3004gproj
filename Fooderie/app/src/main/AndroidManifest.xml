@@ -22,7 +22,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".GroceryList" />
 
-        <activity android:name="fooderie.mealPlanner.views.PlanRecyclerView"/>
+        <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView"/>
         <activity android:name="fooderie.groceryList.GroceryList" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
         <activity
