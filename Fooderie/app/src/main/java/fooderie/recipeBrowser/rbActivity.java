@@ -27,7 +27,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Arrays;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.app.ProgressDialog;
@@ -100,7 +100,6 @@ public class rbActivity extends AppCompatActivity {
                 }
                 if (selected != null) {
                     openSelected(selected, units, fromPlan);
-                    rbResults.clear();
                 }
             }
         });

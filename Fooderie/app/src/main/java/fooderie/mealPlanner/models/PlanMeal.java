@@ -10,7 +10,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import fooderie.models.FooderieRepository;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 
 @Entity(tableName = "table_PlanMeal",
         indices = {@Index("planId"), @Index("parentId")},

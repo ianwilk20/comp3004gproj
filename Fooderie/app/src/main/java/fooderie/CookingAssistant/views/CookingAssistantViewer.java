@@ -1,7 +1,7 @@
 package fooderie.CookingAssistant.views;
 
 import com.example.fooderie.R;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
