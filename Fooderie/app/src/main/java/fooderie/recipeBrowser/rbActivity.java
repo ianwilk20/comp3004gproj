@@ -158,8 +158,15 @@ public class rbActivity extends AppCompatActivity {
                             for (int i = 0; i < rbResponse.length(); ++i) {
                                 JSONObject recipeObj = rbResponse.getJSONObject(i);
                                 String stringifiedRecipe = recipeObj.getString("recipe");
+                                JSONObject actualRecipeObj = recipeObj.getJSONObject("recipe");
+                                JSONArray ingredientsParsed = actualRecipeObj.getJSONArray("ingredients");
                                 Gson gson = new GsonBuilder().create();
                                 Recipe recipe = gson.fromJson(stringifiedRecipe, Recipe.class);
+
+                                for (int k = 0; k < ingredientsParsed.length(); k++){
+                                    JSONObject ingredientObj = ingredientsParsed.getJSONObject(k);
+                                    recipe.theIngredients.add(ingredientObj.getString("text"));
+                                }
 
                                 //add recipes to recipe list
                                 //and their label to list array

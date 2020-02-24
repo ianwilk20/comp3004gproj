@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fooderie.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,13 +37,14 @@ public class CookingAssistantPreview extends AppCompatActivity
 
         /*
         TODO: FILL IN IMAGE PREVIEW HERE
+        ImageView recipeImage = findViewById(R.id._____);
+        Picasso.get().load(selected.image).into(recipeImage);
          */
 
-        ArrayList<RecipeIngredient> ingredients = selected.ingredients;
         String steps = "Ingredients: \n";
-        for (RecipeIngredient ingredient : ingredients)
+        for(String ingredient : selected.theIngredients)
         {
-            steps += "- " + ingredient.text + "\n";
+            steps += "- " + ingredient + "\n";
         }
         ingridentText.setText(steps);   //Set text to steps
 
