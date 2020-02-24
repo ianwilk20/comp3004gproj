@@ -18,7 +18,6 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
-import fooderie.recipeBrowser.models.Recipe;
 
 @Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,

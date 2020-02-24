@@ -7,7 +7,7 @@ import android.webkit.WebView;
 
 import com.example.fooderie.R;
 
-import fooderie.recipeBrowser.models.Recipe;
+import fooderie.models.Recipe;
 
 public class rbWebsite extends AppCompatActivity {
 

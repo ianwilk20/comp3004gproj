@@ -1,4 +1,4 @@
-package fooderie.recipeBrowser.models;
+package fooderie.models;
 
 import java.io.Serializable;
 
