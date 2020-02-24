@@ -1,19 +1,18 @@
 package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.models.Recipe;
@@ -126,8 +125,19 @@ public class rbSelected extends AppCompatActivity {
         }
 
         //Image
-        ImageView recipeImage = findViewById(R.id.recipeImage);
+        ImageButton recipeImage = findViewById(R.id.recipeImage);
         Picasso.get().load(selected.image).into(recipeImage);
+        //Click Listener for image button
+        recipeImage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //If it isn't in the db
+                //add recipe to favorites list
+                Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                //If it is already in the db
+                //delete recipe from favorites list
+                Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);

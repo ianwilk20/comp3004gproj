@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.Arrays;
 import fooderie.models.Recipe;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -36,6 +37,7 @@ public class rbActivity extends AppCompatActivity {
     ProgressDialog dialog;
     SearchView rbSearchView;
     ListView rbListView;
+    ListView favListView;
     RequestQueue rbRequestQueue;
     ArrayAdapter<String> rbArrAdapt;
     ArrayList<String> rbResults = new ArrayList<String>();
@@ -54,12 +56,18 @@ public class rbActivity extends AppCompatActivity {
 
         rbSearchView = findViewById(R.id.rbSearchView);
         rbListView = findViewById(R.id.rbListView);
+        favListView = findViewById(R.id.favListView);
         rbRequestQueue = Volley.newRequestQueue(this);
         dialog = new ProgressDialog(rbActivity.this);
 
         //put search results into list
         rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
         rbListView.setAdapter(rbArrAdapt);
+
+        //THIS IS ALL TEMPORARY AND NEEDS TO BE DELETED!!!!!
+        ArrayList<String> tempList = new ArrayList<String>(Arrays.asList("London", "Tokyo", "New York"));
+        ArrayAdapter<String> temp = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, tempList);
+        favListView.setAdapter(temp);
 
         rbSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //make Query
@@ -68,6 +76,7 @@ public class rbActivity extends AppCompatActivity {
                 if (query.length()>= 1 && query != "null"){
                     rbResults.clear();
                     rbListView.setVisibility(View.VISIBLE);
+                    favListView.setVisibility(View.GONE);
                     jsonFetch(query);
                 }
                 return false;
@@ -75,13 +84,11 @@ public class rbActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                rbResults.clear();
-                rbListView.setVisibility(View.GONE);
                 return false;
             }
         });
 
-        //Get Item Selected and redirect to rbSelected activity
+        //Get Item Selected and redirect to rbSelected activity from results list
         rbListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,9 +99,25 @@ public class rbActivity extends AppCompatActivity {
                     }
                 }
                 if (selected != null) {
-                    rbListView.setVisibility(View.GONE);
                     openSelected(selected, units, fromPlan);
                     rbResults.clear();
+                }
+            }
+        });
+
+        //Get Item Selected and redirect to rbSelected activity from fav list
+        favListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Recipe selected = null;
+                //THIS NEEDS TO BE CHANGED FOR FAVLIST
+//                for (int i = 0; i < rbRecipeArr.size(); ++i){
+//                    if(rbRecipeArr.get(i).label.equals(rbResults.get(position))){
+//                        selected = rbRecipeArr.get(i);
+//                    }
+//                }
+                if (selected != null) {
+                    openSelected(selected, units, fromPlan);
                 }
             }
         });
@@ -148,6 +171,7 @@ public class rbActivity extends AppCompatActivity {
                             }
 
                             if(rbRecipeArr.size() <= 0){
+                                dialog.dismiss();
                                 Toast.makeText(rbActivity.this, "No Results", Toast.LENGTH_SHORT).show();
                                 throw new Exception("No Results");
                             }
