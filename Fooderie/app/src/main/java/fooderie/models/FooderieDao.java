@@ -70,7 +70,7 @@ public interface FooderieDao {
     @Query ("DELETE FROM table_PlanRecipe")
     void deleteAllPlanRecipes();
     @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :p_id AND recipeId == :r_id")
-    PlanRecipe getPlanRecipe(Long p_id, Long r_id);
+    PlanRecipe getPlanRecipe(Long p_id, String r_id);
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
@@ -85,7 +85,7 @@ public interface FooderieDao {
 
     /* Entity=Recipe dao interactions */
     @Insert
-    Long insert(Recipe r);
+    void insert(Recipe r);
     @Delete
     void delete(Recipe r);
 
@@ -95,5 +95,5 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
     @Query("SELECT * FROM table_Recipe WHERE recipe_id == :id")
-    Recipe getRecipeLongID(Long id);
+    Recipe getRecipe(String id);
 }

@@ -48,8 +48,8 @@ public class FooderieRepository {
     }
     public void insert(Long p_id, Recipe r) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            Long r_id = fooderieDao.insert(r);
-            insertPlanRecipe(new PlanRecipe(p_id, r_id));
+            fooderieDao.insert(r);
+            insertPlanRecipe(new PlanRecipe(p_id, r.getId()));
         });
     }
     private void insertPlanRecipe(PlanRecipe p) {
@@ -108,14 +108,14 @@ public class FooderieRepository {
             updatePlanDayRecipeCount(pm.getParentId(), pm.getRecipeCount() * -1);
         });
     }
-    public void deletePlanRecipe(Long p_id, Long r_id) {
+    public void deletePlanRecipe(Long p_id, String r_id) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             // -- Get and delete the PlanRecipe -- //
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
             fooderieDao.delete(pr);
 
             // -- Get and delete the Recipe -- //
-            Recipe r = fooderieDao.getRecipeLongID(r_id);
+            Recipe r = fooderieDao.getRecipe(r_id);
             fooderieDao.delete(r);
 
             // -- Update the recipe count of all parents -- //

@@ -146,7 +146,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         return null;
     }
 
-    private Void deletePlanRecipe(Long r_id) {
+    private Void deletePlanRecipe(String r_id) {
         m_viewModel.deletePlanRecipe(m_current().getPlanId(), r_id);
         return null;
     }

@@ -51,10 +51,10 @@ public class AdapterRecipe extends RecyclerView.Adapter<AdapterRecipe.PlanRecipe
     private final LayoutInflater m_inflater;
     private List<Recipe> m_displayRecipes;
     private Resources m_resources;
-    private Function<Long, Void> m_deleteFunc;
+    private Function<String, Void> m_deleteFunc;
     private Function<Recipe, Void> m_displayFunc;
 
-    AdapterRecipe(Context context, Resources resources, Function<Long, Void> delete, Function<Recipe, Void> display) {
+    AdapterRecipe(Context context, Resources resources, Function<String, Void> delete, Function<Recipe, Void> display) {
         m_inflater = LayoutInflater.from(context);
         m_resources = resources;
         m_deleteFunc = delete;

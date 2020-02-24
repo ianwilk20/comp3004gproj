@@ -29,7 +29,7 @@ public class PlanRecipe {
     @PrimaryKey (autoGenerate = true)
     private Long planId;
     private Long parentId;
-    private Long recipeId;
+    private String recipeId;
 
     public static final String planName = "Recipe";
 
@@ -45,12 +45,14 @@ public class PlanRecipe {
     public void setParentId(Long id) {
         this.parentId = id;
     }
-    public Long getRecipeId() {return recipeId;}
-    public void setRecipeId(Long id) {
+    public String getRecipeId() {
+        return recipeId;
+    }
+    public void setRecipeId(String id) {
         this.recipeId = id;
     }
 
-    public PlanRecipe(Long parentId, Long recipeId) {
+    public PlanRecipe(Long parentId, String recipeId) {
         this.parentId = parentId;
         this.recipeId = recipeId;
     }

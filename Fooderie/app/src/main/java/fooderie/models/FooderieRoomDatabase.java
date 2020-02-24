@@ -58,7 +58,7 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
 
                 if (recipes.size() == 0) {
                     Recipe r = new Recipe();
-                    r.setId(0L);
+                    r.setId("0");
                     dao.insert(r);
                 }
                 //dao.deleteAllRecipes();
