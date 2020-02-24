@@ -1,10 +1,14 @@
-package fooderie.CookingAssistant.views.views;
+package fooderie.CookingAssistant.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.fooderie.MainActivity;
+import fooderie.CookingAssistant.views.CookingAssistantViewer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
