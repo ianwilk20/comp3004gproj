@@ -2,7 +2,6 @@ package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +14,7 @@ import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import fooderie.CookingAssistant.views.CookingAssistantPreview;
+import fooderie.CookingAssistant.views.views.CookingAssistantPreview;
 import fooderie.models.Recipe;
 import fooderie.models.Tag;
 
