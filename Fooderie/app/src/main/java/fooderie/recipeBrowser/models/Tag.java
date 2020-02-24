@@ -1,4 +1,4 @@
-package fooderie.models;
+package fooderie.recipeBrowser.models;
 
 import android.widget.ImageView;
 
