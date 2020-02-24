@@ -48,6 +48,9 @@ public class rbActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb);
 
+        //Get String from Meal Plan or MainActivity
+        Intent intent = getIntent();
+        String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
 
         rbSearchView = findViewById(R.id.rbSearchView);
         rbListView = findViewById(R.id.rbListView);
@@ -90,7 +93,7 @@ public class rbActivity extends AppCompatActivity {
                 }
                 if (selected != null) {
                     rbListView.setVisibility(View.GONE);
-                    openSelected(selected, units);
+                    openSelected(selected, units, fromPlan);
                     rbResults.clear();
                 }
             }
@@ -293,10 +296,35 @@ public class rbActivity extends AppCompatActivity {
 
     //Redirect to rbSelected activity
     //and pass selected recipe, and metric/imperial units
-    public void openSelected(Recipe selected, String units){
+    //and the Meal Plan or Main Activity in fromPlan
+    public void openSelected(Recipe selected, String units, String fromPlan){
         Intent rbIntent = new Intent(this, rbSelected.class);
         rbIntent.putExtra("RECIPE", selected);
         rbIntent.putExtra("UNITS", units);
-        startActivity(rbIntent);
+        rbIntent.putExtra("FROMPLAN", fromPlan);
+        startActivityForResult(rbIntent, 1);
+    }
+
+    //If data is returned from rbSelected
+    //Redirect back to Meal Plan
+    //and pass selected recipe
+    //and pass recipe ID
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            try {
+                Intent intent = getIntent();
+                Recipe selected = (Recipe) data.getSerializableExtra("RECIPE");
+
+                Intent rbIntent = new Intent();
+                rbIntent.putExtra("RECIPE", selected);
+                rbIntent.putExtra("RECIPEID", selected.url);
+                setResult(RESULT_OK, rbIntent);
+                finish();
+            }
+            catch(Exception e){
+                Log.e("No Error", "Recipe not returned");
+            }
+        }
     }
 }
