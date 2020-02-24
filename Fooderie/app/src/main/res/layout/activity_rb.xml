@@ -55,9 +55,25 @@
         android:layout_height="441dp"
         android:layout_below="@id/rbSearchView"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"></ListView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.901"
+        android:focusableInTouchMode="false"
+        android:isScrollContainer="false"
+        android:visibility="gone"></ListView>
+
+    <ListView
+        android:id="@+id/favListView"
+        android:layout_width="380dp"
+        android:layout_height="441dp"
+        android:layout_below="@id/rbSearchView"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.901"
+        android:focusableInTouchMode="false"
+        android:isScrollContainer="false"></ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
