@@ -1,28 +1,21 @@
-package fooderie.mealPlanner.views;
+package fooderie.mealPlannerScheduler.views;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.fooderie.R;
 
-import java.time.DayOfWeek;
-import java.util.Calendar;
-
-import androidx.recyclerview.widget.SnapHelper;
-import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.viewModels.TodayMealViewModel;
+import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.viewModels.WeeklyScheduleViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -30,21 +23,20 @@ import fooderie.mealPlanner.viewModels.TodayMealViewModel;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class TodayMealRecyclerViewFragment extends Fragment {
+public class WeeklyScheduleFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
-    private TodayMealViewModel m_viewModel;
+    private WeeklyScheduleViewModel m_viewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public TodayMealRecyclerViewFragment() {
+    public WeeklyScheduleFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static TodayMealRecyclerViewFragment newInstance(int columnCount) {
-        TodayMealRecyclerViewFragment fragment = new TodayMealRecyclerViewFragment();
+    public static WeeklyScheduleFragment newInstance(int columnCount) {
+        WeeklyScheduleFragment fragment = new WeeklyScheduleFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -53,31 +45,21 @@ public class TodayMealRecyclerViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        m_viewModel = new ViewModelProvider(this).get(TodayMealViewModel.class);
+        m_viewModel = new ViewModelProvider(this).get(WeeklyScheduleViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_todaymeal_recyclerview, container, false);
+        View view = inflater.inflate(R.layout.fragment_weeklyschedule, container, false);
 
-        // -- Set the widget title to that of the current day of the week -- //
-        Calendar calender = Calendar.getInstance();
-        TextView tv = view.findViewById(R.id.TodayMealFragmentTitle);
-        tv.setText(m_viewModel.dayOfWeekName());
-
-        // -- Set the recycler view to display all of the Meals for the given day --//
+        // -- Set the recycler view to display all of the Schedules for the next 52 weeks --//
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.TodayMealRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        RecyclerView recyclerView = view.findViewById(R.id.WeeklyScheduleRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        AdapterTodayMeal adaptor = new AdapterTodayMeal(mListener, context);
-        m_viewModel.getMealsForToday().observe(getViewLifecycleOwner(), adaptor::setDisplayMeals);
+        AdapterWeeklySchedule adaptor = new AdapterWeeklySchedule(mListener);
+        m_viewModel.getSchedules().observe(getViewLifecycleOwner(), adaptor::setDisplaySchedules);
         recyclerView.setAdapter(adaptor);
-
-        // -- Set the snap helper to snap the items in the RecyclerView -- //
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
 
         return view;
     }
@@ -111,7 +93,6 @@ public class TodayMealRecyclerViewFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(PlanMeal meal);
+        void onListFragmentInteraction(Schedule item);
     }
 }

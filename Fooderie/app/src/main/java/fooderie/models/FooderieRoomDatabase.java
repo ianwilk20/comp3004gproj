@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -16,9 +15,9 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
-import fooderie.mealPlanner.models.PlanWeekSchedule;
+import fooderie.mealPlannerScheduler.models.Schedule;
 
-@Database(entities = {PlanWeekSchedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
+@Database(entities = {Schedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
@@ -63,8 +62,8 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
                 if(plans.size() != 0) {
                     PlanWeek pw = plans.get(0);
                     dao.deleteAllScheduleOfPlanWeek();
-                    for (Long i = 0L; i < 53; i++) {
-                        PlanWeekSchedule p = new PlanWeekSchedule(i, pw.getPlanId());
+                    for (Long i = 1L; i < 53; i++) {
+                        Schedule p = new Schedule(i, pw.getPlanId(), pw.getName());
                         dao.insert(p);
                     }
                 }

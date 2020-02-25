@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.fooderie.R;
 
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.views.TodayMealRecyclerViewFragment.OnListFragmentInteractionListener;
+import fooderie.mealPlanner.views.TodayMealFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 
@@ -23,16 +23,16 @@ public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.View
         private ViewHolder(View view) {
             super(view);
             mTitle = view.findViewById(R.id.TodayMealTitle);
-            mRecyclerView = view.findViewById(R.id.TodayMealRecyclerView);
+            mRecyclerView = view.findViewById(R.id.TodayMealRecipesRecyclerView);
         }
     }
 
-    private List<PlanMeal> m_meal;
+    private List<PlanMeal> m_meals;
     private final Context m_context;
     private final OnListFragmentInteractionListener mListener;
 
     void setDisplayMeals(List<PlanMeal> meals) {
-        m_meal = meals;
+        m_meals = meals;
         notifyDataSetChanged();
     }
 
@@ -49,7 +49,7 @@ public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        PlanMeal p = m_meal.get(position);
+        PlanMeal p = m_meals.get(position);
 
         holder.mTitle.setText(p.getName());
 
@@ -60,6 +60,6 @@ public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.View
 
     @Override
     public int getItemCount() {
-        return (m_meal == null) ? 0 : m_meal.size();
+        return (m_meals == null) ? 0 : m_meals.size();
     }
 }

@@ -12,6 +12,7 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlannerScheduler.models.Schedule;
 
 public class FooderieRepository {
     private FooderieDao fooderieDao;
@@ -19,6 +20,11 @@ public class FooderieRepository {
     public FooderieRepository(Application application) {
         FooderieRoomDatabase db = FooderieRoomDatabase.getDatabase(application);
         fooderieDao = db.fooderieDao();
+    }
+
+    /* Entity=Schedule */
+    public LiveData<List<Schedule>> getAllSchedules() {
+        return fooderieDao.getAllSchedules();
     }
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
@@ -124,7 +130,6 @@ public class FooderieRepository {
     public LiveData<List<PlanDay>> getDayPlans(Long id) { return fooderieDao.getDayPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long id) { return fooderieDao.getMealPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName) {
-        //return fooderieDao.getMealPlans(weekNum, dayName);
         return fooderieDao.getMealPlans(weekNum, dayName);
     }
     public LiveData<List<Recipe>> getRecipes(Long id) { return fooderieDao.getRecipes(id); }

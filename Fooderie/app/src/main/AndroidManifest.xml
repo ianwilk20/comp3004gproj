@@ -16,10 +16,7 @@
         <activity android:name=".rbWebsite"></activity>
         <activity android:name=".rbSelected" />
         <activity android:name=".rbActivity" />
-        <activity
-            android:name="fooderie.mealPlanner.views.MealPlannerViewer"
-            android:label="@string/title_activity_meal_planner_viewer"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".GroceryList" />
 
         <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView"/>

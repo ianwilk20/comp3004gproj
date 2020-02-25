@@ -1,27 +1,26 @@
 package com.example.fooderie;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
+import androidx.appcompat.widget.Toolbar;
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.GroceryList;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
-import fooderie.mealPlanner.views.TodayMealRecyclerViewFragment.OnListFragmentInteractionListener;
+import fooderie.mealPlanner.views.TodayMealFragment;
+import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import android.widget.Button;
-import android.content.Intent;
-
-public class MainActivity extends AppCompatActivity implements OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements
+        TodayMealFragment.OnListFragmentInteractionListener,
+        WeeklyScheduleFragment.OnListFragmentInteractionListener {
 
     private Button groceryListButton;
     private Button mealPlannerButton;
@@ -97,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
 
     @Override
     public void onListFragmentInteraction(PlanMeal meal) {
+    }
 
+    @Override
+    public void onListFragmentInteraction(Schedule s) {
     }
 }
