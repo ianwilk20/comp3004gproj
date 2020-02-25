@@ -6,21 +6,22 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import androidx.room.RoomWarnings;
 import androidx.room.Update;
-import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlanner.models.PlanWeekSchedule;
 
 @Dao
 public interface FooderieDao {
 
-    /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
+    /* Entity=PlanWeekSchedule, PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
+    @Insert
+    long insert(PlanWeekSchedule s);
     @Insert
     long insert(PlanWeek p);
     @Insert
@@ -42,6 +43,10 @@ public interface FooderieDao {
     void update(PlanRecipe p);
 
     @Delete
+    void delete(PlanWeekSchedule s);
+    @Query("DELETE FROM table_PlanWeekSchedule")
+    void deleteAllScheduleOfPlanWeek();
+    @Delete
     void delete(PlanWeek p);
     @Delete
     void delete(PlanDay p);
@@ -51,7 +56,9 @@ public interface FooderieDao {
     void delete(PlanRecipe p);
 
     @Query("SELECT * FROM table_PlanWeek")
-    LiveData<List<PlanWeek>> getWeekPlans();
+    LiveData<List<PlanWeek>> getPlanWeeks();
+    @Query("SELECT * FROM table_PlanWeek")
+    List<PlanWeek> getAllPlanWeeks();
     @Query("SELECT * FROM table_PlanWeek WHERE planId == :id")
     PlanWeek getPlanWeek(Long id);
 
@@ -62,6 +69,16 @@ public interface FooderieDao {
 
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     LiveData<List<PlanMeal>> getMealPlans(Long id);
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT * FROM table_PlanWeekSchedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+           "WHERE s.weekOfYearId == :weekNum AND s.planId == pw.planId AND pd.parentId == pw.planId AND pd.name LIKE :dayName " +
+           "AND pm.parentId == pd.planId ORDER BY pm.'order'")
+    LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName);
+
+    @Query("SELECT * FROM table_PlanWeekSchedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+            "WHERE s.weekOfYearId == :weekNum AND s.planId == pw.planId AND pd.parentId == pw.planId " +
+            "AND pm.parentId == pd.planId ORDER BY pm.'order'")
+    LiveData<List<PlanMeal>> getMealPlansFromWeekNum(Long weekNum);
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     List<PlanMeal> getAllMealPlans(Long id);
     @Query("SELECT * FROM table_PlanMeal WHERE planId == :id")

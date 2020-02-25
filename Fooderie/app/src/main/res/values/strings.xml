@@ -102,6 +102,7 @@
     <string name="placeHolder">PLACEHOLDER</string>
 
     <string name="title_activity_rb_selected">rbSelected</string>
+    <string name="today_s_meals">Today\'s Meals</string>
 
 
 </resources>

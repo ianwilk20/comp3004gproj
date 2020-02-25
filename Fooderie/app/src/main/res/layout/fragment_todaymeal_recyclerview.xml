@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TodayMealLayout"
+    android:name="fooderie.mealPlanner.views.TodayMealsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    app:layoutManager="LinearLayoutManager"
+    tools:context="fooderie.mealPlanner.views.TodayMealRecyclerViewFragment"
+    tools:listitem="@layout/fragment_todaymeal_item" >
+
+    <TextView
+        android:id="@+id/TodayMealFragmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeHolder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TodayMealFragmentSuperTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TodayMealRecyclerView"
+        android:name="fooderie.mealPlanner.views.TodayMealsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/TodayMealFragmentTitle"
+        tools:context="fooderie.mealPlanner.views.TodayMealRecyclerViewFragment"
+        tools:listitem="@layout/fragment_todaymeal_item" />
+
+    <TextView
+        android:id="@+id/TodayMealFragmentSuperTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/today_s_meals"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

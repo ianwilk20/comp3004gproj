@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,61 +8,75 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <SearchView
-        android:id="@+id/search"
-        android:layout_width="409dp"
-        android:layout_height="86dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/search"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:text="Main Page"
-        android:textSize="85px"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintVertical_bias="0.14" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/mealPlannerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:text="Meal Planner" />
+            <SearchView
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/groceryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mealPlannerButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:text="Grocery List" />
+            </SearchView>
 
-    <Button
-        android:id="@+id/cookingAssistantButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/groceryButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:text="Cooking Assistant" />
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Main Page"
+                android:textSize="85px"
+                app:layout_constraintTop_toBottomOf="@+id/search"
+                tools:layout_editor_absoluteX="0dp" />
 
-    <Button
-        android:id="@+id/recipeBrowserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cookingAssistantButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:onClick="openRecipeBrowser"
-        android:text="Recipe Browser" />
+            <Button
+                android:id="@+id/groceryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Grocery List"
+                app:layout_constraintTop_toBottomOf="@+id/mealPlannerButton"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/recipeBrowserButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="openRecipeBrowser"
+                android:text="Recipe Browser"
+                app:layout_constraintTop_toBottomOf="@+id/cookingAssistantButton"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/mealPlannerButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Meal Planner"
+                app:layout_constraintTop_toBottomOf="@+id/text"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/cookingAssistantButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cooking Assistant"
+                app:layout_constraintTop_toBottomOf="@+id/groceryButton"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <fragment
+                android:id="@+id/TodayMealFragment"
+                android:name="fooderie.mealPlanner.views.TodayMealRecyclerViewFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/recipeBrowserButton"
+                tools:layout="@layout/fragment_todaymeal_recyclerview"
+                tools:layout_editor_absoluteX="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

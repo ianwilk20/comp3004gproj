@@ -10,7 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.GroceryList;
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
+import fooderie.mealPlanner.views.TodayMealRecyclerViewFragment.OnListFragmentInteractionListener;
 
 import android.view.View;
 import android.view.Menu;
@@ -19,7 +21,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnListFragmentInteractionListener {
 
     private Button groceryListButton;
     private Button mealPlannerButton;
@@ -31,15 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         groceryListButton = findViewById(R.id.groceryButton);
         groceryListButton.setOnClickListener(new View.OnClickListener() {
@@ -100,5 +93,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(PlanMeal meal) {
+
     }
 }

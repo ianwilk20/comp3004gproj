@@ -1,26 +1,24 @@
 package fooderie.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
-import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlanner.models.PlanWeekSchedule;
 
-@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
+@Database(entities = {PlanWeekSchedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
@@ -52,15 +50,25 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
-                List<Recipe> recipes = dao.getAllRecipes();
-
-                //dao.deleteAllPlanRecipes();
-
+                /*List<Recipe> recipes = dao.getAllRecipes();
                 if (recipes.size() == 0) {
                     Recipe r = new Recipe();
                     r.setId("0");
                     dao.insert(r);
+                }*/
+
+                // TODO: REMOVE TEMPORARY CODE POPULATING DB WITH PLAN_WEEK_SCHEDULES
+                // -- TEMPORARY CODE TO ENSURE THERE IS ALWAYS A MEAL PLAN SELECTED FOR ANY WEEK OF THE YEAR -- //
+                List<PlanWeek> plans = dao.getAllPlanWeeks();
+                if(plans.size() != 0) {
+                    PlanWeek pw = plans.get(0);
+                    dao.deleteAllScheduleOfPlanWeek();
+                    for (Long i = 0L; i < 53; i++) {
+                        PlanWeekSchedule p = new PlanWeekSchedule(i, pw.getPlanId());
+                        dao.insert(p);
+                    }
                 }
+
                 //dao.deleteAllRecipes();
 
                 //Recipe r = new Recipe();

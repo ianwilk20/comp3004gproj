@@ -1,7 +1,6 @@
 package fooderie.models;
 
 import android.app.Application;
-import android.util.Log;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.List;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
-import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
@@ -56,7 +54,6 @@ public class FooderieRepository {
         fooderieDao.insert(p);
         updatePlanMealRecipeCount(p.getParentId(), 1);
     }
-
     public void update(PlanWeek p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.update(p);
@@ -123,9 +120,13 @@ public class FooderieRepository {
         });
     }
 
-    public LiveData<List<PlanWeek>> getWeekPlans() { return fooderieDao.getWeekPlans(); }
+    public LiveData<List<PlanWeek>> getWeekPlans() { return fooderieDao.getPlanWeeks(); }
     public LiveData<List<PlanDay>> getDayPlans(Long id) { return fooderieDao.getDayPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long id) { return fooderieDao.getMealPlans(id); }
+    public LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName) {
+        //return fooderieDao.getMealPlans(weekNum, dayName);
+        return fooderieDao.getMealPlans(weekNum, dayName);
+    }
     public LiveData<List<Recipe>> getRecipes(Long id) { return fooderieDao.getRecipes(id); }
 
     public LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id) { return fooderieDao.getAllRecipesFromWeeklyMealPlanId(id); }
