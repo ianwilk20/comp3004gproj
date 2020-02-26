@@ -11,13 +11,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import fooderie.groceryList.models.Food;
+import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
 
-@Database(entities = {Schedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
+
+@Database(entities = {Schedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {

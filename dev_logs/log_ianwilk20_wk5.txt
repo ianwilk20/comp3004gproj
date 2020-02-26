@@ -1,0 +1,52 @@
+Development Log – Week #5
+Ian Wilkinson, 101073244
+
+The goal for this week was to attempt to get some connectivity with the Room Database setup by Gavin, and set up two tables, the first that stores the users grocery list, and the second that stores Food Class filtered API responses by the API to cut down on API query costs. Continuing the development of edit, and delete on the side of the custom adapter. Making fields from the edit be captured and stored and transfered to the grocery list view (upon pressing "Update" on the dialog). Also making my grocery list first look at DB then the API for ingredients, if not in DB, go to API and add the API response to the DB for reduce API reliance.
+
+Saturday, Febuary 22, 2020
+ - [4 Hr] Database Connections
+	o Added inflated items headers to special grocery items
+	o Upon clicking any item in the grocery list it is added to a Got It list
+	o This temporary store acts a backup
+		a) If the user intended to delete the item, they have one more step to delete it
+		b) If the item was accidentally pressed, no harm is done, it is added to the Got It list
+	o Upon being added to the Got It list
+		a) The user can click back on the item in the case that it was an accident and the item will be readded to the grocery list (if they didn't mean to remove it from their proper grocery list)
+		b) The user can clear the got it list, thus acting as a two factor verification that they did intend to delete said item
+
+ - [1 Hr] Alteration of API Response Parsing
+	o When API response is received only parse "hints" if it is not null
+	o Ignore the measures array of objects
+	o Refactor the Food class to remove unnecessary information (thus cutting down on DB storage costs)
+
+ - [5 Hr] Using Database connection
+	o Many issues when pulling from database
+	o Major code refactor
+	o Made two tables: UserGroceryList and APIIngredient
+		o Made various functions and SQL statements for the setting, getting, updating, and deletion of all, and specific data (by food label)
+	
+
+ - [4 Hr] Code Refactor Unintedent Consquences
+	o Delete button no longer working
+		o Had to do a complete re-write, plus ensure that the same information would also be deleted from DB
+	o Edit button no longer working with custom adapter
+		o After various hours of troubleshooting, it was required to pass the GroceryListView Activity to the CustomAdpater in order for it to function
+		o Works in tandem with the database to retrieve the Quantity, Notes, and Department
+		o Making said captured fields appear on the display below the ingredient (quantity, notes, department) -> possibily filtering by department
+	o Progress Dialog when searching for ingredient vanished
+		o No fix, unclear as to why progress dialog won't display after user has pressed "Add Item"
+
+ - [0.5 Hr] Reviewing PR's
+
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+
+- Cleaning up what the groceryItemInfo shows (maybe adding more room)
+	- Filtering the data set prior so nulls and empties don't show up
+- Making sure data being updated from edit button call isn't potentially malicious
+- Altering the parsing of API food results to clean up food_labels by making them camel case, and possibly duplicate names with varying spelling/captialization
+- Possibly remove the aisles/recipes thing and only filter on department if there is one or by ascending
+	- maybe by default have department be "Other" so can do basic filtereing
+- Utilizing the custom adapter on the Got it List too, in the case that we deem it necessary for users to be able to edit Got It List items or delete them individually (instead of clearing them)

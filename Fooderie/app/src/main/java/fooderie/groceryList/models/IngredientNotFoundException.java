@@ -1,4 +1,4 @@
-package fooderie.groceryList;
+package fooderie.groceryList.models;
 
 public class IngredientNotFoundException extends Exception {
 
