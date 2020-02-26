@@ -25,12 +25,10 @@
         android:id="@+id/WeeklyScheduleItemPlanName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
         android:text="@string/placeHolder"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/WeeklyScheduleItemWeekNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toEndOf="@+id/WeeklyScheduleItemWeekNumber"
         app:layout_constraintTop_toTopOf="@+id/WeeklyScheduleItemWeekNumber" />
 
