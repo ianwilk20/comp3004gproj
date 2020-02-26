@@ -1,5 +1,6 @@
 package fooderie.mealPlanner.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,7 @@ import androidx.room.PrimaryKey;
 import fooderie.models.FooderieRepository;
 
 @Entity
-public abstract class Plan {
+public abstract class Plan implements Serializable {
     @PrimaryKey (autoGenerate = true)
     protected Long planId;
     protected Long parentId;

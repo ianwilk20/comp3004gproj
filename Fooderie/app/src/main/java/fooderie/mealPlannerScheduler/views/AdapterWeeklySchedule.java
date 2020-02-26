@@ -1,5 +1,6 @@
 package fooderie.mealPlannerScheduler.views;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -9,18 +10,22 @@ import android.widget.TextView;
 
 import com.example.fooderie.R;
 
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment.OnListFragmentInteractionListener;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.function.Function;
 
 public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySchedule.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private final ConstraintLayout mLayout;
         private final TextView mWeekNum;
         private final TextView mPlanName;
         public ViewHolder(View view) {
             super(view);
+            mLayout = view.findViewById(R.id.WeeklyScheduleItemLayout);
             mWeekNum = view.findViewById(R.id.WeeklyScheduleItemWeekNumber);
             mPlanName = view.findViewById(R.id.WeeklyScheduleItemPlanName);
         }
@@ -28,6 +33,7 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
 
     private List<Schedule> m_schedules;
     private final OnListFragmentInteractionListener mListener;
+    private final Function<Schedule, Void> mselected;
 
     void setDisplaySchedules(List<Schedule> s) {
         //TODO: ENSURE PROPER SORTED ORDER
@@ -37,8 +43,9 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
         notifyDataSetChanged();
     }
 
-    public AdapterWeeklySchedule(OnListFragmentInteractionListener listener) {
+    public AdapterWeeklySchedule(OnListFragmentInteractionListener listener, Function<Schedule, Void> selected) {
         mListener = listener;
+        mselected = selected;
     }
 
     @Override
@@ -52,6 +59,10 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
         Schedule s = m_schedules.get(position);
         holder.mPlanName.setText(s.getName());
         holder.mWeekNum.setText(s.getWeekOfYearId().toString());
+
+        holder.mLayout.setOnClickListener((View v) -> {
+            mselected.apply(s);
+        });
     }
 
     @Override

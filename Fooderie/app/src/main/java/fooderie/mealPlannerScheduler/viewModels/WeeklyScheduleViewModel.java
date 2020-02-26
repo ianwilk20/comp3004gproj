@@ -23,4 +23,8 @@ public class WeeklyScheduleViewModel extends AndroidViewModel {
     public LiveData<List<Schedule>> getSchedules() {
         return m_repo.getAllSchedules();
     }
+
+    public void updateSchedule(Schedule s) {
+        m_repo.update(s);
+    }
 }

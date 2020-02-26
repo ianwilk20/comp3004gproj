@@ -1,5 +1,6 @@
 package fooderie.mealPlanner.views;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanRecipeViewModel;
+import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.models.Recipe;
 
 
@@ -60,6 +62,9 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private static final String REQUEST_RECIPE_KEY = "FROMPLAN";
     private static final String REQUEST_RECIPE_VALUE_YES = "yes";
     private static final String REQUEST_RECIPE_VALUE_NO = "no";
+
+    public static final String LOOKING_FOR_PLANWEEK_KEY = "plan_week";
+    public static final String PLANWEEK_KEY = "plan_week";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +113,10 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
                 }
         });
 
-        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan);
+        Intent intent = getIntent();
+        boolean allowSelect = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
+
+        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (allowSelect) ? this::selectPlanWeek : null);
         m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayPlanRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
@@ -166,6 +174,14 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         m_path.add(p);
         updateDisplay();
 
+        return null;
+    }
+
+    private Void selectPlanWeek(PlanWeek p) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(PLANWEEK_KEY, p);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
         return null;
     }
 

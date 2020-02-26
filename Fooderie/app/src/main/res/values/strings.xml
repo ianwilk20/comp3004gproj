@@ -106,6 +106,7 @@
     <string name="schedule">Schedule</string>
     <string name="WeeklyScheduleDescription">Week # | Plan Name</string>
     <string name="nothing_planned">Nothing Planned</string>
+    <string name="select">Select</string>
 
 
 </resources>

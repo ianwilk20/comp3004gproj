@@ -1,5 +1,7 @@
 package fooderie.mealPlannerScheduler.models;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -14,7 +16,7 @@ import fooderie.mealPlanner.models.PlanWeek;
             childColumns = "planId",
             onDelete = ForeignKey.CASCADE)
         )
-public class Schedule {
+public class Schedule implements Serializable {
     @PrimaryKey
     @NonNull
     private Long weekOfYearId;

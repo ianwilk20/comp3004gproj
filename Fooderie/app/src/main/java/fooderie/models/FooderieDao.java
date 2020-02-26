@@ -23,6 +23,9 @@ public interface FooderieDao {
     @Insert
     long insert(Schedule s);
 
+    @Update
+    void update(Schedule s);
+
     @Delete
     void delete(Schedule s);
     @Query("DELETE FROM table_Schedule")

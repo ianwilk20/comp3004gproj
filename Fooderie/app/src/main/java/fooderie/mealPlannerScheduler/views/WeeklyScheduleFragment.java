@@ -1,6 +1,7 @@
 package fooderie.mealPlannerScheduler.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,8 +15,12 @@ import android.view.ViewGroup;
 
 import com.example.fooderie.R;
 
+import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.viewModels.WeeklyScheduleViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A fragment representing a list of Items.
@@ -27,6 +32,9 @@ public class WeeklyScheduleFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private WeeklyScheduleViewModel m_viewModel;
 
+    private static final int PLANRECIPE_REQUEST_VIEW = 1;
+    private Schedule m_scheduleToModify;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -37,6 +45,7 @@ public class WeeklyScheduleFragment extends Fragment {
     @SuppressWarnings("unused")
     public static WeeklyScheduleFragment newInstance(int columnCount) {
         WeeklyScheduleFragment fragment = new WeeklyScheduleFragment();
+
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -57,7 +66,7 @@ public class WeeklyScheduleFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.WeeklyScheduleRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        AdapterWeeklySchedule adaptor = new AdapterWeeklySchedule(mListener);
+        AdapterWeeklySchedule adaptor = new AdapterWeeklySchedule(mListener, this::setWeeklySchedule);
         m_viewModel.getSchedules().observe(getViewLifecycleOwner(), adaptor::setDisplaySchedules);
         recyclerView.setAdapter(adaptor);
 
@@ -80,6 +89,35 @@ public class WeeklyScheduleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLANRECIPE_REQUEST_VIEW) {
+            if (resultCode != RESULT_OK)
+                return;
+
+            // -- Get PlanWeek to modify selected DB entry -- //
+            PlanWeek p = (PlanWeek) data.getSerializableExtra(PlanRecipeRecyclerView.PLANWEEK_KEY);
+            if (p == null || m_scheduleToModify == null)
+                return;
+
+            m_scheduleToModify.setPlanId(p.getPlanId());
+            m_scheduleToModify.setName(p.getName());
+            m_viewModel.updateSchedule(m_scheduleToModify);
+            m_scheduleToModify = null;
+        }
+    }
+
+    public Void setWeeklySchedule(Schedule s) {
+        Intent intent = new Intent(getActivity(), PlanRecipeRecyclerView.class);
+
+        intent.putExtra(PlanRecipeRecyclerView.LOOKING_FOR_PLANWEEK_KEY, true);
+        m_scheduleToModify = s;
+
+        startActivityForResult(intent, PLANRECIPE_REQUEST_VIEW);
+        return null;
     }
 
     /**

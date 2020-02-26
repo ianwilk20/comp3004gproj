@@ -26,6 +26,11 @@ public class FooderieRepository {
     public LiveData<List<Schedule>> getAllSchedules() {
         return fooderieDao.getAllSchedules();
     }
+    public void update(Schedule s) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(s);
+        });
+    }
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
     public void insert(PlanWeek p) {
