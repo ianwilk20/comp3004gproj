@@ -1,0 +1,32 @@
+COMP3004 Dev Log - Week #5
+Michael Ting - 101068936
+
+Overview: This weeks objective was connecting the cooking assistant with other group 
+members code as well as getting the pre-cookingAssistant page working / frameworked
+
+Weekly Progress:
+[0.5 Hr]
+- Researched intent to transfer data between classes onCreate.
+
+[1 hr]
+- Implement intent retrieval to get the recipe passed to the cooking assistant
+- Implemented code connecting availability to connect with Mackenzie and Gavin's parts
+
+[1 hr]
+- Reserached Vertically scrolling screens to ingridents don't fall off page
+- Researched formatted scrolling views using relative layouts
+
+[2.5 hr]
+- Implementing a scrolling view into the pre-cookingAssistant page with fake data
+- Reconnected the intent to go to the pre-cookingAssistant page and then fill in the
+text with the new data
+- Dynamically move button based on text length as well as have that work with the scroll
+- Linked the pre-page with the actual cooking Assistant page
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
+

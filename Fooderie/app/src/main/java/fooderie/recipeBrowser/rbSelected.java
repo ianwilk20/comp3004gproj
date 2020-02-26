@@ -1,4 +1,4 @@
-package com.example.fooderie;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.example.fooderie.R;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
+import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.models.Recipe;
 import fooderie.models.Tag;
 
@@ -20,15 +25,47 @@ public class rbSelected extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_selected);
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe and units from rbActivity
+        //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+        String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
+        String units = (String)intent.getSerializableExtra("UNITS");
+        if(units.equals("Metric")){
+            units = "g";
+        }
+        if(units.equals("Imperial")){
+            units = "oz";
+        }
+
+        //Click Listener for Add button
+        Button addButton = findViewById(R.id.add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //add recipe to db
+                goBackToPlan(selected);
+            }
+        });
+
+        //If directed to this activity from Meal Plan
+        //Make Add button visible
+        if(fromPlan.equals("yes")){
+            addButton.setVisibility(View.VISIBLE);
+        }
 
         //Click Listener for website button
         Button websiteButton = findViewById(R.id.website);
         websiteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 goToWebsite(selected);
+            }
+        });
+
+        //Click Listener for cooking steps button
+        Button stepsButton = findViewById(R.id.steps);
+        stepsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                goToSteps(selected);
             }
         });
 
@@ -87,8 +124,20 @@ public class rbSelected extends AppCompatActivity {
             }
         }
 
-        //PICTURE
-        //ImageView recipeImage = findViewById(R.id.recipeImage);
+        //Image
+        ImageButton recipeImage = findViewById(R.id.recipeImage);
+        Picasso.get().load(selected.image).into(recipeImage);
+        //Click Listener for image button
+        recipeImage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //If it isn't in the db
+                //add recipe to favorites list
+                Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                //If it is already in the db
+                //delete recipe from favorites list
+                Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
@@ -109,6 +158,7 @@ public class rbSelected extends AppCompatActivity {
         TextView fat = findViewById(R.id.FAT);
         TextView fatUnit = findViewById(R.id.FATunit);
         if(selected.totalNutrients.FAT != null) {
+            selected.totalNutrients.FAT.setUnits(units);
             fat.setText(selected.totalNutrients.FAT.round());
             fatUnit.setText(selected.totalNutrients.FAT.unit);
         }
@@ -119,6 +169,7 @@ public class rbSelected extends AppCompatActivity {
         TextView carbs = findViewById(R.id.CHOCDF);
         TextView carbsUnit = findViewById(R.id.CHOCDFunit);
         if(selected.totalNutrients.CHOCDF != null) {
+            selected.totalNutrients.CHOCDF.setUnits(units);
             carbs.setText(selected.totalNutrients.CHOCDF.round());
             carbsUnit.setText(selected.totalNutrients.CHOCDF.unit);
         }
@@ -129,6 +180,7 @@ public class rbSelected extends AppCompatActivity {
         TextView fiber = findViewById(R.id.FIBTG);
         TextView fiberUnit = findViewById(R.id.FIBTGunit);
         if(selected.totalNutrients.FIBTG != null) {
+            selected.totalNutrients.FIBTG.setUnits(units);
             fiber.setText(selected.totalNutrients.FIBTG.round());
             fiberUnit.setText(selected.totalNutrients.FIBTG.unit);
         }
@@ -139,6 +191,7 @@ public class rbSelected extends AppCompatActivity {
         TextView sugar = findViewById(R.id.SUGAR);
         TextView sugarUnit = findViewById(R.id.SUGARunit);
         if(selected.totalNutrients.SUGAR != null) {
+            selected.totalNutrients.SUGAR.setUnits(units);
             sugar.setText(selected.totalNutrients.SUGAR.round());
             sugarUnit.setText(selected.totalNutrients.SUGAR.unit);
         }
@@ -149,6 +202,7 @@ public class rbSelected extends AppCompatActivity {
         TextView protein = findViewById(R.id.PROCNT);
         TextView proteinUnit = findViewById(R.id.PROCNTunit);
         if(selected.totalNutrients.PROCNT != null) {
+            selected.totalNutrients.PROCNT.setUnits(units);
             protein.setText(selected.totalNutrients.PROCNT.round());
             proteinUnit.setText(selected.totalNutrients.PROCNT.unit);
         }
@@ -164,5 +218,25 @@ public class rbSelected extends AppCompatActivity {
         Intent rbIntent = new Intent(this, rbWebsite.class);
         rbIntent.putExtra("RECIPE", selected);
         startActivity(rbIntent);
+    }
+
+    //Redirect to CookingAssistantViewer activity
+    //and pass selected recipe
+    public void goToSteps(Recipe selected){
+        Intent rbIntent = new Intent(this, CookingAssistantPreview.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
+    }
+
+    //Redirect back to Meal Plan
+    //and pass selected recipe
+    //and pass recipe ID
+    public void goBackToPlan(Recipe selected){
+        //go back twice
+        Intent rbIntent = new Intent();
+        rbIntent.putExtra("RECIPE", selected);
+        rbIntent.putExtra("RECIPEID", selected.url);
+        setResult(RESULT_OK, rbIntent);
+        finish();
     }
 }

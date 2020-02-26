@@ -1,0 +1,16 @@
+2hrs
+-added button to redirect to cooking assistant
+-redirected to cooking assistant activity
+-implemented unit conversion
+-added unit toggle button
+
+1.5hrs
+-added loading dialog (stolen from Ian)
+-added recipe image (stolen from Gavin)
+
+3.5hrs
+-added redirection to Meal Planner
+-added button to Selected xml
+
+1.5hrs
+-added favorites button and listview

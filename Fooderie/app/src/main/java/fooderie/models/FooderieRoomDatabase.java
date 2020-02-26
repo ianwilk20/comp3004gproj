@@ -1,7 +1,6 @@
 package fooderie.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -11,16 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import fooderie.mealPlanner.models.Plan;
+
+import fooderie.groceryList.models.Food;
+import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
-import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlannerScheduler.models.Schedule;
 
-@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class},
+
+@Database(entities = {Schedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
 public abstract class FooderieRoomDatabase extends RoomDatabase {
@@ -52,15 +53,24 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
-                List<Recipe> recipes = dao.getAllRecipes();
-
-                //dao.deleteAllPlanRecipes();
-
+                /*List<Recipe> recipes = dao.getAllRecipes();
                 if (recipes.size() == 0) {
                     Recipe r = new Recipe();
-                    r.setId(0L);
+                    r.setId("0");
                     dao.insert(r);
+                }*/
+
+                // -- Populate schedules list if it is empty (first time running application) -- //
+                List<Schedule> schedules = dao.getAllSchedulesNonLiveData();
+                if (schedules.size() == 0) {
+                    for (Long i = 1L; i < 53; i++) {
+                        Schedule p = new Schedule(i, null, null);
+                        dao.insert(p);
+                    }
                 }
+
+
+
                 //dao.deleteAllRecipes();
 
                 //Recipe r = new Recipe();

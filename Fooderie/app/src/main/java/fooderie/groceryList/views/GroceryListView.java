@@ -1,21 +1,20 @@
-package fooderie.groceryList;
+package fooderie.groceryList.views;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,26 +34,23 @@ import com.google.gson.GsonBuilder;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.List;
 
-import fooderie.models.Food;
-import fooderie.models.Hints;
-import fooderie.models.Ingredient;
-import fooderie.models.Measures;
+import fooderie.groceryList.models.IngredientNotFoundException;
+import fooderie.groceryList.models.UserGroceryListItem;
+import fooderie.groceryList.viewModels.GroceryListViewModel;
+import fooderie.groceryList.viewModels.Utility;
+import fooderie.groceryList.models.Food;
 
 
-public class GroceryList extends AppCompatActivity {
-    HashMap<String, Ingredient> storedGroceryList = new HashMap<String, Ingredient>();
+public class GroceryListView extends AppCompatActivity {
+    private GroceryListViewModel groceryListViewModel;
+
+    HashMap<String, Food> storedGroceryList = new HashMap<String, Food>();
     View v;
     RequestQueue requestQueue;
     ListView groceryList;
@@ -66,7 +61,7 @@ public class GroceryList extends AppCompatActivity {
     CustomAdapter groceryListAdapter;
     ArrayAdapter<String> gotItListAdapter;
     FloatingActionButton addItem;
-    ProgressDialog dialog;
+    //ProgressDialog progressDialog;
     ArrayList<String> grocList = new ArrayList<String>();
     ArrayList<String> gotList = new ArrayList<String>();
 
@@ -78,8 +73,24 @@ public class GroceryList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list);
-
         groceryList = findViewById(R.id.groceryListDisplay);
+
+
+
+        groceryListViewModel = ViewModelProviders.of(this).get(GroceryListViewModel.class);
+        groceryListViewModel.getUserGroceryList().observe(this, new Observer<List<UserGroceryListItem>>() {
+            @Override
+            public void onChanged(List<UserGroceryListItem> userGroceryListItems) {
+                //update our View later
+                groceryListAdapter = new CustomAdapter(userGroceryListItems, getApplicationContext(), groceryListViewModel, GroceryListView.this);
+                groceryList.setAdapter(groceryListAdapter);
+                groceryListAdapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(groceryList);
+                Toast.makeText(GroceryListView.this, "onChanged", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
         gotItList = findViewById(R.id.gotItListDisplay);
         addItem = findViewById(R.id.addGroceryItem);
 
@@ -90,25 +101,14 @@ public class GroceryList extends AppCompatActivity {
         gotItHeader = header.findViewById(R.id.gotItHeader);
         gotItList.addHeaderView(header);
 
-
-//        gotItHeader = new TextView(GroceryList.this);
-//        gotItHeader.setText("Got It");
-//
-//        gotItList.addHeaderView(gotItHeader);
-
-        dialog = new ProgressDialog(GroceryList.this);
-
         requestQueue = Volley.newRequestQueue(this);
 
-        //groceryListAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, new ArrayList<String>(storedGroceryList.keySet())); //doesn't work
+        //groceryListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, new ArrayList<String>(storedGroceryList.keySet())); //doesn't work
 
-//        groceryListAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, grocList);
+//        groceryListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, grocList);
 //        groceryList.setAdapter(groceryListAdapter);
 
-        groceryListAdapter = new CustomAdapter(grocList, this.getBaseContext());
-        groceryList.setAdapter(groceryListAdapter);
-
-        gotItListAdapter = new ArrayAdapter(GroceryList.this, android.R.layout.simple_list_item_1, gotList);
+        gotItListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, gotList);
         gotItList.setAdapter(gotItListAdapter);
 
         addItem.setOnClickListener(new View.OnClickListener() {
@@ -118,23 +118,23 @@ public class GroceryList extends AppCompatActivity {
             }
         });
 
-        groceryListAdapter.setOnDataChangeListener(new CustomAdapter.OnDataChangeListener() {
-            @Override
-            public void onDataChanged(String item) {
-                if (gotList.isEmpty()){
-                    gotItList.setVisibility(View.VISIBLE);
-                }
-                gotList.add(item);
-
-                //Dynamically set heights of the grocery and gotIt list
-                Utility.setListViewHeightBasedOnChildren(groceryList);
-                Utility.setListViewHeightBasedOnChildren(gotItList);
-
-                //Update View
-                groceryListAdapter.notifyDataSetChanged();
-                gotItListAdapter.notifyDataSetChanged();
-            }
-        });
+//        groceryListAdapter.setOnDataChangeListener(new CustomAdapter.OnDataChangeListener() {
+//            @Override
+//            public void onDataChanged(String item) {
+//                if (gotList.isEmpty()){
+//                    gotItList.setVisibility(View.VISIBLE);
+//                }
+//                gotList.add(item);
+//
+//                //Dynamically set heights of the grocery and gotIt list
+//                Utility.setListViewHeightBasedOnChildren(groceryList);
+//                Utility.setListViewHeightBasedOnChildren(gotItList);
+//
+//                //Update View
+//                groceryListAdapter.notifyDataSetChanged();
+//                gotItListAdapter.notifyDataSetChanged();
+//            }
+//        });
 
 //        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -158,7 +158,7 @@ public class GroceryList extends AppCompatActivity {
 //                    groceryListAdapter.notifyDataSetChanged();
 //                    gotItListAdapter.notifyDataSetChanged();
 //                } else {
-//                    Toast.makeText(GroceryList.this, "Problem Removing Element From Grocery List", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(GroceryListView.this, "Problem Removing Element From Grocery List", Toast.LENGTH_SHORT).show();
 //                }
 //            }
 //        });
@@ -183,7 +183,7 @@ public class GroceryList extends AppCompatActivity {
                     groceryListAdapter.notifyDataSetChanged();
                     gotItListAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(GroceryList.this, "Problem Removing Element From Got It List", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroceryListView.this, "Problem Removing Element From Got It List", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -209,10 +209,10 @@ public class GroceryList extends AppCompatActivity {
 
 
     private void addIngredient() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(GroceryList.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroceryListView.this);
         builder.setTitle("Add to List");
 
-        v = LayoutInflater.from(GroceryList.this).inflate(R.layout.add_grocery_dialog, null, false);
+        v = LayoutInflater.from(GroceryListView.this).inflate(R.layout.add_grocery_dialog, null, false);
         builder.setView(v);
 
         final SearchView grocerySearch = v.findViewById(R.id.addItem);
@@ -223,13 +223,31 @@ public class GroceryList extends AppCompatActivity {
         builder.setPositiveButton("Add Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String query = grocerySearch.getQuery().toString();
+                dialog.dismiss();
 
+                ProgressDialog progressDialog = new ProgressDialog(GroceryListView.this);
+                progressDialog.setMessage("Please, wait while we find your ingredient");
+                progressDialog.show();
+                //((ViewGroup) v.getParent()).removeView(v);
+//                progressDialog = new ProgressDialog(GroceryListView.this);
+//                progressDialog.setTitle("Please, wait while we find your ingredient");
+//                progressDialog.show();
+
+                String query = grocerySearch.getQuery().toString();
                 if (query.length()>= 1 && query != null){
-                    FetchIngredient(query);
+                    boolean hasIngredientInDB = FetchIngredientFromDBBoolean(query);
+                    if (hasIngredientInDB == false) {
+                        FetchIngredientFromAPI(query); //Get Ingredients from API and save to DB
+                        FetchIngredientFromDB(query);
+                    } else {
+                        FetchIngredientFromDB(query);
+                    }
+
                 } else if (query.length() == 0){
-                    Toast.makeText(GroceryList.this, "Nothing was added" + query, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroceryListView.this, "Nothing was added" + query, Toast.LENGTH_SHORT).show();
                 }
+
+                progressDialog.dismiss();
             }
         });
 
@@ -243,8 +261,21 @@ public class GroceryList extends AppCompatActivity {
         builder.show();
     }
 
+    public boolean FetchIngredientFromDBBoolean(final String ingredient){
+        List<Food> data = groceryListViewModel.getFoodByLabel(ingredient).getValue();
+        if (data == null || data.isEmpty()){
+            return false;
+        }
+        return true;
+    }
 
-    public void FetchIngredient(final String ingredient){
+    public void FetchIngredientFromDB(final String ingredient){
+        List<Food> listFromDB = groceryListViewModel.getFoodByLabel(ingredient).getValue();
+        return;
+    }
+
+
+    public void FetchIngredientFromAPI(final String ingredient){
         String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
         String queryParams;
         String appKey = "d98b79a1c20ab328a1fc73311be5d1ee";
@@ -253,11 +284,6 @@ public class GroceryList extends AppCompatActivity {
         String foodApiURLProper = foodApiDomainNPath + "?ingr=" + ingredient + "&app_id=" + appID + "&app_key=" + appKey;
 
         Log.e("API URL", foodApiURL);
-
-        Ingredient recIngredient = new Ingredient();
-
-        dialog.setMessage("Please, wait while we find your ingredient");
-        dialog.show();
 
         JsonObjectRequest objectReq = new JsonObjectRequest(
                 Request.Method.GET,
@@ -271,47 +297,28 @@ public class GroceryList extends AppCompatActivity {
                         try {
                             String text = response.getString("text"); //What user passes in and is parsed from API
 
-                            JSONArray ingredientParsed = response.getJSONArray("parsed"); //The Array called "parsed"
+                            JSONArray hintsIngredientsArray = response.getJSONArray("hints"); //The Array called "parsed"
 
-                            if (ingredientParsed.length() == 0){
-                                dialog.dismiss();
-                                Toast.makeText(GroceryList.this, "Cannot find the ingredient: '" + text + "'", Toast.LENGTH_SHORT).show();
+                            if (hintsIngredientsArray.length() == 0){
+                                Toast.makeText(GroceryListView.this, "Cannot find the ingredient: '" + text + "'", Toast.LENGTH_SHORT).show();
                                 throw new IngredientNotFoundException("Cannot find the ingredient: " + text);
                             }
 
-                            JSONObject defReturnObj = ingredientParsed.getJSONObject(0); //Gets the only element returned at 0 position in the "parsed" array
-                            JSONObject ingredientObj = defReturnObj.getJSONObject("food"); // The object at 0 in "parsed" array is called "food"
-                            String ingredientName = ingredientObj.getString("label"); // Gets the parsed name by the API of the ingredient we're looking for from the response
-
-                            String stringRespOfFoodObject = defReturnObj.getString("food");
-
-                            ingredientName = ingredientName.toLowerCase();
-                            ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
-
-
                             Gson gson = new GsonBuilder().create();
-                            recIngredient.ingredientName = ingredientName;
-                            recIngredient.ingredientParsed = gson.fromJson(stringRespOfFoodObject, Food.class);
 
-                            JSONArray hintsParsed = response.getJSONArray("hints");
-                            for (int i = 0; i < hintsParsed.length(); i++){
-                                JSONObject foodNMeasures = hintsParsed.getJSONObject(i);
-
-                                String food = foodNMeasures.getString("food");
-                                String measures = foodNMeasures.getString("measures");
-
-                                Food f = gson.fromJson(food, Food.class);
-                                Measures[] m = gson.fromJson(measures, Measures[].class);
-
-                                Hints h = new Hints(f, m);
-                                recIngredient.hintsParsed.add(h);
+                            for (int i = 0; i < hintsIngredientsArray.length(); i++){
+                                JSONObject ingredientParsed = hintsIngredientsArray.getJSONObject(i); //Gets the element returned at i position in the "hints" array
+                                String stringRepOfFoodObj = ingredientParsed.getString("food");
+                                Food f = gson.fromJson(stringRepOfFoodObj, Food.class);
+                                groceryListViewModel.insert(f); //insert Food into DB
+                                if (i == 0){
+                                    UserGroceryListItem firstItem = new UserGroceryListItem(f.foodId, f.label);
+                                    groceryListViewModel.insert(firstItem);
+                                }
                             }
 
-                            storedGroceryList.put(recIngredient.ingredientName, recIngredient);
-                            grocList.add(recIngredient.ingredientName);
-                            Utility.setListViewHeightBasedOnChildren(groceryList);
-                            //groceryListAdapter.notifyDataSetChanged(); Not needed with custom adapter
-                            dialog.dismiss();
+
+                            //groceryListAdapter.notifyDataSetChanged();// Not needed with custom adapter
                             return;
 
                         } catch (IngredientNotFoundException ne){

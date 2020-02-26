@@ -1,4 +1,4 @@
-package fooderie.groceryList;
+package fooderie.groceryList.viewModels;
 
 import android.view.View;
 import android.view.ViewGroup;
