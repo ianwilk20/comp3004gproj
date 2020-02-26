@@ -42,7 +42,6 @@ public class rbSelected extends AppCompatActivity {
         Button addButton = findViewById(R.id.add);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //add recipe to db
                 goBackToPlan(selected);
             }
         });
@@ -141,7 +140,7 @@ public class rbSelected extends AppCompatActivity {
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
-        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.ingredientLines);
+        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.theIngredients);
         ingredientsView.setAdapter(rbArrAdapt);
 
         //Nutritional Information
@@ -232,7 +231,6 @@ public class rbSelected extends AppCompatActivity {
     //and pass selected recipe
     //and pass recipe ID
     public void goBackToPlan(Recipe selected){
-        //go back twice
         Intent rbIntent = new Intent();
         rbIntent.putExtra("RECIPE", selected);
         rbIntent.putExtra("RECIPEID", selected.url);

@@ -1,0 +1,15 @@
+2hrs
+-refactoring recipe class
+-deleting recipeIngredient
+-fixing code which broke from refactor
+
+1.5hrs
+-doing db stuff
+
+2hrs
+-making type converters
+-adding TotalNutrient Entity to db
+
+1.5hrs
+-removing totalNutrient entity from db by creating new type converter
+-finished adding all Entities to db and their converters
