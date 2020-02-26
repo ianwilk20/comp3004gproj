@@ -1,0 +1,26 @@
+Development Log – Week #4
+Gavin Jackson, 101065531
+
+The database has been my focus for this week. There doesn’t seem to be an inherently right way to implement all the various components. My first implementation of the database was far from optimal. The beginning of the week began with attempting to patch the problems with a disconnected depth object to be the main authority of the various levels of plan. However, I ended the week with scrapping the idea and trying something completely different.
+
+    Monday, Feb 10th, 2020
+        -	[3.0 Hr] Constructed depth class to manage the unique relations between the various levels of plan. Problematic design
+        attempting to link two classes together with no official code bindings. A level of plan doesn’t know anything about itself
+        unless it queries the depth class. Design was close to working but was horribly bugged.
+
+    Wednesday, Feb 12th, 2020
+        -	[3.0 Hr] Major redesign, dropped depth class, abandoned single Plan entity, converted to abstract class and made different
+        object for each level. This way the levels store their information as individual entities rather than pushing that information
+        on to another disconnected class. Code is completely functional and works with the new changes.
+
+    Thursday, Feb 13th, 2020
+        -	[0.25 Hr] Quickly discussed the database I implemented. Went over the basics. What I did, how I got everything implemented,
+        the best way to work async calls from the database.
+
+    Saturday, Feb 15th, 2020
+        -	[0.5 Hr] Conceptualized ways to display the meals in the planner (allowing the user to put them in the order they like).
+        Thought about how to display (as a widget on the homepage) all the meals lined up for the day with their recipes. Looked into
+        various ways to keep track of which meals have been cooked and which are still to cook.
+
+    Sunday, Feb 16th, 2020
+        -	[0.5 Hr] Log Writing
