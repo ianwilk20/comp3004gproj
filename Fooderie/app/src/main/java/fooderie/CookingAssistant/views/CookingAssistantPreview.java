@@ -10,10 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fooderie.R;
 
-import java.util.ArrayList;
-
 import fooderie.recipeBrowser.models.Recipe;
-import fooderie.recipeBrowser.models.RecipeIngredient;
 
 
 public class CookingAssistantPreview extends AppCompatActivity
@@ -35,13 +32,14 @@ public class CookingAssistantPreview extends AppCompatActivity
 
         /*
         TODO: FILL IN IMAGE PREVIEW HERE
+        ImageView recipeImage = findViewById(R.id._____);
+        Picasso.get().load(selected.image).into(recipeImage);
          */
 
-        ArrayList<RecipeIngredient> ingredients = selected.ingredients;
         String steps = "Ingredients: \n";
-        for (RecipeIngredient ingredient : ingredients)
+        for(String ingredient : selected.theIngredients)
         {
-            steps += "- " + ingredient.text + "\n";
+            steps += "- " + ingredient + "\n";
         }
         ingridentText.setText(steps);   //Set text to steps
 

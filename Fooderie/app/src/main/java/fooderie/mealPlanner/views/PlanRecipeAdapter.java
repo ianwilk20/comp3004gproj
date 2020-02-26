@@ -80,7 +80,7 @@ public class PlanRecipeAdapter extends RecyclerView.Adapter<PlanRecipeAdapter.Pl
             Picasso.get().load("http://java.sogeti.nl/JavaBlog/wp-content/uploads/2009/04/android_icon_256.png").into(holder);
 
             holder.deleteButton.setOnClickListener((View v) -> {
-                m_delete.apply(r.getId());
+                //m_delete.apply(r.getId());
             });
         }
     }
