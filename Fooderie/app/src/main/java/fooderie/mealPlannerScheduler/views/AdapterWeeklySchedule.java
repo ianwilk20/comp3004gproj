@@ -38,21 +38,25 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
     private final Function<Schedule, Void> mselected;
 
     void setDisplaySchedules(List<Schedule> schedules) {
-        Calendar calender = Calendar.getInstance();
-        Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
+        if(schedules.size() > 0) {
+            Calendar calender = Calendar.getInstance();
+            Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
 
-        Collections.sort(schedules);
-        int i = 0;
-        while (!schedules.get(i).getWeekOfYearId().equals(weekNum)) {
-            i++;
-            if(i == schedules.size()-1) break;
+            Collections.sort(schedules);
+            int i = 0;
+            while (!schedules.get(i).getWeekOfYearId().equals(weekNum)) {
+                i++;
+                if (i == schedules.size() - 1) break;
+            }
+
+            List<Schedule> sendToBack = new ArrayList<>(schedules.subList(0, i));
+            List<Schedule> bringToFront = new ArrayList<>(schedules.subList(i, schedules.size()));
+
+            bringToFront.addAll(sendToBack);
+            m_schedules = bringToFront;
+        } else {
+            m_schedules = schedules;
         }
-
-        List<Schedule> sendToBack = new ArrayList<>(schedules.subList(0, i));
-        List<Schedule> bringToFront = new ArrayList<>(schedules.subList(i, schedules.size()));
-
-        bringToFront.addAll(sendToBack);
-        m_schedules = bringToFront;
         notifyDataSetChanged();
     }
 

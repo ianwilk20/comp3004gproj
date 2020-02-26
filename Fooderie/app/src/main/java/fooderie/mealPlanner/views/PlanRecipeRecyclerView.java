@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.fooderie.rbActivity;
-import com.example.fooderie.rbSelected;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -30,6 +28,8 @@ import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanRecipeViewModel;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.models.Recipe;
+import fooderie.recipeBrowser.rbActivity;
+import fooderie.recipeBrowser.rbSelected;
 
 
 import com.example.fooderie.R;
