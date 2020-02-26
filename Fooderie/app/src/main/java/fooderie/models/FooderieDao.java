@@ -29,10 +29,12 @@ public interface FooderieDao {
     @Delete
     void delete(Schedule s);
     @Query("DELETE FROM table_Schedule")
-    void deleteAllScheduleOfPlanWeek();
+    void deleteAllSchedules();
 
-    @Query("SELECT * FROM table_Schedule s")
+    @Query("SELECT * FROM table_Schedule")
     LiveData<List<Schedule>> getAllSchedules();
+    @Query("SELECT * FROM table_Schedule")
+    List<Schedule> getAllSchedulesNonLiveData();
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
     @Insert

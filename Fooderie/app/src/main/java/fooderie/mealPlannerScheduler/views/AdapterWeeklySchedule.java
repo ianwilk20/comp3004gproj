@@ -14,7 +14,9 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment.OnListFragmentInteractionListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -35,11 +37,22 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
     private final OnListFragmentInteractionListener mListener;
     private final Function<Schedule, Void> mselected;
 
-    void setDisplaySchedules(List<Schedule> s) {
-        //TODO: ENSURE PROPER SORTED ORDER
-        //Calendar calender = Calendar.getInstance();
-        //Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
-        m_schedules = s;
+    void setDisplaySchedules(List<Schedule> schedules) {
+        Calendar calender = Calendar.getInstance();
+        Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
+
+        Collections.sort(schedules);
+        int i = 0;
+        while (!schedules.get(i).getWeekOfYearId().equals(weekNum)) {
+            i++;
+            if(i == schedules.size()-1) break;
+        }
+
+        List<Schedule> sendToBack = new ArrayList<>(schedules.subList(0, i));
+        List<Schedule> bringToFront = new ArrayList<>(schedules.subList(i, schedules.size()));
+
+        bringToFront.addAll(sendToBack);
+        m_schedules = bringToFront;
         notifyDataSetChanged();
     }
 
@@ -57,7 +70,10 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Schedule s = m_schedules.get(position);
-        holder.mPlanName.setText(s.getName());
+        if(s.getName() != null)
+            holder.mPlanName.setText(s.getName());
+        else
+            holder.mPlanName.setText(R.string.nothing_planned);
         holder.mWeekNum.setText(s.getWeekOfYearId().toString());
 
         holder.mLayout.setOnClickListener((View v) -> {

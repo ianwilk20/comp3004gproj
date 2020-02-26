@@ -16,7 +16,7 @@ import fooderie.mealPlanner.models.PlanWeek;
             childColumns = "planId",
             onDelete = ForeignKey.CASCADE)
         )
-public class Schedule implements Serializable {
+public class Schedule implements Serializable, Comparable<Schedule> {
     @PrimaryKey
     @NonNull
     private Long weekOfYearId;
@@ -45,5 +45,10 @@ public class Schedule implements Serializable {
         this.weekOfYearId = weekOfYearId;
         this.planId = planId;
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(@NonNull Schedule s) {
+        return (int) (weekOfYearId - s.weekOfYearId);
     }
 }

@@ -56,17 +56,16 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
                     dao.insert(r);
                 }*/
 
-                // TODO: REMOVE TEMPORARY CODE POPULATING DB WITH PLAN_WEEK_SCHEDULES
-                // -- TEMPORARY CODE TO ENSURE THERE IS ALWAYS A MEAL PLAN SELECTED FOR ANY WEEK OF THE YEAR -- //
-                List<PlanWeek> plans = dao.getAllPlanWeeks();
-                if(plans.size() != 0) {
-                    PlanWeek pw = plans.get(0);
-                    dao.deleteAllScheduleOfPlanWeek();
+                // -- Populate schedules list if it is empty (first time running application) -- //
+                List<Schedule> schedules = dao.getAllSchedulesNonLiveData();
+                if (schedules.size() == 0) {
                     for (Long i = 1L; i < 53; i++) {
-                        Schedule p = new Schedule(i, pw.getPlanId(), pw.getName());
+                        Schedule p = new Schedule(i, null, null);
                         dao.insert(p);
                     }
                 }
+
+
 
                 //dao.deleteAllRecipes();
 
