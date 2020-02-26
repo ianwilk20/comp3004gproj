@@ -3,10 +3,7 @@ package fooderie.mealPlanner.viewModels;
 import android.app.Application;
 import android.util.Log;
 
-import java.lang.reflect.Method;
-import java.security.acl.Owner;
 import java.util.List;
-import java.util.function.Function;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,7 +16,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.models.FooderieRepository;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 
 public class PlanRecipeViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;

@@ -21,7 +21,8 @@ import java.util.function.Function;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import fooderie.models.Recipe;
+
+import fooderie.recipeBrowser.models.Recipe;
 
 public class AdapterRecipe extends RecyclerView.Adapter<AdapterRecipe.PlanRecipeViewHolder> {
     class PlanRecipeViewHolder extends RecyclerView.ViewHolder implements Target {

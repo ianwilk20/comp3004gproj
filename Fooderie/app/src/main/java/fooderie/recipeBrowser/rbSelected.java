@@ -15,8 +15,8 @@ import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
-import fooderie.models.Recipe;
-import fooderie.models.Tag;
+import fooderie.recipeBrowser.models.Recipe;
+import fooderie.recipeBrowser.models.Tag;
 
 public class rbSelected extends AppCompatActivity {
 

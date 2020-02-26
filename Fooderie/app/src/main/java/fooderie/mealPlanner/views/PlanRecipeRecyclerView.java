@@ -26,11 +26,9 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanRecipeViewModel;
-import fooderie.mealPlannerScheduler.models.Schedule;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.rbActivity;
 import fooderie.recipeBrowser.rbSelected;
-
 
 import com.example.fooderie.R;
 

@@ -16,6 +16,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.recipeBrowser.models.Recipe;
 
 
 public class FooderieRepository {

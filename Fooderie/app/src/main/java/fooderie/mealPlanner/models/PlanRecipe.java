@@ -1,17 +1,13 @@
 package fooderie.mealPlanner.models;
 
-import java.util.List;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import fooderie.models.FooderieRepository;
-import fooderie.models.Recipe;
+import fooderie.recipeBrowser.models.Recipe;
 
 @Entity(tableName = "table_PlanRecipe",
         indices = {@Index("planId"), @Index("parentId"), @Index("recipeId")},

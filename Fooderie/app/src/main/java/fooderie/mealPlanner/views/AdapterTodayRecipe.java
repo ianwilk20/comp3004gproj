@@ -1,6 +1,7 @@
 package fooderie.mealPlanner.views;
 
 import androidx.recyclerview.widget.RecyclerView;
+import fooderie.recipeBrowser.models.Recipe;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fooderie.R;
-
-import fooderie.models.Recipe;
 
 import java.util.List;
 
