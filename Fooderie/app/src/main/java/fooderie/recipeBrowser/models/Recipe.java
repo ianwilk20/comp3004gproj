@@ -13,11 +13,11 @@ import java.util.ArrayList;
 @Entity (tableName = "table_Recipe",
          indices = {@Index("recipe_id")})
 public class Recipe implements Serializable {
-
     @PrimaryKey
     @NonNull
     @ColumnInfo(name="recipe_id")
     public String url;
+    public String getId() {return url;}
 
     public String label;
     public String image;

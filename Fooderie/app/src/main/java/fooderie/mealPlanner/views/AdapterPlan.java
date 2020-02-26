@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fooderie.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,14 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
+import fooderie.mealPlanner.models.PlanWeek;
 
-public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder> {
+public class AdapterPlan extends RecyclerView.Adapter<AdapterPlan.PlanViewHolder> {
     class PlanViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView recipeCount;
         private final ImageView deleteButton;
         private final ImageView orderButton;
         private final ConstraintLayout layout;
+        private final Button selectButton;
 
         private PlanViewHolder(View item) {
             super(item);
@@ -33,6 +35,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             deleteButton = item.findViewById(R.id.planItemDeleteButton);
             orderButton = item.findViewById(R.id.planItemOrderButton);
             layout = item.findViewById(R.id.planItem);
+            selectButton = item.findViewById(R.id.planItemSelectButton);
         }
     }
 
@@ -40,14 +43,13 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
     private List<Plan> m_displayPlans;
     private Function<Plan, Void> m_displayChildrenPlansOfID;
     private Function<Plan, Void> m_deletePlan;
-    private Function<Plan, Void> m_updatePlan;
+    private Function<PlanWeek, Void> m_selectPlan;
 
-
-    PlanAdapter(Context context, Function<Plan, Void> display, Function<Plan, Void> delete, Function<Plan, Void> update) {
+    AdapterPlan(Context context, Function<Plan, Void> display, Function<Plan, Void> delete, Function<PlanWeek, Void> select) {
         m_inflater = LayoutInflater.from(context);
         m_displayChildrenPlansOfID = display;
         m_deletePlan = delete;
-        m_updatePlan = update;
+        m_selectPlan = select;
     }
 
     void setPlans(List<Plan> plans) {
@@ -71,15 +73,11 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
             String suffix = (count == 0 || count > 1) ? "s" : "";
             holder.recipeCount.setText(Integer.toString(count) + " Recipe" + suffix);
 
-            holder.layout.setOnClickListener((View v)-> {
-                m_displayChildrenPlansOfID.apply(p);
-            });
+            holder.layout.setOnClickListener((View v) -> m_displayChildrenPlansOfID.apply(p));
 
             if (p.isEditable()) {
                 holder.deleteButton.setVisibility(View.VISIBLE);
-                holder.deleteButton.setOnClickListener((View v) -> {
-                    m_deletePlan.apply(p);
-                });
+                holder.deleteButton.setOnClickListener((View v) -> m_deletePlan.apply(p));
             } else {
                 holder.deleteButton.setVisibility(View.INVISIBLE);
             }
@@ -88,6 +86,13 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.PlanViewHolder
                 holder.orderButton.setVisibility(View.VISIBLE);
             } else {
                 holder.orderButton.setVisibility(View.INVISIBLE);
+            }
+
+            if (p instanceof PlanWeek && m_selectPlan != null) {
+                holder.selectButton.setOnClickListener((View v) -> m_selectPlan.apply((PlanWeek) p));
+                holder.selectButton.setVisibility(View.VISIBLE);
+            } else {
+                holder.selectButton.setVisibility(View.INVISIBLE);
             }
 
         } else {

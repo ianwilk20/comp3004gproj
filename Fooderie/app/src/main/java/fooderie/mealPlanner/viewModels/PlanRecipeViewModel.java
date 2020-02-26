@@ -16,11 +16,12 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.models.FooderieRepository;
+import fooderie.recipeBrowser.models.Recipe;
 
-public class PlanViewModel extends AndroidViewModel {
+public class PlanRecipeViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
 
-    public PlanViewModel (Application application) {
+    public PlanRecipeViewModel(Application application) {
         super(application);
         m_repo = new FooderieRepository(application);
     }
@@ -37,12 +38,13 @@ public class PlanViewModel extends AndroidViewModel {
     public void insertPlanRecipe(PlanRecipe pr) {
         m_repo.insert(pr);
     }
-    public void deletePlanRecipe(Long p_id, Long r_id) {
+    public void deletePlanRecipe(Long p_id, String r_id) {
         m_repo.deletePlanRecipe(p_id, r_id);
     }
 
-    public LiveData<List<PlanWeek>> getAllWeeklyMealPlans() {
-        return m_repo.getWeekPlans();
+    // -- Makes new recipe entity in database, and makes new link to it -- //
+    public void insertRecipeAndPlanRecipe(Long p_id, Recipe r) {
+        m_repo.insert(p_id, r);
     }
 
     public void insertPlan(Plan p) {

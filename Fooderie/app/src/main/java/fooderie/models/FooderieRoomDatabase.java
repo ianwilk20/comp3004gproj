@@ -19,11 +19,13 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.recipeBrowser.models.ArrayTypeConverter;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.TotalNutrientsTypeConverter;
 
-@Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
+
+@Database(entities = {Schedule.class, PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
 @TypeConverters({ArrayTypeConverter.class, TotalNutrientsTypeConverter.class})
@@ -56,15 +58,25 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
             super.onOpen(db);
             databaseWriteExecutor.execute(() -> {
                 FooderieDao dao = INSTANCE.fooderieDao();
-                List<Recipe> recipes = dao.getAllRecipes();
-
-                //dao.deleteAllPlanRecipes();
-
+                /*List<Recipe> recipes = dao.getAllRecipes();
                 if (recipes.size() == 0) {
                     Recipe r = new Recipe();
+                    r.setId("0");
                     //r.setId(0L);
                     dao.insert(r);
+                }*/
+
+                // -- Populate schedules list if it is empty (first time running application) -- //
+                List<Schedule> schedules = dao.getAllSchedulesNonLiveData();
+                if (schedules.size() == 0) {
+                    for (Long i = 1L; i < 53; i++) {
+                        Schedule p = new Schedule(i, null, null);
+                        dao.insert(p);
+                    }
                 }
+
+
+
                 //dao.deleteAllRecipes();
 
                 //Recipe r = new Recipe();

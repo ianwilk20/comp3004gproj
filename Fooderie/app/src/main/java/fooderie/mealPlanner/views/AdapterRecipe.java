@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import fooderie.recipeBrowser.models.Recipe;
 
-public class PlanRecipeAdapter extends RecyclerView.Adapter<PlanRecipeAdapter.PlanRecipeViewHolder> {
+public class AdapterRecipe extends RecyclerView.Adapter<AdapterRecipe.PlanRecipeViewHolder> {
     class PlanRecipeViewHolder extends RecyclerView.ViewHolder implements Target {
         private final TextView title;
         private final ImageView deleteButton;
@@ -52,12 +52,14 @@ public class PlanRecipeAdapter extends RecyclerView.Adapter<PlanRecipeAdapter.Pl
     private final LayoutInflater m_inflater;
     private List<Recipe> m_displayRecipes;
     private Resources m_resources;
-    private Function<Long, Void> m_delete;
+    private Function<String, Void> m_deleteFunc;
+    private Function<Recipe, Void> m_displayFunc;
 
-    PlanRecipeAdapter(Context context, Resources resources, Function<Long, Void> delete) {
+    AdapterRecipe(Context context, Resources resources, Function<String, Void> delete, Function<Recipe, Void> display) {
         m_inflater = LayoutInflater.from(context);
         m_resources = resources;
-        m_delete = delete;
+        m_deleteFunc = delete;
+        m_displayFunc = display;
     }
 
     void setPlanRecipes(List<Recipe> recipes) {
@@ -75,12 +77,15 @@ public class PlanRecipeAdapter extends RecyclerView.Adapter<PlanRecipeAdapter.Pl
     public void onBindViewHolder(@NonNull PlanRecipeViewHolder holder, int pos) {
         if (m_displayRecipes != null) {
             Recipe r = m_displayRecipes.get(pos);
-            //TODO: Fix what is being displayed about the recipe
-            holder.title.setText("TEMP");
-            Picasso.get().load("http://java.sogeti.nl/JavaBlog/wp-content/uploads/2009/04/android_icon_256.png").into(holder);
+
+            holder.title.setText(r.label);
+            Picasso.get().load(r.image).into(holder);
 
             holder.deleteButton.setOnClickListener((View v) -> {
-                //m_delete.apply(r.getId());
+                m_deleteFunc.apply(r.getId());
+            });
+            holder.layout.setOnClickListener((View v) -> {
+                m_displayFunc.apply(r);
             });
         }
     }
