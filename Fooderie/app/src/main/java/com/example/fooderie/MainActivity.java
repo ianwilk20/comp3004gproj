@@ -1,15 +1,21 @@
 package com.example.fooderie;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
+
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.views.GroceryListView;
@@ -26,6 +32,10 @@ import android.view.MenuItem;
 
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
 public class MainActivity extends AppCompatActivity implements
         TodayMealFragment.OnListFragmentInteractionListener,
         WeeklyScheduleFragment.OnListFragmentInteractionListener {
@@ -40,6 +50,14 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Click Listener for options button
+        Button optionsButton = findViewById(R.id.options);
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setOptions();
+            }
+        });
 
         groceryListButton = findViewById(R.id.groceryButton);
         groceryListButton.setOnClickListener(new View.OnClickListener() {
@@ -112,5 +130,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(Schedule s) {
+    }
+
+    //Show set_preferences xml in an Alert Dialog
+    private void setOptions() {
+        Intent intent = new Intent(this, OptionsActivity.class);
+        startActivity(intent);
     }
 }

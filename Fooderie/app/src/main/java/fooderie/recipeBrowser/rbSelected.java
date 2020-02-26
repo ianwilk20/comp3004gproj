@@ -1,7 +1,9 @@
 package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,10 +13,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.fooderie.OptionsActivity;
 import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
+import fooderie.recipeBrowser.models.Nutrient;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.Tag;
 
@@ -25,18 +29,11 @@ public class rbSelected extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_selected);
 
-        //Get selected recipe and units from rbActivity
+        //Get selected recipe from rbActivity
         //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
         String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
-        String units = (String)intent.getSerializableExtra("UNITS");
-        if(units.equals("Metric")){
-            units = "g";
-        }
-        if(units.equals("Imperial")){
-            units = "oz";
-        }
 
         //Click Listener for Add button
         Button addButton = findViewById(R.id.add);
@@ -72,6 +69,91 @@ public class rbSelected extends AppCompatActivity {
         TextView recipeLabel = findViewById(R.id.textView);
         recipeLabel.setText(selected.label);
 
+        //Add every image and their corresponding label
+        setTags(selected);
+
+        //Image
+        ImageButton recipeImage = findViewById(R.id.recipeImage);
+        Picasso.get().load(selected.image).into(recipeImage);
+        //Click Listener for image button
+        recipeImage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //If it isn't in the db
+                //add recipe to favorites list
+                Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                //If it is already in the db
+                //delete recipe from favorites list
+                Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Ingredients list
+        ListView ingredientsView = findViewById(R.id.ingredientsView);
+        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.theIngredients);
+        ingredientsView.setAdapter(rbArrAdapt);
+
+        //Nutritional Information
+        setNutritionalInfo(selected, selected.totalNutrients.ENERC_KCAL, findViewById(R.id.ENERC_KCAL), findViewById(R.id.ENERC_KCALunit));
+        setNutritionalInfo(selected, selected.totalNutrients.FAT, findViewById(R.id.FAT), findViewById(R.id.FATunit));
+        setNutritionalInfo(selected, selected.totalNutrients.CHOCDF, findViewById(R.id.CHOCDF), findViewById(R.id.CHOCDFunit));
+        setNutritionalInfo(selected, selected.totalNutrients.FIBTG, findViewById(R.id.FIBTG), findViewById(R.id.FIBTGunit));
+        setNutritionalInfo(selected, selected.totalNutrients.SUGAR, findViewById(R.id.SUGAR), findViewById(R.id.SUGARunit));
+        setNutritionalInfo(selected, selected.totalNutrients.PROCNT, findViewById(R.id.PROCNT), findViewById(R.id.PROCNTunit));
+    }
+
+    //Redirect to rbWebsite activity
+    //and pass selected recipe
+    public void goToWebsite(Recipe selected){
+        Intent rbIntent = new Intent(this, rbWebsite.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
+    }
+
+    //Redirect to CookingAssistantViewer activity
+    //and pass selected recipe
+    public void goToSteps(Recipe selected){
+        Intent rbIntent = new Intent(this, CookingAssistantPreview.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
+    }
+
+    //Redirect back to Meal Plan
+    //and pass selected recipe
+    //and pass recipe ID
+    public void goBackToPlan(Recipe selected){
+        Intent rbIntent = new Intent();
+        rbIntent.putExtra("RECIPE", selected);
+        rbIntent.putExtra("RECIPEID", selected.url);
+        setResult(RESULT_OK, rbIntent);
+        finish();
+    }
+
+    public void setNutritionalInfo(Recipe selected, Nutrient n, TextView quantityView, TextView unitView){
+        //Get option units
+        String units;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean switchPref = sharedPref.getBoolean(OptionsActivity.IMPERIAL_UNITS_CHECK_BOX, false);
+        if(switchPref){
+            units = "oz";
+        }
+        else{
+            units = "g";
+        }
+
+        if(n != null) {
+            if(n != selected.totalNutrients.ENERC_KCAL){
+                n.setUnits(units);
+            }
+            quantityView.setText(n.round());
+            unitView.setText(n.unit);
+        }
+        else{
+            quantityView.setText("Unknown");
+            unitView.setText("");
+        }
+    }
+
+    public void setTags(Recipe selected){
         //Add every image and their corresponding label
         ArrayList<Tag> dietTags = new ArrayList<>();
         ArrayList<Tag> healthTags = new ArrayList<>();
@@ -122,119 +204,5 @@ public class rbSelected extends AppCompatActivity {
                 }
             }
         }
-
-        //Image
-        ImageButton recipeImage = findViewById(R.id.recipeImage);
-        Picasso.get().load(selected.image).into(recipeImage);
-        //Click Listener for image button
-        recipeImage.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //If it isn't in the db
-                //add recipe to favorites list
-                Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-                //If it is already in the db
-                //delete recipe from favorites list
-                Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //Ingredients list
-        ListView ingredientsView = findViewById(R.id.ingredientsView);
-        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.theIngredients);
-        ingredientsView.setAdapter(rbArrAdapt);
-
-        //Nutritional Information
-        TextView calories = findViewById(R.id.ENERC_KCAL);
-        TextView caloriesUnit = findViewById(R.id.ENERC_KCALunit);
-        if(selected.totalNutrients.ENERC_KCAL != null) {
-            calories.setText(selected.totalNutrients.ENERC_KCAL.round());
-            caloriesUnit.setText(selected.totalNutrients.ENERC_KCAL.unit);
-        }
-        else{
-            calories.setText("Unknown");
-            caloriesUnit.setText("");
-        }
-        TextView fat = findViewById(R.id.FAT);
-        TextView fatUnit = findViewById(R.id.FATunit);
-        if(selected.totalNutrients.FAT != null) {
-            selected.totalNutrients.FAT.setUnits(units);
-            fat.setText(selected.totalNutrients.FAT.round());
-            fatUnit.setText(selected.totalNutrients.FAT.unit);
-        }
-        else{
-            fat.setText("Unknown");
-            fatUnit.setText("");
-        }
-        TextView carbs = findViewById(R.id.CHOCDF);
-        TextView carbsUnit = findViewById(R.id.CHOCDFunit);
-        if(selected.totalNutrients.CHOCDF != null) {
-            selected.totalNutrients.CHOCDF.setUnits(units);
-            carbs.setText(selected.totalNutrients.CHOCDF.round());
-            carbsUnit.setText(selected.totalNutrients.CHOCDF.unit);
-        }
-        else{
-            carbs.setText("Unknown");
-            carbsUnit.setText("");
-        }
-        TextView fiber = findViewById(R.id.FIBTG);
-        TextView fiberUnit = findViewById(R.id.FIBTGunit);
-        if(selected.totalNutrients.FIBTG != null) {
-            selected.totalNutrients.FIBTG.setUnits(units);
-            fiber.setText(selected.totalNutrients.FIBTG.round());
-            fiberUnit.setText(selected.totalNutrients.FIBTG.unit);
-        }
-        else{
-            fiber.setText("Unknown");
-            fiberUnit.setText("");
-        }
-        TextView sugar = findViewById(R.id.SUGAR);
-        TextView sugarUnit = findViewById(R.id.SUGARunit);
-        if(selected.totalNutrients.SUGAR != null) {
-            selected.totalNutrients.SUGAR.setUnits(units);
-            sugar.setText(selected.totalNutrients.SUGAR.round());
-            sugarUnit.setText(selected.totalNutrients.SUGAR.unit);
-        }
-        else{
-            sugar.setText("Unknown");
-            sugarUnit.setText("");
-        }
-        TextView protein = findViewById(R.id.PROCNT);
-        TextView proteinUnit = findViewById(R.id.PROCNTunit);
-        if(selected.totalNutrients.PROCNT != null) {
-            selected.totalNutrients.PROCNT.setUnits(units);
-            protein.setText(selected.totalNutrients.PROCNT.round());
-            proteinUnit.setText(selected.totalNutrients.PROCNT.unit);
-        }
-        else{
-            protein.setText("Unknown");
-            proteinUnit.setText("");
-        }
-    }
-
-    //Redirect to rbWebsite activity
-    //and pass selected recipe
-    public void goToWebsite(Recipe selected){
-        Intent rbIntent = new Intent(this, rbWebsite.class);
-        rbIntent.putExtra("RECIPE", selected);
-        startActivity(rbIntent);
-    }
-
-    //Redirect to CookingAssistantViewer activity
-    //and pass selected recipe
-    public void goToSteps(Recipe selected){
-        Intent rbIntent = new Intent(this, CookingAssistantPreview.class);
-        rbIntent.putExtra("RECIPE", selected);
-        startActivity(rbIntent);
-    }
-
-    //Redirect back to Meal Plan
-    //and pass selected recipe
-    //and pass recipe ID
-    public void goBackToPlan(Recipe selected){
-        Intent rbIntent = new Intent();
-        rbIntent.putExtra("RECIPE", selected);
-        rbIntent.putExtra("RECIPEID", selected.url);
-        setResult(RESULT_OK, rbIntent);
-        finish();
     }
 }

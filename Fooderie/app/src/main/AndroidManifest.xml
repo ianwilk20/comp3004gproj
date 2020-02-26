@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,14 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="fooderie.recipeBrowser.rbWebsite"></activity>
+        <activity
+            android:name=".OptionsActivity"
+            android:label="@string/title_activity_options"></activity>
+        <activity android:name="fooderie.recipeBrowser.rbWebsite" />
         <activity android:name="fooderie.recipeBrowser.rbSelected" />
         <activity android:name="fooderie.recipeBrowser.rbActivity" />
-
-        <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView"/>
-        <activity android:name="fooderie.groceryList.views.GroceryListView"/>
-
+        <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView" />
+        <activity android:name="fooderie.groceryList.views.GroceryListView" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantPreview" />
         <activity

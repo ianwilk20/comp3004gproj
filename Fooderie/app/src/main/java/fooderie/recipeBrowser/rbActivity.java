@@ -1,16 +1,13 @@
 package fooderie.recipeBrowser;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.DialogInterface;
+import androidx.preference.PreferenceManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import com.android.volley.Request;
@@ -21,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 import android.view.View;
 import com.android.volley.toolbox.Volley;
+import com.example.fooderie.OptionsActivity;
 import com.example.fooderie.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import fooderie.recipeBrowser.models.Recipe;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import android.app.ProgressDialog;
 
 public class rbActivity extends AppCompatActivity {
@@ -43,7 +40,6 @@ public class rbActivity extends AppCompatActivity {
     ArrayList<String> rbResults = new ArrayList<String>();
     ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
     String preferencesUrl = "";
-    String units = "Metric";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +64,65 @@ public class rbActivity extends AppCompatActivity {
         ArrayList<String> tempList = new ArrayList<String>(Arrays.asList("London", "Tokyo", "New York"));
         ArrayAdapter<String> temp = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, tempList);
         favListView.setAdapter(temp);
+
+        //If an option switch is checked, add its query parameter
+        //Otherwise, remove its query parameter
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean af_switchPref = sharedPref.getBoolean(OptionsActivity.ALCOHOL_FREE_SWITCH, false);
+        if(af_switchPref){
+            preferencesUrl += "&health=alcohol-free";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&health=alcohol-free", "");
+        }
+
+        Boolean lc_switchPref = sharedPref.getBoolean(OptionsActivity.LOW_CARB_SWITCH, false);
+        if (lc_switchPref) {
+            preferencesUrl += "&diet=low-carb";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&diet=low-carb", "");
+        }
+
+        Boolean lf_switchPref = sharedPref.getBoolean(OptionsActivity.LOW_FAT_SWITCH, false);
+        if (lf_switchPref) {
+            preferencesUrl += "&diet=low-fat";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&diet=low-fat", "");
+        }
+
+        Boolean pf_switchPref = sharedPref.getBoolean(OptionsActivity.PEANUT_FREE_SWITCH, false);
+        if (pf_switchPref) {
+            preferencesUrl += "&health=peanut-free";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&health=peanut-free", "");
+        }
+
+        Boolean tnf_switchPref = sharedPref.getBoolean(OptionsActivity.TREE_NUT_FREE_SWITCH, false);
+        if (tnf_switchPref) {
+            preferencesUrl += "&health=tree-nut-free";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&health=tree-nut-free", "");
+        }
+
+        Boolean vn_switchPref = sharedPref.getBoolean(OptionsActivity.VEGAN_SWITCH, false);
+        if (vn_switchPref) {
+            preferencesUrl += "&health=vegan";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&health=vegan", "");
+        }
+
+        Boolean veg_switchPref = sharedPref.getBoolean(OptionsActivity.VEGETARIAN_SWITCH, false);
+        if (veg_switchPref) {
+            preferencesUrl += "&health=vegetarian";
+        }
+        else {
+            preferencesUrl = preferencesUrl.replace("&health=vegetarian", "");
+        }
 
         rbSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //make Query
@@ -99,7 +154,7 @@ public class rbActivity extends AppCompatActivity {
                     }
                 }
                 if (selected != null) {
-                    openSelected(selected, units, fromPlan);
+                    openSelected(selected, fromPlan);
                 }
             }
         });
@@ -116,16 +171,8 @@ public class rbActivity extends AppCompatActivity {
 //                    }
 //                }
                 if (selected != null) {
-                    openSelected(selected, units, fromPlan);
+                    openSelected(selected, fromPlan);
                 }
-            }
-        });
-
-        //Click Listener for preferences button
-        Button preferencesButton = findViewById(R.id.preferences);
-        preferencesButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setPreferences();
             }
         });
     }
@@ -200,137 +247,12 @@ public class rbActivity extends AppCompatActivity {
         rbRequestQueue.add(objectReq);
     }
 
-    //Show set_preferences xml in an Alert Dialog
-    private void setPreferences() {
-        units = "Metric";
-        preferencesUrl = "";
-
-        //Set Dialog Title
-        AlertDialog.Builder builder = new AlertDialog.Builder(rbActivity.this);
-        builder.setTitle("Preferences");
-
-        //Set View layout to set_preferences.xml
-        View v = LayoutInflater.from(rbActivity.this).inflate(R.layout.set_preferences, null, false);
-        builder.setView(v);
-
-        //If units toggle button is checked, set units to imperial
-        //Otherwise, set units to metric
-        ToggleButton unitstoggle = v.findViewById(R.id.units_toggle_button);
-        unitstoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    units = "Imperial";
-                }
-                else {
-                    units = "Metric";
-                }
-            }
-        });
-
-        //If a toggle button is checked, add its query parameter
-        //Otherwise, remove its query parameter
-        ToggleButton aftoggle = v.findViewById(R.id.alcohol_free_toggle_button);
-        aftoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&health=alcohol-free";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&health=alcohol-free", "");
-                }
-            }
-        });
-
-        ToggleButton lctoggle = v.findViewById(R.id.low_carb_toggle_button);
-        lctoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&diet=low-carb";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&diet=low-carb", "");
-                }
-            }
-        });
-
-        ToggleButton lftoggle = v.findViewById(R.id.low_fat_toggle_button);
-        lftoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&diet=low-fat";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&diet=low-fat", "");
-                }
-            }
-        });
-
-        ToggleButton pftoggle = v.findViewById(R.id.peanut_free_toggle_button);
-        pftoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&health=peanut-free";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&health=peanut-free", "");
-                }
-            }
-        });
-
-        ToggleButton tnftoggle = v.findViewById(R.id.tree_nut_free_toggle_button);
-        tnftoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&health=tree-nut-free";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&health=tree-nut-free", "");
-                }
-            }
-        });
-
-        ToggleButton vegantoggle = v.findViewById(R.id.vegan_toggle_button);
-        vegantoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&health=vegan";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&health=vegan", "");
-                }
-            }
-        });
-
-        ToggleButton vegtoggle = v.findViewById(R.id.vegetarian_toggle_button);
-        vegtoggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    preferencesUrl += "&health=vegetarian";
-                }
-                else {
-                    preferencesUrl = preferencesUrl.replace("&health=vegetarian", "");
-                }
-            }
-        });
-
-        //Add button to close dialog
-        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.show();
-    }
-
     //Redirect to rbSelected activity
-    //and pass selected recipe, and metric/imperial units
+    //and pass selected recipe
     //and the Meal Plan or Main Activity in fromPlan
-    public void openSelected(Recipe selected, String units, String fromPlan){
+    public void openSelected(Recipe selected, String fromPlan){
         Intent rbIntent = new Intent(this, rbSelected.class);
         rbIntent.putExtra("RECIPE", selected);
-        rbIntent.putExtra("UNITS", units);
         rbIntent.putExtra("FROMPLAN", fromPlan);
         startActivityForResult(rbIntent, 1);
     }
