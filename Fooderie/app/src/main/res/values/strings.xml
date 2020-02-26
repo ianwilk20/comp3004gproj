@@ -102,6 +102,11 @@
     <string name="placeHolder">PLACEHOLDER</string>
 
     <string name="title_activity_rb_selected">rbSelected</string>
+    <string name="today_s_meals">Today\'s Meals</string>
+    <string name="schedule">Schedule</string>
+    <string name="WeeklyScheduleDescription">Week # | Plan Name</string>
+    <string name="nothing_planned">Nothing Planned</string>
+    <string name="select">Select</string>
 
 
 </resources>

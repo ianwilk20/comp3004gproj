@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TodayMealLayout"
+    android:name="fooderie.mealPlanner.views.TodayMealsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@drawable/fragment_border"
+    app:layoutManager="LinearLayoutManager"
+    tools:context="fooderie.mealPlanner.views.TodayMealFragment"
+    tools:listitem="@layout/fragment_todaymeal_item">
+
+    <TextView
+        android:id="@+id/TodayMealFragmentSuperTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/today_s_meals"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TodayMealFragmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeHolder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/TodayMealFragmentSuperTitle"
+        app:layout_constraintTop_toBottomOf="@+id/TodayMealFragmentSuperTitle" />
+
+    <TextView
+        android:id="@+id/TodayMealFragmentEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nothing_planned"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="30sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TodayMealRecyclerView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TodayMealRecyclerView"
+        android:name="fooderie.mealPlanner.views.TodayMealsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:minHeight="200dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/TodayMealFragmentTitle"
+        app:layout_constraintTop_toBottomOf="@+id/TodayMealFragmentTitle"
+        tools:context="fooderie.mealPlanner.views.TodayMealFragment"
+        tools:listitem="@layout/fragment_todaymeal_item" />
+
+    <com.kingfisher.easyviewindicator.RecyclerViewIndicator
+        android:id="@+id/recyclerViewIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:avi_animation_enable="true"
+        app:avi_drawable="@drawable/indicator_blue"
+        app:avi_drawable_unselected="@drawable/indicator_gray"
+        app:avi_height="5dp"
+        app:avi_margin="5dp"
+        app:avi_width="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/TodayMealRecyclerView"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

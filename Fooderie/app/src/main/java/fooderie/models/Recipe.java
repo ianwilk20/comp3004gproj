@@ -1,5 +1,6 @@
 package fooderie.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -12,14 +13,16 @@ import java.util.ArrayList;
 @Entity (tableName = "table_Recipe",
          indices = {@Index("recipe_id")})
 public class Recipe implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name="recipe_id")
-    private Long id;
+    // TODO: recipe_id MUST CONTAIN URL, FIX ONCE RECIPES ARE IN DB
+    private String id;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

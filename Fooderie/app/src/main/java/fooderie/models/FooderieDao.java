@@ -17,11 +17,29 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlannerScheduler.models.Schedule;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface FooderieDao {
+
+    /* Entity=Schedule */
+    @Insert
+    long insert(Schedule s);
+
+    @Update
+    void update(Schedule s);
+
+    @Delete
+    void delete(Schedule s);
+    @Query("DELETE FROM table_Schedule")
+    void deleteAllSchedules();
+
+    @Query("SELECT * FROM table_Schedule")
+    LiveData<List<Schedule>> getAllSchedules();
+    @Query("SELECT * FROM table_Schedule")
+    List<Schedule> getAllSchedulesNonLiveData();
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
     @Insert
@@ -54,7 +72,9 @@ public interface FooderieDao {
     void delete(PlanRecipe p);
 
     @Query("SELECT * FROM table_PlanWeek")
-    LiveData<List<PlanWeek>> getWeekPlans();
+    LiveData<List<PlanWeek>> getPlanWeeks();
+    @Query("SELECT * FROM table_PlanWeek")
+    List<PlanWeek> getAllPlanWeeks();
     @Query("SELECT * FROM table_PlanWeek WHERE planId == :id")
     PlanWeek getPlanWeek(Long id);
 
@@ -65,6 +85,11 @@ public interface FooderieDao {
 
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     LiveData<List<PlanMeal>> getMealPlans(Long id);
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+           "WHERE s.weekOfYearId == :weekNum AND s.planId == pw.planId AND pd.parentId == pw.planId AND pd.name LIKE :dayName " +
+           "AND pm.parentId == pd.planId ORDER BY pm.'order'")
+    LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName);
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")
     List<PlanMeal> getAllMealPlans(Long id);
     @Query("SELECT * FROM table_PlanMeal WHERE planId == :id")
@@ -73,7 +98,7 @@ public interface FooderieDao {
     @Query ("DELETE FROM table_PlanRecipe")
     void deleteAllPlanRecipes();
     @Query("SELECT * FROM table_PlanRecipe WHERE parentId == :p_id AND recipeId == :r_id")
-    PlanRecipe getPlanRecipe(Long p_id, Long r_id);
+    PlanRecipe getPlanRecipe(Long p_id, String r_id);
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
@@ -88,12 +113,18 @@ public interface FooderieDao {
 
     /* Entity=Recipe dao interactions */
     @Insert
-    Long insert(Recipe r);
+    void insert(Recipe r);
+    @Delete
+    void delete(Recipe r);
 
     @Query("DELETE FROM table_Recipe")
     void deleteAllRecipes();
+
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
+
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :id")
+    Recipe getRecipe(String id);
 
 
     /* Entity=Food dao interactions */
@@ -140,4 +171,5 @@ public interface FooderieDao {
             "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department " +
             "WHERE table_userGroceryList.food_name = :prevName")
     void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department);
+
 }

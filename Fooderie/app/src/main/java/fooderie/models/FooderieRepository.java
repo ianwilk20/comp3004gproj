@@ -15,6 +15,7 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.mealPlannerScheduler.models.Schedule;
 
 
 public class FooderieRepository {
@@ -25,13 +26,23 @@ public class FooderieRepository {
         fooderieDao = db.fooderieDao();
     }
 
+    /* Entity=Schedule */
+    public LiveData<List<Schedule>> getAllSchedules() {
+        return fooderieDao.getAllSchedules();
+    }
+    public void update(Schedule s) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(s);
+        });
+    }
+
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
     public void insert(PlanWeek p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             long id = fooderieDao.insert(p);
-            List<PlanDay> plans = new ArrayList<PlanDay>();
+            List<PlanDay> plans = new ArrayList<>();
             for (DayOfWeek d : DayOfWeek.values()) {
-                PlanDay day = new PlanDay((Long) id, d.toString(), p.getRecipeCount());
+                PlanDay day = new PlanDay(id, d.toString(), p.getRecipeCount());
                 plans.add(day);
             }
             fooderieDao.insert(plans);
@@ -44,11 +55,22 @@ public class FooderieRepository {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.insert(p));
     }
     public void insert(PlanRecipe p) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() ->
+            insertPlanRecipe(p)
+        );
+    }
+    public void insert(Long p_id, Recipe r) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            fooderieDao.insert(p);
-            updatePlanMealRecipeCount(p.getParentId(), 1);
+            fooderieDao.insert(r);
+            insertPlanRecipe(new PlanRecipe(p_id, r.getId()));
         });
     }
+
+    private void insertPlanRecipe(PlanRecipe p) {
+        fooderieDao.insert(p);
+        updatePlanMealRecipeCount(p.getParentId(), 1);
+    }
+
     public void insert(Food f){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.insert(f);
@@ -59,6 +81,7 @@ public class FooderieRepository {
             fooderieDao.insert(item);
         });
     }
+
 
     public void update(PlanWeek p) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -127,6 +150,9 @@ public class FooderieRepository {
             updatePlanDayRecipeCount(pm.getParentId(), pm.getRecipeCount() * -1);
         });
     }
+
+    public void deletePlanRecipe(Long p_id, String r_id) {
+
     public void delete(Food f){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.delete(f));
     }
@@ -144,16 +170,25 @@ public class FooderieRepository {
     }
     public void deletePlanRecipe(Long p_id, Long r_id) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            // -- Get and delete the PlanRecipe -- //
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
             fooderieDao.delete(pr);
 
+            // -- Get and delete the Recipe -- //
+            Recipe r = fooderieDao.getRecipe(r_id);
+            fooderieDao.delete(r);
+
+            // -- Update the recipe count of all parents -- //
             updatePlanMealRecipeCount(pr.getParentId(), -1);
         });
     }
 
-    public LiveData<List<PlanWeek>> getWeekPlans() { return fooderieDao.getWeekPlans(); }
+    public LiveData<List<PlanWeek>> getWeekPlans() { return fooderieDao.getPlanWeeks(); }
     public LiveData<List<PlanDay>> getDayPlans(Long id) { return fooderieDao.getDayPlans(id); }
     public LiveData<List<PlanMeal>> getMealPlans(Long id) { return fooderieDao.getMealPlans(id); }
+    public LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName) {
+        return fooderieDao.getMealPlans(weekNum, dayName);
+    }
     public LiveData<List<Recipe>> getRecipes(Long id) { return fooderieDao.getRecipes(id); }
     public LiveData<List<Food>> getAllAPIIngredients() { return  fooderieDao.getAllAPIIngredients(); }
     public LiveData<Food> getFoodByID(String food_id) { return fooderieDao.getFoodByID(food_id); }
