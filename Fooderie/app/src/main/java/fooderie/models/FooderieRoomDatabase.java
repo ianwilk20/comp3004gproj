@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import fooderie.groceryList.models.Food;
@@ -18,11 +19,13 @@ import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
+import fooderie.recipeBrowser.models.ArrayTypeConverter;
 import fooderie.recipeBrowser.models.Recipe;
 
 @Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
+@TypeConverters({ArrayTypeConverter.class})
 public abstract class FooderieRoomDatabase extends RoomDatabase {
     abstract FooderieDao fooderieDao();
 

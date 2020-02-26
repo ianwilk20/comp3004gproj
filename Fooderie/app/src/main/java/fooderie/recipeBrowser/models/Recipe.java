@@ -21,9 +21,9 @@ public class Recipe implements Serializable {
 
     public String label;
     public String image;
-    @Ignore public ArrayList<String> dietLabels;
-    @Ignore public ArrayList<String> healthLabels;
-    @Ignore public ArrayList<String> theIngredients = new ArrayList<String>();
+    public ArrayList<String> dietLabels;
+    public ArrayList<String> healthLabels;
+    public ArrayList<String> theIngredients = new ArrayList<String>();
     @Ignore public TotalNutrients totalNutrients;
 
     //Getters
@@ -31,15 +31,17 @@ public class Recipe implements Serializable {
     public String getUrl()   {return url;}
     public String getLabel() {return label;}
     public String getImage() {return image;}
-    @Ignore public ArrayList<String> getDietLabels() {return dietLabels;}
-    @Ignore public ArrayList<String> getHealthLabels() {return healthLabels;}
+    public ArrayList<String> getDietLabels() {return dietLabels;}
+    public ArrayList<String> getHealthLabels() {return healthLabels;}
+    public ArrayList<String> getTheIngredients() {return theIngredients;}
 
     //Setters
     public void setUrl(@NonNull String id)  {this.url = id;}
     public void setLabel(String l)          {this.label = l;}
     public void setImage(String i)          {this.image = i;}
-    @Ignore public void setDietLabels(ArrayList<String> items) {this.dietLabels = items;}
-    @Ignore public void setHealthLabels(ArrayList<String> items){this.healthLabels = items;}
+    public void setDietLabels(ArrayList<String> items) {this.dietLabels = items;}
+    public void setHealthLabels(ArrayList<String> items){this.healthLabels = items;}
+    public void setTheIngredients(ArrayList<String> items){this.theIngredients = items;}
 
     public Recipe(){
     }
