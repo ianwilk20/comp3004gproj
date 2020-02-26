@@ -151,8 +151,6 @@ public class FooderieRepository {
         });
     }
 
-    public void deletePlanRecipe(Long p_id, String r_id) {
-
     public void delete(Food f){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.delete(f));
     }
@@ -168,7 +166,7 @@ public class FooderieRepository {
     public void deleteGroceryItemByName(String ingredientName){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> fooderieDao.deleteGroceryItemByName(ingredientName));
     }
-    public void deletePlanRecipe(Long p_id, Long r_id) {
+    public void deletePlanRecipe(Long p_id, String r_id) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             // -- Get and delete the PlanRecipe -- //
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
