@@ -38,7 +38,7 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
     private final Function<Schedule, Void> mselected;
 
     void setDisplaySchedules(List<Schedule> schedules) {
-        if (schedules.size() == 0) {
+        if (schedules.size() != 0) {
             Calendar calender = Calendar.getInstance();
             Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
 
