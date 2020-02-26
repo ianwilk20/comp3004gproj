@@ -1,0 +1,7 @@
+2hrs
+-refactoring recipe class
+-deleting recipeIngredient
+-fixing code which broke from refactor
+
+1.5hrs
+-doing db stuff
