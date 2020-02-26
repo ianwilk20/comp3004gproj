@@ -6,5 +6,10 @@
 1.5hrs
 -doing db stuff
 
-1hr
+2hrs
 -making type converters
+-adding TotalNutrient Entity to db
+
+1.5hrs
+-removing totalNutrient entity from db by creating new type converter
+-finished adding all Entities to db and their converters

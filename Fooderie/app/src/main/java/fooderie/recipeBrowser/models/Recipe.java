@@ -24,7 +24,7 @@ public class Recipe implements Serializable {
     public ArrayList<String> dietLabels;
     public ArrayList<String> healthLabels;
     public ArrayList<String> theIngredients = new ArrayList<String>();
-    @Ignore public TotalNutrients totalNutrients;
+    public TotalNutrients totalNutrients;
 
     //Getters
     @NonNull
@@ -34,6 +34,7 @@ public class Recipe implements Serializable {
     public ArrayList<String> getDietLabels() {return dietLabels;}
     public ArrayList<String> getHealthLabels() {return healthLabels;}
     public ArrayList<String> getTheIngredients() {return theIngredients;}
+    public TotalNutrients getTotalNutrients() {return totalNutrients;}
 
     //Setters
     public void setUrl(@NonNull String id)  {this.url = id;}
@@ -42,6 +43,7 @@ public class Recipe implements Serializable {
     public void setDietLabels(ArrayList<String> items) {this.dietLabels = items;}
     public void setHealthLabels(ArrayList<String> items){this.healthLabels = items;}
     public void setTheIngredients(ArrayList<String> items){this.theIngredients = items;}
+    public void setTotalNutrients(TotalNutrients total) {this.totalNutrients = total;}
 
     public Recipe(){
     }

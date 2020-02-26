@@ -21,11 +21,12 @@ import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.recipeBrowser.models.ArrayTypeConverter;
 import fooderie.recipeBrowser.models.Recipe;
+import fooderie.recipeBrowser.models.TotalNutrientsTypeConverter;
 
 @Database(entities = {PlanWeek.class, PlanDay.class, PlanMeal.class, PlanRecipe.class, Recipe.class, UserGroceryListItem.class, Food.class},
         version = 1,
         exportSchema = false)
-@TypeConverters({ArrayTypeConverter.class})
+@TypeConverters({ArrayTypeConverter.class, TotalNutrientsTypeConverter.class})
 public abstract class FooderieRoomDatabase extends RoomDatabase {
     abstract FooderieDao fooderieDao();
 
