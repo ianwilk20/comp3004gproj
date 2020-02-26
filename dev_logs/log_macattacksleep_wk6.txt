@@ -13,3 +13,6 @@
 1.5hrs
 -removing totalNutrient entity from db by creating new type converter
 -finished adding all Entities to db and their converters
+
+5.5hrs
+-Options menu implemented
