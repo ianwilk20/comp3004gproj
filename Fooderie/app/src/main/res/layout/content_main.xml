@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="openRecipeBrowser"
                 android:text="Recipe Browser"
-                app:layout_constraintTop_toBottomOf="@+id/cookingAssistantButton"
+                app:layout_constraintTop_toBottomOf="@+id/groceryButton"
                 tools:layout_editor_absoluteX="0dp" />
 
             <Button
@@ -69,23 +69,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/text"
                 tools:layout_editor_absoluteX="0dp" />
 
-            <Button
-                android:id="@+id/cookingAssistantButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cooking Assistant"
-                app:layout_constraintTop_toBottomOf="@+id/groceryButton"
-                tools:layout_editor_absoluteX="16dp" />
-
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/TodayMealFragment"
                 android:name="fooderie.mealPlanner.views.TodayMealFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="4dp"
-                app:layout_constraintTop_toBottomOf="@+id/recipeBrowserButton"
                 app:layout_constraintBottom_toTopOf="@+id/WeeklyScheduleFragment"
+                app:layout_constraintTop_toBottomOf="@+id/recipeBrowserButton"
                 tools:layout="@layout/fragment_todaymeal"
                 tools:layout_editor_absoluteX="0dp" />
 
