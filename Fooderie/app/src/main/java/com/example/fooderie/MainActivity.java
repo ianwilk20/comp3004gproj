@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
                 openGroceryList();
             }
         });
-
+        /*
         //Launch cooking assistant (this button shouldn't directly be here (potentially later on))
         final AppCompatActivity cAssistThis = this;
         cookingAssistantButton = findViewById(R.id.cookingAssistantButton);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 startActivity(intent);
             }
-        });
+        });*/
 
 
         final AppCompatActivity tmp = this;
