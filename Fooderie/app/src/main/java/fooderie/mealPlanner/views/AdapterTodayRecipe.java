@@ -46,7 +46,7 @@ public class AdapterTodayRecipe extends RecyclerView.Adapter<AdapterTodayRecipe.
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_todaymeal_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_todaymeal_recipe_item, parent, false);
         return new ViewHolder(view);
     }
 

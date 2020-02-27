@@ -54,8 +54,6 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private Stack<Plan> m_path = new Stack<>();
 
     private static final int RECIPE_REQUEST_VIEW = 1;
-    private static final String UNIT_TYPE_KEY = "UNITS";
-    private static final String UNIT_TYPE_VALUE_METRIC = "Metric";
     private static final String RECIPE_KEY = "RECIPE";
     private static final String REQUEST_RECIPE_KEY = "FROMPLAN";
     private static final String REQUEST_RECIPE_VALUE_YES = "yes";
@@ -162,7 +160,6 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         Intent rbIntent = new Intent(this, rbSelected.class);
         rbIntent.putExtra(RECIPE_KEY, r);
         rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_NO);
-        rbIntent.putExtra(UNIT_TYPE_KEY, UNIT_TYPE_VALUE_METRIC);
         startActivity(rbIntent);
         return null;
     }

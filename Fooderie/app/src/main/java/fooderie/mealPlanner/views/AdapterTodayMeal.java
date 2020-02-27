@@ -64,8 +64,8 @@ public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.View
         holder.mTitle.setText(p.getName());
 
         AdapterTodayRecipe adaptor = new AdapterTodayRecipe(mDisplayRecipe);
-        holder.mRecyclerView.setAdapter(adaptor);
         holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(holder.mContext));
+        holder.mRecyclerView.setAdapter(adaptor);
 
         m_viewModel.getRecipesFromPlanMeal(p).observe(m_owner, adaptor::setRecipes);
     }
