@@ -21,6 +21,7 @@ public class Recipe implements Serializable {
 
     public String label;
     public String image;
+    public Boolean favorite = false;
     public ArrayList<String> dietLabels;
     public ArrayList<String> healthLabels;
     public ArrayList<String> theIngredients = new ArrayList<String>();

@@ -1,40 +1,24 @@
 package com.example.fooderie;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceManager;
 
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
-import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.views.GroceryListView;
-import fooderie.recipeBrowser.rbActivity;
+import fooderie.recipeBrowser.views.rbActivity;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
 import fooderie.mealPlanner.views.TodayMealFragment;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import android.widget.Button;
-import android.content.Intent;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements
         TodayMealFragment.OnListFragmentInteractionListener,

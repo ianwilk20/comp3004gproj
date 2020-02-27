@@ -1,5 +1,6 @@
 package fooderie.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -19,6 +20,7 @@ import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.recipeBrowser.models.Recipe;
+import io.reactivex.Flowable;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -124,9 +126,14 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
 
-    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :id")
-    Recipe getRecipe(String id);
+    @Query("SELECT * FROM table_Recipe WHERE favorite ==" + true)
+    List<Recipe> getAllFavs();
 
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url")
+    Recipe getRecipe(String url);
+
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url AND favorite ==" + true)
+    Recipe getFav(String url);
 
     /* Entity=Food dao interactions */
     @Insert(onConflict = REPLACE)
@@ -172,5 +179,4 @@ public interface FooderieDao {
             "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department " +
             "WHERE table_userGroceryList.food_name = :prevName")
     void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department);
-
 }
