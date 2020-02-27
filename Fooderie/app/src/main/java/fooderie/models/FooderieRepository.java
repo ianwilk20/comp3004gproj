@@ -216,4 +216,18 @@ public class FooderieRepository {
         update(pw);
     }
 
+    //Recipe Browser Stuff
+    public void insert(Recipe r){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {fooderieDao.insert(r);});
+    }
+    public void delete(Recipe r){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {fooderieDao.delete(r);});
+    }
+    public void deleteAllRecipes(){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {fooderieDao.deleteAllRecipes();});
+    }
+    public List<Recipe> getAllRecipes(){return fooderieDao.getAllRecipes();}
+    public List<Recipe> getAllFavs(){return fooderieDao.getAllFavs();}
+    public Recipe getRecipe(String url){return fooderieDao.getRecipe(url);}
+    public Recipe getFav(String url){return fooderieDao.getFav(url);}
 }
