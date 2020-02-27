@@ -54,8 +54,6 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private Stack<Plan> m_path = new Stack<>();
 
     private static final int RECIPE_REQUEST_VIEW = 1;
-    private static final String UNIT_TYPE_KEY = "UNIT";
-    private static final String UNIT_TYPE_VALUE_METRIC = "Metric";
     private static final String RECIPE_KEY = "RECIPE";
     private static final String REQUEST_RECIPE_KEY = "FROMPLAN";
     private static final String REQUEST_RECIPE_VALUE_YES = "yes";
@@ -115,7 +113,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         boolean allowSelect = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
 
         m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (allowSelect) ? this::selectPlanWeek : null);
-        m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayPlanRecipe);
+        m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
         m_planRecipeRecyclerView.setAdapter(m_planRecipeAdaptor);
@@ -157,12 +155,11 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         return null;
     }
 
-    private Void displayPlanRecipe(Recipe r) {
+    private Void displayRecipe(Recipe r) {
         // -- Connect to recipe browser(rb) selected (rbSelected) -- //
         Intent rbIntent = new Intent(this, rbSelected.class);
         rbIntent.putExtra(RECIPE_KEY, r);
         rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_NO);
-        rbIntent.putExtra(UNIT_TYPE_KEY, UNIT_TYPE_VALUE_METRIC);
         startActivity(rbIntent);
         return null;
     }

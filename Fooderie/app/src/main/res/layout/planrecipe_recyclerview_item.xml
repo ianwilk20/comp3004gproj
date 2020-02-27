@@ -27,24 +27,27 @@
             android:id="@+id/planRecipeItemDeleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/planRecipeItemTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.857"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/planRecipeItemTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/planRecipeItemTitle"
             app:srcCompat="@drawable/ic_delete_black_24dp" />
 
         <TextView
             android:id="@+id/planRecipeItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
+            android:layout_marginStart="8dp"
             android:text="@string/placeHolder"
+            android:textColor="@android:color/white"
             android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/planRecipeItemDeleteButton"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.904" />
+            app:layout_constraintVertical_bias="0.904"
+            app:layout_constraintWidth_min="wrap" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

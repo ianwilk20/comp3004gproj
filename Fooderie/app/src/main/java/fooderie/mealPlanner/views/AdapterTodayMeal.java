@@ -1,5 +1,7 @@
 package fooderie.mealPlanner.views;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -11,34 +13,42 @@ import android.widget.TextView;
 import com.example.fooderie.R;
 
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.views.TodayMealFragment.OnListFragmentInteractionListener;
+import fooderie.mealPlanner.viewModels.TodayMealViewModel;
+import fooderie.recipeBrowser.models.Recipe;
 
+import java.security.acl.Owner;
 import java.util.List;
+import java.util.function.Function;
 
 public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView mTitle;
         private final RecyclerView mRecyclerView;
+        private final Context mContext;
 
         private ViewHolder(View view) {
             super(view);
             mTitle = view.findViewById(R.id.TodayMealTitle);
             mRecyclerView = view.findViewById(R.id.TodayMealRecipesRecyclerView);
+            mContext = view.getContext();
         }
     }
 
     private List<PlanMeal> m_meals;
-    private final Context m_context;
-    private final OnListFragmentInteractionListener mListener;
+    private final TodayMealViewModel m_viewModel;
+    private final LifecycleOwner m_owner;
+    private final Function<Recipe, Void> mDisplayRecipe;
 
     void setDisplayMeals(List<PlanMeal> meals) {
         m_meals = meals;
+        m_viewModel.clearRecipeLiveData(m_owner);
         notifyDataSetChanged();
     }
 
-    public AdapterTodayMeal(OnListFragmentInteractionListener listener, Context context) {
-        mListener = listener;
-        m_context = context;
+    public AdapterTodayMeal(TodayMealViewModel wm, LifecycleOwner o, Function<Recipe, Void> displayRecipe) {
+        m_viewModel = wm;
+        m_owner = o;
+        mDisplayRecipe= displayRecipe;
     }
 
     @Override
@@ -53,9 +63,11 @@ public class AdapterTodayMeal extends RecyclerView.Adapter<AdapterTodayMeal.View
 
         holder.mTitle.setText(p.getName());
 
-        /*AdapterTodayRecipe adaptor = new AdapterTodayRecipe(t);
+        AdapterTodayRecipe adaptor = new AdapterTodayRecipe(mDisplayRecipe);
+        holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(holder.mContext));
         holder.mRecyclerView.setAdapter(adaptor);
-        holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(m_context));*/
+
+        m_viewModel.getRecipesFromPlanMeal(p).observe(m_owner, adaptor::setRecipes);
     }
 
     @Override

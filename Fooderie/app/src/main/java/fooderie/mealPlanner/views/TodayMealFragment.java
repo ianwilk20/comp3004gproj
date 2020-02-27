@@ -1,8 +1,10 @@
 package fooderie.mealPlanner.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,12 +19,13 @@ import android.widget.TextView;
 import com.example.fooderie.R;
 import com.kingfisher.easyviewindicator.RecyclerViewIndicator;
 
-import java.util.Calendar;
 import java.util.List;
 
 import androidx.recyclerview.widget.SnapHelper;
+import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.viewModels.TodayMealViewModel;
+import fooderie.recipeBrowser.models.Recipe;
 
 /**
  * A fragment representing a list of Items.
@@ -34,10 +37,12 @@ public class TodayMealFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private TodayMealViewModel m_viewModel;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    private static final String RECIPE_KEY = "RECIPE";
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteraction(PlanMeal meal);
+    }
+
     public TodayMealFragment() {
     }
 
@@ -61,7 +66,6 @@ public class TodayMealFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_todaymeal, container, false);
 
         // -- Set the widget title to that of the current day of the week -- //
-        Calendar calender = Calendar.getInstance();
         TextView tv = view.findViewById(R.id.TodayMealFragmentTitle);
         tv.setText(m_viewModel.dayOfWeekName());
 
@@ -70,7 +74,7 @@ public class TodayMealFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.TodayMealRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-        AdapterTodayMeal adaptor = new AdapterTodayMeal(mListener, context);
+        AdapterTodayMeal adaptor = new AdapterTodayMeal(m_viewModel, getViewLifecycleOwner(), this::displayCookingAssistant);
         recyclerView.setAdapter(adaptor);
 
         // -- Set the snap helper to snap the items in the RecyclerView -- //
@@ -97,7 +101,7 @@ public class TodayMealFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
@@ -113,17 +117,10 @@ public class TodayMealFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(PlanMeal meal);
+    public Void displayCookingAssistant(Recipe r) {
+        Intent intent = new Intent(getActivity(), CookingAssistantPreview.class);
+        intent.putExtra(RECIPE_KEY, r);
+        startActivity(intent);
+        return null;
     }
 }

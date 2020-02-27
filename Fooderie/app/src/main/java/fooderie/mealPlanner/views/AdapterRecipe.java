@@ -78,8 +78,8 @@ public class AdapterRecipe extends RecyclerView.Adapter<AdapterRecipe.PlanRecipe
         if (m_displayRecipes != null) {
             Recipe r = m_displayRecipes.get(pos);
 
-            holder.title.setText(r.label);
-            Picasso.get().load(r.image).into(holder);
+            holder.title.setText(r.getLabel());
+            Picasso.get().load(r.getImage()).into(holder);
 
             holder.deleteButton.setOnClickListener((View v) -> {
                 m_deleteFunc.apply(r.getId());
