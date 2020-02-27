@@ -1,4 +1,4 @@
-package fooderie.recipeBrowser.views;
+package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;

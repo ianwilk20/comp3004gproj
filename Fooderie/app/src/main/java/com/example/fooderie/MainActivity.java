@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.groceryList.views.GroceryListView;
-import fooderie.recipeBrowser.views.rbActivity;
+import fooderie.recipeBrowser.rbActivity;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
 import fooderie.mealPlanner.views.TodayMealFragment;
