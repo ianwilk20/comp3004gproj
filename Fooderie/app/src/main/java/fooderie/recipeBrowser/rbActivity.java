@@ -1,6 +1,7 @@
 package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,12 +25,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import java.util.ArrayList;
-import java.util.Arrays;
 import fooderie.recipeBrowser.models.Recipe;
+import fooderie.recipeBrowser.viewModels.RBViewModel;
+
 import android.widget.Toast;
 import android.app.ProgressDialog;
 
 public class rbActivity extends AppCompatActivity {
+    private RBViewModel viewModel;
 
     ProgressDialog dialog;
     SearchView rbSearchView;
@@ -46,6 +49,8 @@ public class rbActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb);
 
+        viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
+
         //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
@@ -60,10 +65,23 @@ public class rbActivity extends AppCompatActivity {
         rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
         rbListView.setAdapter(rbArrAdapt);
 
-        //THIS IS ALL TEMPORARY AND NEEDS TO BE DELETED!!!!!
-        ArrayList<String> tempList = new ArrayList<String>(Arrays.asList("London", "Tokyo", "New York"));
-        ArrayAdapter<String> temp = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, tempList);
-        favListView.setAdapter(temp);
+        //put favourties list into list
+        ArrayList<Recipe> recipeFavList;
+        ArrayList<String> stringFavList = new ArrayList<String>();
+
+        //WHERE YOU LEFT THINGS
+
+//        if(viewModel.getAllFavs() != null) {
+//            recipeFavList = new ArrayList<Recipe>(viewModel.getAllFavs());
+//            for (Recipe r : recipeFavList) {
+//                stringFavList.add(r.label);
+//            }
+//        }
+//        else{
+//            recipeFavList = new ArrayList<Recipe>();
+//        }
+//        ArrayAdapter<String> arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
+//        favListView.setAdapter(arrAdapt);
 
         //If an option switch is checked, add its query parameter
         //Otherwise, remove its query parameter
@@ -164,10 +182,9 @@ public class rbActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Recipe selected = null;
-                //THIS NEEDS TO BE CHANGED FOR FAVLIST
-//                for (int i = 0; i < rbRecipeArr.size(); ++i){
-//                    if(rbRecipeArr.get(i).label.equals(rbResults.get(position))){
-//                        selected = rbRecipeArr.get(i);
+//                for (int i = 0; i < recipeFavList.size(); ++i){
+//                    if(recipeFavList.get(i).label.equals(stringFavList.get(position))){
+//                        selected = recipeFavList.get(i);
 //                    }
 //                }
                 if (selected != null) {
