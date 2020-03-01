@@ -22,7 +22,6 @@ import fooderie.recipeBrowser.models.Recipe;
 
 public class FooderieRepository {
     private FooderieDao fooderieDao;
-    private Calendar calendarForMealPlan;
 
     public FooderieRepository(Application application) {
         FooderieRoomDatabase db = FooderieRoomDatabase.getDatabase(application);
@@ -37,6 +36,12 @@ public class FooderieRepository {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.update(s);
         });
+    }
+
+    public LiveData<List<Recipe>> getNextWeeksRecipes() {
+        Calendar c = Calendar.getInstance();
+        Long week = (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
+        return fooderieDao.getNextWeeksRecipes(week);
     }
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
@@ -202,11 +207,6 @@ public class FooderieRepository {
     public LiveData<List<Food>> getFoodByLabel(String label) {return fooderieDao.getFoodByLabel(label); }
     public LiveData<List<UserGroceryListItem>> getAllGroceryItems() { return fooderieDao.getAllGroceryItems(); }
     public LiveData<List<UserGroceryListItem>> getItemsInPantry() {return fooderieDao.getItemsInPantry(); }
-    public LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id) { return fooderieDao.getAllRecipesFromWeeklyMealPlanId(id); }
-//    public LiveData<List<PlanMeal>> getNextWeeksMealPlan() {
-//        Long week = (Long) Integer.toUnsignedLong(calendarForMealPlan.get(Calendar.WEEK_OF_YEAR + 1) % 53);
-//        return fooderieDao.getMealPlans(week, "");
-//    }
 
     private void updatePlanMealRecipeCount(Long id, int change) {
         PlanMeal pm = fooderieDao.getPlanMeal(id);
