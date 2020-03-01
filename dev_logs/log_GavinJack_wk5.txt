@@ -3,7 +3,7 @@ Gavin Jackson, 101065531
 Goal for the week was finishing up the groundwork of our activities in preparation for connecting our components together. Wanted to 
 ensure the Meal Planner was fully functional and ready to accept recipes. 
 
-      Monday, Feb 24th, 2020
+      Monday, Feb 17th, 2020
     -	[5.0 Hr] Worked on making recipe recyclerView(fancy list of recipes). Required loads of debugging to resolve numerous problems. 
         Struggles:
         o	Recipes required their own adaptor to be displayed to the user. Needed to remake loads of functionality used for the Plans, 
