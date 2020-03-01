@@ -103,7 +103,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
             public void onClick(View v) {
                 String itemSelected = ((TextView) v).getText().toString();
                 itemSelected += " was clicked";
-                Toast.makeText(v.getContext(), itemSelected, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), itemSelected, Toast.LENGTH_SHORT).show();
                 if ((groceryItem.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
                     groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), false);
                     //notifyDataSetChanged();
@@ -177,7 +177,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
     public void clearCrossedOffItems(){
         //temporary fix, uses all
 
-        Toast.makeText(this.appContext, "Pressed clear", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this.appContext, "Pressed clear", Toast.LENGTH_SHORT).show();
         LiveData<List<UserGroceryListItem>> fromDB = groceryListViewModel.getUserGroceryList();
         List<UserGroceryListItem> parsedDB = fromDB.getValue();
 //        LiveData<List<UserGroceryListItem>> inPantryFromDB = groceryListViewModel.getItemsInPantry();
