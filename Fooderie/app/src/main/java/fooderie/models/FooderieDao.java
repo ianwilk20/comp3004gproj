@@ -154,7 +154,7 @@ public interface FooderieDao {
     LiveData<Food> getFoodByID(String food_id);
 
     @Query("SELECT * FROM table_APIIngredient " +
-            "WHERE table_APIIngredient.label LIKE :label")
+            "WHERE table_APIIngredient.label LIKE '%' || :label || '%'")
     LiveData<List<Food>> getFoodByLabel(String label); //MUST enter label as "apple%" to get all results with apples
 
     /* Entity=UserGroceryListItem dao interactions */
@@ -175,8 +175,18 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_userGroceryList")
     LiveData<List<UserGroceryListItem>> getAllGroceryItems();
 
+    @Query("SELECT * FROM table_userGroceryList " +
+            "WHERE table_userGroceryList.inPantry = 1")
+    LiveData<List<UserGroceryListItem>> getItemsInPantry();
+
     @Query("UPDATE table_userGroceryList " +
-            "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department " +
+            "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department, inPantry = :inPantry " +
             "WHERE table_userGroceryList.food_name = :prevName")
-    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department);
+    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department, boolean inPantry);
+
+    @Query("UPDATE table_userGroceryList " +
+            "SET inPantry = :inPantry " +
+            "WHERE table_userGroceryList.food_id = :foodId")
+    void updateInPantryStatus(String foodId, boolean inPantry);
+
 }

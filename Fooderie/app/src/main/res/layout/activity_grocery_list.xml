@@ -58,45 +58,62 @@
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
         android:background="#373737"
+        android:clipToPadding="false"
         android:paddingTop="4dp"
         android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/filterAisles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:buttonTint="@color/rbutton_color"
-            android:checked="true"
-            android:fontFamily="@font/montserrat"
-            android:text="Aisles"
-            android:textColor="@color/colorPrimary" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/filterAisles"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:buttonTint="@color/rbutton_color"-->
+<!--            android:checked="true"-->
+<!--            android:fontFamily="@font/montserrat"-->
+<!--            android:text="Aisles"-->
+<!--            android:textColor="@color/colorPrimary" />-->
 
-        <RadioButton
-            android:id="@+id/filterRecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:buttonTint="@color/rbutton_color"
-            android:fontFamily="@font/montserrat"
-            android:text="Recipe"
-            android:textColor="@color/colorPrimary" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/filterRecipe"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:buttonTint="@color/rbutton_color"-->
+<!--            android:fontFamily="@font/montserrat"-->
+<!--            android:text="Recipe"-->
+<!--            android:textColor="@color/colorPrimary" />-->
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/share_button"/>
+
+        <ImageButton
+            android:id="@+id/optionsButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/clear_list"/>
     </RadioGroup>
+
+
 
     <ListView
     android:id="@+id/groceryListDisplay"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="match_parent"
     android:layout_below="@id/filterGroup"
     android:layout_marginTop="1dp"></ListView>
-
-    <ListView
-        android:id="@+id/gotItListDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/groceryListDisplay"
-        android:layout_marginTop="1dp"
-        android:visibility="invisible"></ListView>
 
 
 </RelativeLayout>
