@@ -45,7 +45,6 @@ public class CookingAssistantPreview extends AppCompatActivity
         ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(CookingAssistantPreview.this, android.R.layout.simple_list_item_1, selected.theIngredients);
         ingridentList.setAdapter(rbArrAdapt);
 
-        final AppCompatActivity cAssistThis = this;
         startButton.setOnClickListener(new View.OnClickListener()
         {
             @Override

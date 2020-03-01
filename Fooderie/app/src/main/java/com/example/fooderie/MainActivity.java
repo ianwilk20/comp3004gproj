@@ -21,8 +21,8 @@ import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        TodayMealFragment.OnListFragmentInteractionListener,
-        WeeklyScheduleFragment.OnListFragmentInteractionListener {
+    TodayMealFragment.OnListFragmentInteractionListener,
+    WeeklyScheduleFragment.OnListFragmentInteractionListener {
 
     private Button groceryListButton;
     private Button mealPlannerButton;
