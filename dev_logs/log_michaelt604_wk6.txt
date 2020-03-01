@@ -1,0 +1,28 @@
+COMP3004 Dev Log - Week #6
+Michael Ting - 101068936
+
+Overview: 
+This weeks objective was streamlining and preparing for a physical demo on a
+physical android device and various usability fixes to ensure a polished experience
+
+Weekly Progress:
+[1.5 Hr]
+- Researched invisible elements and usability practices on mobile apps
+
+[5 hr]
+- Refactored cooking assistant viewer page to allow for the main menu return button to 
+fit on the page
+- Refactored the code base to allow for the button to become invisible and visible
+- Lots of issues related to the async JSoup parsing creating issues with button visibility
+and onclick settings
+	- Fixed onClick by calling the onClick through the xml sheet
+	- Fixed Visibility by resetting invisibility whenever async calls were used
+
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
+
