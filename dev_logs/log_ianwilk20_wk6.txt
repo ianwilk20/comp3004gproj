@@ -1,0 +1,69 @@
+Development Log – Week #6
+Ian Wilkinson, 101073244
+
+The goal for this week was to attempt to clean up some of the final touches of the grocery list for the D2 presentation. Cleaning up what the groceryItemInfo shows (maybe adding more room), filtering the data set prior so nulls and empties don't show up and rather empty is shown. Altering the parsing of API food results to clean up food_labels by making them camel case, and possibly duplicate names with varying spelling/capitalization. Possibly remove the aisles/recipes thing and only filter on the department if there is one or by ascending. Utilizing the custom adapter on the Got it List too, in the case that we deem it necessary for users to be able to edit Got It List items or delete them individually (instead of clearing them). Implementation with Gavin's meal plan.
+
+Friday, February 28, 2020 and Saturday, February 29, 2020
+ - [1.0 Hr] Fixed Progress Bar 
+    - When searching for recipes progress bar has now been enabled to work with AlertDialog so upon "Add Item", it is shown
+    - Subsequently dismissed upon adding of the item to the grocery list which happens in our Observer for live data changes
+
+ - [2.0 Hr] Revamp of Grocery List page for D2
+    - Removed the use of Radio Buttons
+    - Added new buttons for share and edit list functionality
+    - Resizing and restructuring of the edit and delete buttons as well as the additional grocery information text
+    - Removed old Got it List
+    
+ - [1.5 Hr] Cross off requirement
+    - Enabled the use of crossing off to replace old Got it list
+    - User clicks on an item
+        - Flag in DB is changed to say that said item is in their pantry
+        - We query DB to see if anything changed
+        - We update the text so it is now struck through
+    - User clicks on struck through the item
+        - Flag in DB is changed to say that said item is not in their pantry any longer
+        - We query DB to see if anything changed
+        - We update the text so it is now struck through
+
+ - [4 Hr] Causing DB updates for Edit Additional Grocery item info
+    - All info captured from the edit page
+        - Quantity
+        - Notes
+        - Department
+    - Now syncs to DB 
+    - Upon opening the edit, DB queried, edit pop-up is populated
+    - Upon pressing "Update" all fields that've changed are updated
+    - The item in the grocery list is formatted to have the additional information
+    - If additional info too long, it is "..."ed at the end
+    - Additional info is parsed from DB so if fields are null, only ones that have user-entered data are displayed
+
+ - [3.5 Hr] Requirement for enabling the user to share the grocery list
+    - User can share grocery list through
+        - Text message
+        - Email
+        - Copy to clipboard and paste into a notes app or search engine or what have you
+    - Creating intents
+    - Parsing LiveData from DB into a nicely formatted list for users to use'
+    - Only fields edited by the user are nicely formatted, any nulls or extra information stored in the database is filtered from users copy
+
+ - [3 Hr] Clearing of grocery lists/in pantry list
+    - Problems with LiveData and observer updates
+    - The entire grocery list can be cleared
+    - Ones marked as in the pantry are cleared, but the proper DB query is not executed (fix in next steps)
+
+ - [2 Hr] Actual utilization of DB when looking for an ingredient
+    -Prior to this the API was solely being used despite the DB being implemented
+    -Now we search to see if the item or something like it is in the DB
+    - If so, we populate it in the grocery list
+    - If not we search API and add the Food to the DB so it never has to be queried from the API again
+
+ - [0.5 Hr] Reviewing PR's
+
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+-Need proper clearing of items in pantry
+    - get only the ones from my query of inPantry(), selectively delete those
+-Need proper getting of items from Food table where food label is like %bacon%
+-Integrate with Gavins Meal Planner to get all recipes from next week and add ingredients to the grocery list
