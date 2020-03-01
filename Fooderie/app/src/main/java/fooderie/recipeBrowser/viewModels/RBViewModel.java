@@ -6,10 +6,10 @@ import java.util.List;
 import fooderie.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
 
-public class rbViewModel extends AndroidViewModel {
+public class RBViewModel extends AndroidViewModel {
     private FooderieRepository repo;
 
-    public rbViewModel(Application app){
+    public RBViewModel(Application app){
         super(app);
         repo = new FooderieRepository(app);
     }

@@ -2,19 +2,30 @@ package fooderie.groceryList.views;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -39,6 +50,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fooderie.groceryList.models.IngredientNotFoundException;
 import fooderie.groceryList.models.UserGroceryListItem;
@@ -54,14 +67,11 @@ public class GroceryListView extends AppCompatActivity {
     View v;
     RequestQueue requestQueue;
     ListView groceryList;
-    ListView gotItList;
-    TextView gotItHeader;
-    TextView clearGotItList;
-    //ArrayAdapter<String> groceryListAdapter;
+    ImageButton saveButton;
+    ImageButton optionsButton;
     CustomAdapter groceryListAdapter;
-    ArrayAdapter<String> gotItListAdapter;
     FloatingActionButton addItem;
-    //ProgressDialog progressDialog;
+    ProgressDialog progressDialog;
     ArrayList<String> grocList = new ArrayList<String>();
     ArrayList<String> gotList = new ArrayList<String>();
 
@@ -73,9 +83,13 @@ public class GroceryListView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list);
+
+        //Getting tagged items from activity
         groceryList = findViewById(R.id.groceryListDisplay);
-
-
+        optionsButton = findViewById(R.id.optionsButton);
+        requestQueue = Volley.newRequestQueue(this);
+        addItem = findViewById(R.id.addGroceryItem);
+        saveButton = findViewById(R.id.saveButton);
 
         groceryListViewModel = ViewModelProviders.of(this).get(GroceryListViewModel.class);
         groceryListViewModel.getUserGroceryList().observe(this, new Observer<List<UserGroceryListItem>>() {
@@ -85,31 +99,118 @@ public class GroceryListView extends AppCompatActivity {
                 groceryListAdapter = new CustomAdapter(userGroceryListItems, getApplicationContext(), groceryListViewModel, GroceryListView.this);
                 groceryList.setAdapter(groceryListAdapter);
                 groceryListAdapter.notifyDataSetChanged();
-                Utility.setListViewHeightBasedOnChildren(groceryList);
-                Toast.makeText(GroceryListView.this, "onChanged", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                //Utility.setListViewHeightBasedOnChildren(groceryList);
+                //Toast.makeText(GroceryListView.this, "Grocery List Changed", Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        gotItList = findViewById(R.id.gotItListDisplay);
-        addItem = findViewById(R.id.addGroceryItem);
+        groceryListViewModel.getAllFoodItems().observe(this, new Observer<List<Food>>() {
+            @Override
+            public void onChanged(List<Food> foods) {
+                //Toast.makeText(GroceryListView.this, "Food Table Changed", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.item_header, gotItList, false);
-        clearGotItList = header.findViewById(R.id.clearGotItList);
-        gotItHeader = header.findViewById(R.id.gotItHeader);
-        gotItList.addHeaderView(header);
+        progressDialog = new ProgressDialog(GroceryListView.this);
 
-        requestQueue = Volley.newRequestQueue(this);
 
-        //groceryListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, new ArrayList<String>(storedGroceryList.keySet())); //doesn't work
+        final PopupMenu dropDownSaveMenu = new PopupMenu(this, saveButton);
+        final Menu save_menu = dropDownSaveMenu.getMenu();
+        save_menu.add(0, 0, 0, "Copy to Clipboard");
+        save_menu.add(0, 1, 0, "Email Grocery List");
+        save_menu.add(0,2,0,"Send to a friend");
 
-//        groceryListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, grocList);
-//        groceryList.setAdapter(groceryListAdapter);
+        dropDownSaveMenu.getMenuInflater().inflate(R.menu.save_menu, save_menu);
 
-        gotItListAdapter = new ArrayAdapter(GroceryListView.this, android.R.layout.simple_list_item_1, gotList);
-        gotItList.setAdapter(gotItListAdapter);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dropDownSaveMenu.show();
+            }
+        });
+
+        final PopupMenu dropDownOptionMenu = new PopupMenu(this, optionsButton);
+        final Menu options_menu = dropDownOptionMenu.getMenu();
+        options_menu.add(0, 0, 0, "Clear items in pantry");
+        options_menu.add(0, 1, 0, "Clear all items");
+
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dropDownOptionMenu.show();
+            }
+        });
+
+        dropDownSaveMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String body = "";
+
+                LiveData<List<UserGroceryListItem>> grocListFromDB = groceryListViewModel.getUserGroceryList();
+                List<UserGroceryListItem> grocList = grocListFromDB.getValue();
+
+                for (UserGroceryListItem i : grocList){
+
+                    body += "• " + i.getFood_name();
+                    body += i.getQuantity().isEmpty() || i.getQuantity() == null ? "" : ", Quantity: " + i.getQuantity();
+                    body += i.getNotes().isEmpty() || i.getNotes() == null ? "" : ", Notes: " + i.getNotes();
+                    body += i.getDepartment().isEmpty() || i.getDepartment() == null ? "" : ", Department: " + i.getDepartment();
+                    body += "\n";
+                }
+
+
+                switch (item.getItemId()){
+                    case 0:
+                        //Clipboard
+                        Toast.makeText(GroceryListView.this, "Grocery List Copied to Clipboard", Toast.LENGTH_SHORT).show();
+                        final android.content.ClipboardManager clipboardMan = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                        ClipData groceryListClipData = ClipData.newPlainText("Source Text", body);
+                        clipboardMan.setPrimaryClip(groceryListClipData);
+                        return true;
+                    case 1:
+                        //Email
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        emailIntent.setType("plain/text");
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { ""});
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Grocery List");
+
+                        body += "\nThank you for using Fooderie :) \n";
+
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+                        startActivity(Intent.createChooser(emailIntent, ""));
+                        return true;
+                    case 2:
+                        //SMS
+                        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                        smsIntent.setData(Uri.parse("sms:"));
+                        smsIntent.putExtra("sms_body", body);
+                        startActivity(smsIntent);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        dropDownOptionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case 0:
+                        groceryListAdapter.clearCrossedOffItems();
+                        return true;
+                    case 1:
+                        //clear all items - prompt first
+                        groceryListAdapter.clearAllItems();
+                        return true;
+                }
+                return false;
+            }
+        });
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,99 +218,11 @@ public class GroceryListView extends AppCompatActivity {
                 addIngredient();
             }
         });
-
-//        groceryListAdapter.setOnDataChangeListener(new CustomAdapter.OnDataChangeListener() {
-//            @Override
-//            public void onDataChanged(String item) {
-//                if (gotList.isEmpty()){
-//                    gotItList.setVisibility(View.VISIBLE);
-//                }
-//                gotList.add(item);
-//
-//                //Dynamically set heights of the grocery and gotIt list
-//                Utility.setListViewHeightBasedOnChildren(groceryList);
-//                Utility.setListViewHeightBasedOnChildren(gotItList);
-//
-//                //Update View
-//                groceryListAdapter.notifyDataSetChanged();
-//                gotItListAdapter.notifyDataSetChanged();
-//            }
-//        });
-
-//        groceryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String itemSelected = ((TextView) view).getText().toString(); // Gets the text of the selected item in list
-//                if (itemSelected.equals(grocList.get(position))){
-//                    //Make Got It only visible if something is deleted from it
-//                    if (gotList.isEmpty()){
-//                        gotItList.setVisibility(View.VISIBLE);
-//                    }
-//                    gotList.add(itemSelected);
-//
-//                    //Delete the element from groceryList
-//                    grocList.remove(position);
-//
-//                    //Dynamically set heights of the grocery and gotIt list
-//                    Utility.setListViewHeightBasedOnChildren(groceryList);
-//                    Utility.setListViewHeightBasedOnChildren(gotItList);
-//
-//                    //Update View
-//                    groceryListAdapter.notifyDataSetChanged();
-//                    gotItListAdapter.notifyDataSetChanged();
-//                } else {
-//                    Toast.makeText(GroceryListView.this, "Problem Removing Element From Grocery List", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
-        gotItList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemSelected = ((TextView) view).getText().toString();
-                if (itemSelected.equals(gotList.get(position - 1))){
-                    grocList.add(itemSelected);
-                    gotList.remove(itemSelected);
-
-                    if (gotList.isEmpty()){
-                        gotItList.setVisibility(View.INVISIBLE);
-                    }
-
-                    //Dynamically set heights of the grocery and gotIt list
-                    Utility.setListViewHeightBasedOnChildren(groceryList);
-                    Utility.setListViewHeightBasedOnChildren(gotItList);
-
-                    //Update View
-                    groceryListAdapter.notifyDataSetChanged();
-                    gotItListAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(GroceryListView.this, "Problem Removing Element From Got It List", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        clearGotItList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (gotList.isEmpty()) { return; }
-                gotList.clear();
-                gotItList.setVisibility(View.INVISIBLE);
-                Utility.setListViewHeightBasedOnChildren(gotItList);
-                gotItListAdapter.notifyDataSetChanged();
-            }
-        });
-
-        gotItHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                return;
-            }
-        });
     }
 
 
     private void addIngredient() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(GroceryListView.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(GroceryListView.this);
         builder.setTitle("Add to List");
 
         v = LayoutInflater.from(GroceryListView.this).inflate(R.layout.add_grocery_dialog, null, false);
@@ -223,16 +236,8 @@ public class GroceryListView extends AppCompatActivity {
         builder.setPositiveButton("Add Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-
-                ProgressDialog progressDialog = new ProgressDialog(GroceryListView.this);
                 progressDialog.setMessage("Please, wait while we find your ingredient");
                 progressDialog.show();
-                //((ViewGroup) v.getParent()).removeView(v);
-//                progressDialog = new ProgressDialog(GroceryListView.this);
-//                progressDialog.setTitle("Please, wait while we find your ingredient");
-//                progressDialog.show();
-
                 String query = grocerySearch.getQuery().toString();
                 if (query.length()>= 1 && query != null){
                     boolean hasIngredientInDB = FetchIngredientFromDBBoolean(query);
@@ -246,8 +251,6 @@ public class GroceryListView extends AppCompatActivity {
                 } else if (query.length() == 0){
                     Toast.makeText(GroceryListView.this, "Nothing was added" + query, Toast.LENGTH_SHORT).show();
                 }
-
-                progressDialog.dismiss();
             }
         });
 
@@ -258,19 +261,58 @@ public class GroceryListView extends AppCompatActivity {
             }
         });
 
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener(){
+            @Override
+            public void onDismiss(DialogInterface dialogInterface){
+
+            }
+        });
+
         builder.show();
     }
 
-    public boolean FetchIngredientFromDBBoolean(final String ingredient){
-        List<Food> data = groceryListViewModel.getFoodByLabel(ingredient).getValue();
-        if (data == null || data.isEmpty()){
+    public boolean FetchIngredientFromDBBoolean(String ingredient){
+        //get working with the proper sqlite search
+        //LiveData<List<Food>> data = groceryListViewModel.getFoodByLabel(ingredient);
+        //List<Food> dataParsed = data.getValue();
+//        groceryListViewModel.getFoodByLabel(ingredient.trim()).observe(this, new Observer<List<Food>>() {
+//            @Override
+//            public void onChanged(List<Food> foods) {
+//                 final List<Food> data = foods;
+//                 if (data != null && data.size() != 0){
+//                     return true;
+//                 }
+//            }
+//        });
+
+
+        List<Food> data = groceryListViewModel.getAllFoodItems().getValue();
+        if (data != null || !data.isEmpty()){
+            for(Food f : data){
+                Matcher matches = Pattern.compile(Pattern.quote(f.label), Pattern.CASE_INSENSITIVE).matcher(ingredient.trim());
+                if (matches.find()){
+                    return true;
+                }
+                //if (f.label.contains(ingredient))
+            }
             return false;
         }
-        return true;
+        return false;
     }
 
     public void FetchIngredientFromDB(final String ingredient){
-        List<Food> listFromDB = groceryListViewModel.getFoodByLabel(ingredient).getValue();
+        LiveData<List<Food>> listFromDB = groceryListViewModel.getAllFoodItems();
+        List<Food> listParsed = listFromDB.getValue();
+        if (listParsed != null){
+            for(Food f : listParsed){
+                Matcher matches = Pattern.compile(Pattern.quote(f.label), Pattern.CASE_INSENSITIVE).matcher(ingredient.trim());
+                if (matches.find()){
+                    UserGroceryListItem item = new UserGroceryListItem(f.foodId, f.label);
+                    groceryListViewModel.insert(item);
+                    return;
+                }
+            }
+        }
         return;
     }
 
@@ -316,9 +358,6 @@ public class GroceryListView extends AppCompatActivity {
                                     groceryListViewModel.insert(firstItem);
                                 }
                             }
-
-
-                            //groceryListAdapter.notifyDataSetChanged();// Not needed with custom adapter
                             return;
 
                         } catch (IngredientNotFoundException ne){

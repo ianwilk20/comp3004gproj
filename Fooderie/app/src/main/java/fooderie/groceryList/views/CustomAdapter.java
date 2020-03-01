@@ -3,6 +3,7 @@ package fooderie.groceryList.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,12 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fooderie.R;
@@ -24,6 +27,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import fooderie.groceryList.models.Food;
 import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.groceryList.viewModels.GroceryListViewModel;
 
@@ -33,6 +37,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
     private Context appContext;
     private GroceryListViewModel groceryListViewModel;
     private Activity parentAppActivty;
+
 
     public CustomAdapter(List<UserGroceryListItem> strings, Context aContext, GroceryListViewModel groceryListViewModel, Activity activity){
         list = strings;
@@ -64,10 +69,31 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
             v = inflater.inflate(R.layout.edit_delete_layout, null);
         }
 
+        //The grocery item displayed - as food_name
         TextView groceryItem = (TextView) v.findViewById(R.id.groceryItem);
         groceryItem.setText(list.get(position).getFood_name());
+
+        //The grocery item's additional information - as quantity, notes, and department
         TextView groceryItemInfo = (TextView) v.findViewById(R.id.groceryItemInfo);
-        groceryItemInfo.setText("Quantity: " + list.get(position).getQuantity() + " Notes: " + list.get(position).getNotes() + " Department: " + list.get(position).getDepartment());
+
+        String quantity = list.get(position).getQuantity();
+        String notes = list.get(position).getNotes();
+        String dept = list.get(position).getDepartment();
+        String food_id = list.get(position).getFood_id();
+        String infoStr = "";
+
+        if (quantity != null && !quantity.isEmpty()) { infoStr += "Quantity: " + quantity; }
+        if (notes != null && !notes.isEmpty()) { infoStr += "  Notes: " + notes; }
+        if (dept != null && !dept.isEmpty()) { infoStr += "  Department: " + dept; }
+        groceryItemInfo.setText(infoStr);
+
+        if (list.get(position).getInPantry() == true) {
+            groceryItem.setPaintFlags(groceryItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            groceryItemInfo.setPaintFlags((groceryItemInfo.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG));
+        } else if (list.get(position).getInPantry() == false){
+            groceryItem.setPaintFlags(0);
+            groceryItemInfo.setPaintFlags(0);
+        }
 
         ImageButton editButton = (ImageButton) v.findViewById(R.id.editButton);
         ImageButton deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
@@ -76,10 +102,13 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 String itemSelected = ((TextView) v).getText().toString();
-                list.remove(itemSelected);
-                notifyDataSetChanged();
-                if (myOnDataChangeListener != null){
-                    myOnDataChangeListener.onDataChanged(itemSelected);
+                itemSelected += " was clicked";
+                Toast.makeText(v.getContext(), itemSelected, Toast.LENGTH_SHORT).show();
+                if ((groceryItem.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
+                    groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), false);
+                    //notifyDataSetChanged();
+                } else {
+                    groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), true);
                 }
             }
         });
@@ -87,7 +116,6 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Edit Button Was Clicked", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(parentAppActivty);
                 builder.setTitle("Edit Item");
 
@@ -96,11 +124,18 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 v = LayoutInflater.from(v.getContext()).inflate(R.layout.edit_grocery_item, null, false);
                 builder.setView(v);
 
+                LiveData<Food> foodFromDB = groceryListViewModel.getFoodByID(food_id);
+                Food foodObject = foodFromDB.getValue();
+
+
                 final EditText item = (EditText) v.findViewById(R.id.itemName);
                 item.setText(list.get(position).getFood_name());
                 final EditText itemQuantity = (EditText) v.findViewById(R.id.itemQuantity);
+                itemQuantity.setText(list.get(position).getQuantity());
                 final EditText itemNotes = (EditText) v.findViewById(R.id.itemNotes);
+                itemNotes.setText(list.get(position).getNotes());
                 final EditText itemDepartment = (EditText) v.findViewById(R.id.itemDepartment);
+                itemDepartment.setText(list.get(position).getDepartment());
 
                 builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                     @Override
@@ -111,7 +146,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                         String userDepartment = itemDepartment.getText().toString();
 
                         //No SQL Check, maybe check fields before updating blindly
-                        groceryListViewModel.updateGroceryItemAttributes(ogItemName, userItem, userQuantity, userNotes, userDepartment);
+                        groceryListViewModel.updateGroceryItemAttributes(ogItemName, userItem, userQuantity, userNotes, userDepartment, false);
                         notifyDataSetChanged();
                     }
                 });
@@ -137,6 +172,30 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
         });
 
         return v;
+    }
+
+    public void clearCrossedOffItems(){
+        //temporary fix, uses all
+
+        Toast.makeText(this.appContext, "Pressed clear", Toast.LENGTH_SHORT).show();
+        LiveData<List<UserGroceryListItem>> fromDB = groceryListViewModel.getUserGroceryList();
+        List<UserGroceryListItem> parsedDB = fromDB.getValue();
+//        LiveData<List<UserGroceryListItem>> inPantryFromDB = groceryListViewModel.getItemsInPantry();
+//        List<UserGroceryListItem> inPantryItems = inPantryFromDB.getValue();
+        if (parsedDB != null && parsedDB.size() != 0){
+            for (UserGroceryListItem i : parsedDB){
+                if (i.getInPantry() == true){
+                    groceryListViewModel.delete(i);
+                }
+            }
+        } else if (parsedDB == null){
+            //Toast.makeText(this.appContext, "In Pantry Items is Null", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void clearAllItems(){
+        //Toast.makeText(this.appContext, "Clearing All items", Toast.LENGTH_SHORT).show();
+        groceryListViewModel.deleteAllGroceryItems();
     }
 
     public interface OnDataChangeListener{
