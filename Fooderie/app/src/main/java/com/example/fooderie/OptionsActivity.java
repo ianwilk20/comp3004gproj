@@ -17,6 +17,7 @@ public class OptionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_options);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content, new OptionsFragment())

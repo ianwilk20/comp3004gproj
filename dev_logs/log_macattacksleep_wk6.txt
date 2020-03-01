@@ -16,3 +16,7 @@
 
 5.5hrs
 -Options menu implemented
+
+4hrs
+-finished adding all db queries
+-Dealing with db async in activities

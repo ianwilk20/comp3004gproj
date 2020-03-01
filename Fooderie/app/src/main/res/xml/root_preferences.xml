@@ -38,4 +38,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Attributions">
+        <Preference
+            android:icon="@drawable/edamam"
+            android:selectable="false"
+            android:layout="@layout/activity_options"
+            ></Preference>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
