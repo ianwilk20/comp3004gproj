@@ -25,6 +25,7 @@ public class AdapterPlan extends RecyclerView.Adapter<AdapterPlan.PlanViewHolder
         private final TextView recipeCount;
         private final ImageView deleteButton;
         private final ImageView orderButton;
+        private final ImageView rightArrowButton;
         private final ConstraintLayout layout;
         private final Button selectButton;
 
@@ -36,6 +37,7 @@ public class AdapterPlan extends RecyclerView.Adapter<AdapterPlan.PlanViewHolder
             orderButton = item.findViewById(R.id.planItemOrderButton);
             layout = item.findViewById(R.id.planItem);
             selectButton = item.findViewById(R.id.planItemSelectButton);
+            rightArrowButton = item.findViewById(R.id.planItemRightArrow);
         }
     }
 
@@ -65,39 +67,33 @@ public class AdapterPlan extends RecyclerView.Adapter<AdapterPlan.PlanViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull PlanViewHolder holder, int pos) {
-        if (m_displayPlans != null) {
-            Plan p = m_displayPlans.get(pos);
-            holder.title.setText(p.getName().toUpperCase());
-
-            int count = p.getRecipeCount();
-            String suffix = (count == 0 || count > 1) ? "s" : "";
-            holder.recipeCount.setText(Integer.toString(count) + " Recipe" + suffix);
-
-            holder.layout.setOnClickListener((View v) -> m_displayChildrenPlansOfID.apply(p));
-
-            if (p.isEditable()) {
-                holder.deleteButton.setVisibility(View.VISIBLE);
-                holder.deleteButton.setOnClickListener((View v) -> m_deletePlan.apply(p));
-            } else {
-                holder.deleteButton.setVisibility(View.INVISIBLE);
-            }
-
-            if (p.isDraggable()) {
-                holder.orderButton.setVisibility(View.VISIBLE);
-            } else {
-                holder.orderButton.setVisibility(View.INVISIBLE);
-            }
-
-            if (p instanceof PlanWeek && m_selectPlan != null) {
-                holder.selectButton.setOnClickListener((View v) -> m_selectPlan.apply((PlanWeek) p));
-                holder.selectButton.setVisibility(View.VISIBLE);
-            } else {
-                holder.selectButton.setVisibility(View.INVISIBLE);
-            }
-
-        } else {
+        if (m_displayPlans == null) {
             holder.title.setText("N/A");
+            return;
         }
+
+        Plan p = m_displayPlans.get(pos);
+        holder.title.setText(p.getName().toUpperCase());
+
+        int count = p.getRecipeCount();
+        String suffix = (count == 0 || count > 1) ? "s" : "";
+        holder.recipeCount.setText(Integer.toString(count) + " Recipe" + suffix);
+
+        if (p instanceof PlanWeek && m_selectPlan != null) {
+            holder.selectButton.setOnClickListener((View v) -> m_selectPlan.apply((PlanWeek) p));
+            holder.selectButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.GONE);
+            holder.rightArrowButton.setVisibility(View.GONE);
+            holder.orderButton.setVisibility(View.GONE);
+            return;
+        }
+
+        holder.selectButton.setVisibility(View.GONE);
+        holder.layout.setOnClickListener((View v) -> m_displayChildrenPlansOfID.apply(p));
+        holder.deleteButton.setOnClickListener((View v) -> m_deletePlan.apply(p));
+
+        holder.deleteButton.setVisibility((p.isEditable()) ? View.VISIBLE : View.GONE);
+        holder.orderButton.setVisibility((p.isDraggable()) ? View.VISIBLE : View.GONE);
     }
 
     @Override

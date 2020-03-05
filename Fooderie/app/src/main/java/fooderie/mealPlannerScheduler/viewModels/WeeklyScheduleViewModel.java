@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.models.FooderieRepository;
 
 public class WeeklyScheduleViewModel extends AndroidViewModel {
@@ -20,7 +21,7 @@ public class WeeklyScheduleViewModel extends AndroidViewModel {
         m_repo = new FooderieRepository(application);
     }
 
-    public LiveData<List<Schedule>> getSchedules() {
+    public LiveData<List<ScheduleAndPlanWeek>> getSchedules() {
         return m_repo.getAllSchedules();
     }
 

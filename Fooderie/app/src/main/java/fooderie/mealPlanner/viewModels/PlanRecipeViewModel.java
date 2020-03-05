@@ -35,9 +35,6 @@ public class PlanRecipeViewModel extends AndroidViewModel {
         m_repo.updatePlanMealsOrder(id, moves);
     }
 
-    public void insertPlanRecipe(PlanRecipe pr) {
-        m_repo.insert(pr);
-    }
     public void deletePlanRecipe(Long p_id, String r_id) {
         m_repo.deletePlanRecipe(p_id, r_id);
     }

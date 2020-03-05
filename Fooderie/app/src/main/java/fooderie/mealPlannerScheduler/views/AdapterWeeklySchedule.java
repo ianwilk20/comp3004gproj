@@ -12,6 +12,7 @@ import com.example.fooderie.R;
 
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment.OnListFragmentInteractionListener;
 
 import java.util.ArrayList;
@@ -33,24 +34,24 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
         }
     }
 
-    private List<Schedule> m_schedules;
+    private List<ScheduleAndPlanWeek> m_schedules;
     private final OnListFragmentInteractionListener mListener;
     private final Function<Schedule, Void> mselected;
 
-    void setDisplaySchedules(List<Schedule> schedules) {
+    void setDisplaySchedules(List<ScheduleAndPlanWeek> schedules) {
         if (schedules.size() != 0) {
             Calendar calender = Calendar.getInstance();
             Long weekNum = (Long) Integer.toUnsignedLong(calender.get(Calendar.WEEK_OF_YEAR));
 
             Collections.sort(schedules);
             int i = 0;
-            while (!schedules.get(i).getWeekOfYearId().equals(weekNum)) {
+            while (!schedules.get(i).s.getWeekOfYearId().equals(weekNum)) {
                 i++;
                 if (i == schedules.size() - 1) break;
             }
 
-            List<Schedule> sendToBack = new ArrayList<>(schedules.subList(0, i));
-            List<Schedule> bringToFront = new ArrayList<>(schedules.subList(i, schedules.size()));
+            List<ScheduleAndPlanWeek> sendToBack = new ArrayList<>(schedules.subList(0, i));
+            List<ScheduleAndPlanWeek> bringToFront = new ArrayList<>(schedules.subList(i, schedules.size()));
 
             bringToFront.addAll(sendToBack);
             m_schedules = bringToFront;
@@ -73,15 +74,15 @@ public class AdapterWeeklySchedule extends RecyclerView.Adapter<AdapterWeeklySch
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Schedule s = m_schedules.get(position);
-        if(s.getName() != null)
-            holder.mPlanName.setText(s.getName());
+        ScheduleAndPlanWeek obj = m_schedules.get(position);
+        if(obj.s.getPlanWeekId() != null)
+            holder.mPlanName.setText(obj.pw.getName());
         else
             holder.mPlanName.setText(R.string.nothing_planned);
-        holder.mWeekNum.setText(s.getWeekOfYearId().toString());
+        holder.mWeekNum.setText(obj.s.getWeekOfYearId().toString());
 
         holder.mLayout.setOnClickListener((View v) -> {
-            mselected.apply(s);
+            mselected.apply(obj.s);
         });
     }
 

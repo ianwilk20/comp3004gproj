@@ -18,6 +18,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.recipeBrowser.models.Recipe;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -37,8 +38,8 @@ public interface FooderieDao {
     @Query("DELETE FROM table_Schedule")
     void deleteAllSchedules();
 
-    @Query("SELECT * FROM table_Schedule")
-    LiveData<List<Schedule>> getAllSchedules();
+    @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw WHERE s.planWeekId == pw.planId OR s.planWeekId IS NULL")
+    LiveData<List<ScheduleAndPlanWeek>> getAllSchedules();
     @Query("SELECT * FROM table_Schedule")
     List<Schedule> getAllSchedulesNonLiveData();
 
@@ -88,7 +89,7 @@ public interface FooderieDao {
     LiveData<List<PlanMeal>> getMealPlans(Long id);
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
-           "WHERE s.weekOfYearId == :weekNum AND s.planId == pw.planId AND pd.parentId == pw.planId AND pd.name LIKE :dayName " +
+           "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pd.name LIKE :dayName " +
            "AND pm.parentId == pd.planId ORDER BY pm.'order'")
     LiveData<List<PlanMeal>> getMealPlans(Long weekNum, String dayName);
     @Query("SELECT * FROM table_PlanMeal WHERE parentId == :id")

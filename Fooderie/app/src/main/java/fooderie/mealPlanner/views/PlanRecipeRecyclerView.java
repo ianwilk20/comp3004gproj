@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -49,6 +50,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private RecyclerView m_planRecyclerView;
     private RecyclerView m_planRecipeRecyclerView;
 
+    private boolean SELECTING;
     private final Plan ROOT = new PlanRoot();
     private Plan m_current() {return m_path.peek();}
     private Stack<Plan> m_path = new Stack<>();
@@ -110,9 +112,9 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        boolean allowSelect = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
+        SELECTING = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
 
-        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (allowSelect) ? this::selectPlanWeek : null);
+        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (SELECTING) ? this::selectPlanWeek : null);
         m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
@@ -123,7 +125,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         m_planRecyclerView.setAdapter(m_planAdaptor);
         m_planRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        m_fab = findViewById(R.id.fab);
+        m_fab = findViewById(R.id.PlanRecyclerViewFab);
         m_fab.setOnClickListener((View view) -> addPlanDialog());
 
         m_viewModel = new ViewModelProvider(this).get(PlanRecipeViewModel.class);
@@ -224,7 +226,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         });
 
         // -- Set up additional features based on the level of plan's set attributes -- //
-        if (m_current().isChildEditable()) {
+        if (m_current().isChildEditable() && !SELECTING) {
             m_fab.show();
         } else {
             m_fab.hide();

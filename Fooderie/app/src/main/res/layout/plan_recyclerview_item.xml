@@ -20,22 +20,25 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/planItemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/placeHolder"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/planItemSelectButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/planItemOrderButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/planItemRecipeCount"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/placeHolder"
@@ -50,41 +53,53 @@
             android:id="@+id/planItemDeleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/planItemTitle"
-            app:layout_constraintStart_toEndOf="@+id/planItemTitle"
-            app:layout_constraintTop_toTopOf="@+id/planItemTitle"
-            app:layout_constraintVertical_bias="0.50"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/planItemRightArrow"
+            app:layout_constraintStart_toStartOf="@+id/planItemRightArrow"
+            app:layout_constraintTop_toBottomOf="@+id/planItemRightArrow"
             app:srcCompat="@drawable/ic_delete_black_24dp" />
 
         <ImageView
             android:id="@+id/planItemRightArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/planItemRecipeCount"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/planItemSelectButton"
             app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
         <ImageView
             android:id="@+id/planItemOrderButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/planItemTitle"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/planItemTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/planItemTitle"
             app:srcCompat="@drawable/ic_dehaze_black_24dp" />
 
         <Button
             android:id="@+id/planItemSelectButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@string/select"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/planItemRightArrow"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/planItemTitle"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <View
+            android:id="@+id/planItemHorizontalLine"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:background="#c0c0c0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/planItemRecipeCount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,18 @@
         app:layout_constraintStart_toStartOf="@+id/WeeklyScheduleSuperTitle"
         app:layout_constraintTop_toBottomOf="@+id/WeeklyScheduleSuperTitle" />
 
+    <TextView
+        android:id="@+id/WeeklyScheduleNoMealPlans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_meal_plans"
+        android:textAllCaps="true"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/WeeklyScheduleRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/WeeklyScheduleRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/WeeklyScheduleRecyclerView" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/WeeklyScheduleRecyclerView"
         android:name="fooderie.mealPlanner.views.TodayMealsFragment"
