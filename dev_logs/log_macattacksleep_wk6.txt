@@ -20,3 +20,8 @@
 4hrs
 -finished adding all db queries
 -Dealing with db async in activities
+
+2.5hrs 
+-redirected opening my activity
+-removed my button
+-added api pic to options

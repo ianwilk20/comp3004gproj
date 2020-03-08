@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import com.example.fooderie.OptionsActivity;
 import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.recipeBrowser.models.Nutrient;
 import fooderie.recipeBrowser.models.Recipe;
@@ -83,12 +85,23 @@ public class rbSelected extends AppCompatActivity {
         //Click Listener for image button
         recipeImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Recipe favIfExists = FetchFav(selected.url);
+
                 //If it isn't in the db
-                //add recipe to favorites list with attribute
-                Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                //add recipe to favorites list with favorite attr
+                if(favIfExists == null) {
+                    selected.favorite = true;
+                    viewModel.insert(selected);
+                    Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                }
                 //If it is already in the db
-                //delete recipe from favorites list, remove attribute
-                Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+                //delete recipe from favorites list, remove favorite attr
+                if(favIfExists != null) {
+                    selected.favorite = true;
+                    viewModel.delete(selected);
+                    selected.favorite = false;
+                    Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -208,6 +221,33 @@ public class rbSelected extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    public Recipe FetchFav(String url){
+        GetRecipeFromFavsAsyncTask task = new GetRecipeFromFavsAsyncTask();
+        task.execute(url);
+
+        Recipe r = null;
+        try{
+            r = task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
+        @Override
+        protected Recipe doInBackground(String... strings) {
+            Recipe r = null;
+            int count = strings == null ? 0 : strings.length;
+            for(int i = 0; i < count; i++){
+                r = viewModel.getFav(strings[i]);
+            }
+            return r;
         }
     }
 }
