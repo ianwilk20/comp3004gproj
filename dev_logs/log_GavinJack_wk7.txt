@@ -1,0 +1,26 @@
+Development Log – Week #7
+Gavin Jackson, 101065531
+
+There was no particularly large goal this week, besides work on D2. Worked on cleaning up my component and fixing notable errors. 
+Trying to ensure all requirements are finished/presentable in preparation for the D3.
+
+Sunday, March 1st, 2020
+    -	[0.5 Hr] Made recipe function to get next week’s recipes given an ID
+
+Wednesday, March 4th, 2020
+    -	[0.25 Hr] Made Sunday display first inside meal planner
+    -	[1.0 Hr] Fixed on delete cascade problem, if scheduled meal plan were deleted it would delete that whole week from the scheduler. 
+        Made new class ScheduleAndPlanWeek to contain weekly meal plan and schedule information, modified query to return new class 
+        instead of schedule class. This change was required to make sure the schedules forgot the names of deleted weekly meal plans.
+    -	[0.75 Hr] Debugged previous, fixed double schedule display problem. Added ‘no meal plan’ indicator.
+    -	[0.75 Hr] Fixed constraints of all items in all recyclerviews managed by me. Text no longer spills under other objects 
+        within the item. Added horizontal lines to plan item to enhance the distinction between two plans.
+    -	[0.25 Hr] Modified plan adaptor when in selection mode, no longer traverses can traverse plans like before.
+    -	[0.25 Hr] Fixed double recipe problem, if there were two recipes and one was deleted both would be removed. Happened across 
+        plans/meals.
+    -	[0.75 Hr] Removed floating action button when selecting plan for scheduler. Completely forgot this was being controlled else 
+        where in the code, couldn’t understand why the fab was still being displayed after calling hide.
+
+Sunday, March 8th, 2020
+    -	[0.50 Hr]  Log Writing.
+
