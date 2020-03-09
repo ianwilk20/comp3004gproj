@@ -10,4 +10,5 @@
     <color name="addbutton_color">#f4f4f4</color>
     <color name="colorPrimary_Dark">#3C3C3C</color>
     <color name="colorSelected_Dark">#87DBF3</color>
+    <color name="grocery_list_sherling_gray">#373737</color>
 </resources>

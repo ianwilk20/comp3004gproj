@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/add_image"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:background="#35C55D"
+        android:padding="15dp" />
+
+    <TextView
+        android:id="@+id/findItems"
+        android:layout_height="50dp"
+        android:layout_width="245dp"
+        android:text="Find Ingredients"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="left"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/colorPrimary"/>
+
+    <ImageView
+        android:id="@+id/friesImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_toRightOf="@id/findItems"
+        android:layout_marginTop="5dp"
+        android:padding="8dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/find_ingredients_icon1" />
+
+    <ImageView
+        android:id="@+id/appleImage"
+        android:layout_width="60dp"
+        android:layout_height="62dp"
+        android:layout_toLeftOf="@id/findItems"
+        android:layout_marginTop="5dp"
+        android:padding="14dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/find_ingredients_icon2" />
+
+    <LinearLayout
+        android:id="@+id/rectangleSeperator"
+        android:layout_below="@id/add_image"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:background="@color/grocery_list_sherling_gray"
+        >
+    </LinearLayout>
 
     <SearchView
         android:id="@+id/addItem"
+        android:layout_below="@id/rectangleSeperator"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
         android:queryHint="What can we find for you?"></SearchView>
 
 
-</LinearLayout>
+</RelativeLayout>

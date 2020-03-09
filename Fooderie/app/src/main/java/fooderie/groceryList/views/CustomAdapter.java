@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.fooderie.R;
 
@@ -26,6 +26,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import fooderie.groceryList.models.Food;
 import fooderie.groceryList.models.UserGroceryListItem;
@@ -120,6 +121,7 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 builder.setTitle("Edit Item");
 
                 String ogItemName = list.get(position).getFood_name();
+                String foodIDForChosenItem = list.get(position).getFood_id();
 
                 v = LayoutInflater.from(v.getContext()).inflate(R.layout.edit_grocery_item, null, false);
                 builder.setView(v);
@@ -140,13 +142,14 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         String userItem = item.getText().toString();
                         String userQuantity = itemQuantity.getText().toString();
                         String userNotes = itemNotes.getText().toString();
                         String userDepartment = itemDepartment.getText().toString();
 
                         //No SQL Check, maybe check fields before updating blindly
-                        groceryListViewModel.updateGroceryItemAttributes(ogItemName, userItem, userQuantity, userNotes, userDepartment, false);
+                        groceryListViewModel.updateGroceryItemAttributes(foodIDForChosenItem, userItem, userQuantity, userNotes, userDepartment, false);
                         notifyDataSetChanged();
                     }
                 });
@@ -175,21 +178,13 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
     }
 
     public void clearCrossedOffItems(){
-        //temporary fix, uses all
-
-        //Toast.makeText(this.appContext, "Pressed clear", Toast.LENGTH_SHORT).show();
-        LiveData<List<UserGroceryListItem>> fromDB = groceryListViewModel.getUserGroceryList();
-        List<UserGroceryListItem> parsedDB = fromDB.getValue();
-//        LiveData<List<UserGroceryListItem>> inPantryFromDB = groceryListViewModel.getItemsInPantry();
-//        List<UserGroceryListItem> inPantryItems = inPantryFromDB.getValue();
-        if (parsedDB != null && parsedDB.size() != 0){
-            for (UserGroceryListItem i : parsedDB){
+        List<UserGroceryListItem> inPantryItems = FetchIngredientsWithInPantryStatus();
+        if (inPantryItems != null && inPantryItems.size() != 0){
+            for (UserGroceryListItem i : inPantryItems){
                 if (i.getInPantry() == true){
                     groceryListViewModel.delete(i);
                 }
             }
-        } else if (parsedDB == null){
-            //Toast.makeText(this.appContext, "In Pantry Items is Null", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -205,5 +200,34 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
     OnDataChangeListener myOnDataChangeListener;
     public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
         myOnDataChangeListener = onDataChangeListener;
+    }
+
+    private class GetItemsInPantryAsyncTask extends AsyncTask<Void, Void, List<UserGroceryListItem>> {
+
+        @Override
+        protected List<UserGroceryListItem> doInBackground(Void... voids) {
+            List<UserGroceryListItem> ingredientWithPantryStatus = null;
+            ingredientWithPantryStatus = groceryListViewModel.getItemsInPantry();
+            return ingredientWithPantryStatus;
+        }
+    }
+
+    public List<UserGroceryListItem> FetchIngredientsWithInPantryStatus(){
+        GetItemsInPantryAsyncTask getGroceryItemsInPantry = new GetItemsInPantryAsyncTask();
+        getGroceryItemsInPantry.execute();
+        List<UserGroceryListItem> itemsInPantry = null;
+        try {
+            itemsInPantry = getGroceryItemsInPantry.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (itemsInPantry == null){
+            return null;
+        } else {
+            return itemsInPantry;
+        }
     }
 }
