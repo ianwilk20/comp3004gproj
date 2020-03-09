@@ -1,0 +1,18 @@
+COMP3004 Dev Log - Week #7
+Michael Ting - 101068936
+
+Overview: 
+This week was largely focused on researching future plans and preparing for the group demo.
+
+Weekly Progress:
+[3 Hr]
+- Push notification scheduling and timing.
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
+
+
