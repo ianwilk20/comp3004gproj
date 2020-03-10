@@ -1,6 +1,7 @@
 package fooderie.mealPlannerScheduler.models;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -10,45 +11,39 @@ import androidx.room.PrimaryKey;
 import fooderie.mealPlanner.models.PlanWeek;
 
 @Entity(tableName = "table_Schedule",
-        indices = {@Index("weekOfYearId"), @Index("planId")},
+        indices = {@Index("weekOfYearId"), @Index("planWeekId")},
         foreignKeys = @ForeignKey(entity = PlanWeek.class,
             parentColumns = "planId",
-            childColumns = "planId",
-            onDelete = ForeignKey.CASCADE)
+            childColumns = "planWeekId",
+            onUpdate = ForeignKey.CASCADE,
+            onDelete = ForeignKey.SET_NULL)
         )
-public class Schedule implements Serializable, Comparable<Schedule> {
+public class Schedule  {
     @PrimaryKey
     @NonNull
     private Long weekOfYearId;
-    private Long planId;
-    private String name;
+    private Long planWeekId;
 
     public @NonNull Long getWeekOfYearId() {
         return weekOfYearId;
     }
-    public Long getPlanId() {
-        return planId;
+    public Long getPlanWeekId() {
+        return planWeekId;
     }
-    public String getName() {return name;}
     public void setWeekOfYearId(@NonNull Long id) {
         weekOfYearId = id;
     }
-    public void setPlanId(Long id) {
-        planId = id;
-    }
-    public void setName(String s) {
-        name = s;
+    public void setPlanWeekId(Long id) {
+        planWeekId = id;
     }
 
-
-    public Schedule(@NonNull Long weekOfYearId, Long planId, String name) {
+    public Schedule(@NonNull Long weekOfYearId, Long planWeekId) {
         this.weekOfYearId = weekOfYearId;
-        this.planId = planId;
-        this.name = name;
+        this.planWeekId = planWeekId;
     }
 
-    @Override
-    public int compareTo(@NonNull Schedule s) {
-        return (int) (weekOfYearId - s.weekOfYearId);
+    public static Long getNextWeekID() {
+        Calendar c = Calendar.getInstance();
+        return (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
     }
 }

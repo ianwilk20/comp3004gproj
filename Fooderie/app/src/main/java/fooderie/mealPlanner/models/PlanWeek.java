@@ -54,6 +54,14 @@ public class PlanWeek extends Plan{
         return PlanDay.draggable;
     }
     @Override
+    public boolean isSchedulable() {
+        return schedulable;
+    }
+    @Override
+    public boolean isChildSchedulable() {
+        return PlanDay.schedulable;
+    }
+    @Override
     public String childName() {
         return PlanDay.planName;
     }

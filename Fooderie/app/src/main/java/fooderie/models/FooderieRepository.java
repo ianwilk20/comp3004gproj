@@ -17,6 +17,7 @@ import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.recipeBrowser.models.Recipe;
 
 
@@ -29,7 +30,7 @@ public class FooderieRepository {
     }
 
     /* Entity=Schedule */
-    public LiveData<List<Schedule>> getAllSchedules() {
+    public LiveData<List<ScheduleAndPlanWeek>> getAllSchedules() {
         return fooderieDao.getAllSchedules();
     }
     public void update(Schedule s) {
@@ -49,9 +50,13 @@ public class FooderieRepository {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             long id = fooderieDao.insert(p);
             List<PlanDay> plans = new ArrayList<>();
-            for (DayOfWeek d : DayOfWeek.values()) {
-                PlanDay day = new PlanDay(id, d.toString(), p.getRecipeCount());
-                plans.add(day);
+
+            int offset = 6; //Make sure the week starts on the sunday
+            DayOfWeek[] days = DayOfWeek.values();
+            for (int i = 0; i < 7; i++) {
+                DayOfWeek day = days[(i + offset) % 7];
+                PlanDay pd = new PlanDay(id, day.toString(), p.getRecipeCount());
+                plans.add(pd);
             }
             fooderieDao.insert(plans);
         });
@@ -69,7 +74,9 @@ public class FooderieRepository {
     }
     public void insert(Long p_id, Recipe r) {
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            fooderieDao.insert(r);
+            Recipe tmp = fooderieDao.getRecipe(r.getId());
+            if (tmp == null)
+                fooderieDao.insert(r);
             insertPlanRecipe(new PlanRecipe(p_id, r.getId()));
         });
     }
@@ -111,6 +118,11 @@ public class FooderieRepository {
             fooderieDao.update(p);
         });
     }
+    public void update(List<PlanMeal> plans) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(plans);
+        });
+    }
     //Necessary? To update food if only populated once
     public void update(Food f){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -130,26 +142,6 @@ public class FooderieRepository {
     public void updateInPantryStatus(String foodId, boolean inPantry){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.updateInPantryStatus(foodId, inPantry);
-        });
-    }
-
-    public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
-        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            List<PlanMeal> plans = fooderieDao.getAllMealPlans(id);
-
-            for (Pair<Integer, Integer> m : moves) {
-                if (m.first == null || m.second == null) continue;
-                PlanMeal p1 = (PlanMeal) plans.stream().filter(p -> m.first.equals(p.getOrder())).toArray()[0];
-                PlanMeal p2 = (PlanMeal) plans.stream().filter(p -> m.second.equals(p.getOrder())).toArray()[0];
-
-                int tmp = p1.getOrder();
-                p1.setOrder(p2.getOrder());
-                p2.setOrder(tmp);
-            }
-
-            for (PlanMeal p : plans) {
-                fooderieDao.update(p);
-            }
         });
     }
 
@@ -185,10 +177,6 @@ public class FooderieRepository {
             // -- Get and delete the PlanRecipe -- //
             PlanRecipe pr = fooderieDao.getPlanRecipe(p_id, r_id);
             fooderieDao.delete(pr);
-
-            // -- Get and delete the Recipe -- //
-            Recipe r = fooderieDao.getRecipe(r_id);
-            fooderieDao.delete(r);
 
             // -- Update the recipe count of all parents -- //
             updatePlanMealRecipeCount(pr.getParentId(), -1);

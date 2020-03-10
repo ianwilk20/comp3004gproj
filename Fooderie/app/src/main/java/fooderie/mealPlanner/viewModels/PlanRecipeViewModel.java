@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
@@ -31,13 +32,37 @@ public class PlanRecipeViewModel extends AndroidViewModel {
         p.setLiveData(m_repo, owner, o);
     }
 
-    public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
-        m_repo.updatePlanMealsOrder(id, moves);
+    public void updatePlanMealsOrder(LifecycleOwner owner, Long id, List<Pair<Integer, Integer>> moves) {
+        LiveData<List<PlanMeal>> liveData = m_repo.getMealPlans(id);
+        Observer<List<PlanMeal>> o = new Observer<List<PlanMeal>>() {
+            @Override
+            public void onChanged(@Nullable List<PlanMeal> plans) {
+                if (plans == null)
+                    return;
+
+                for (Pair<Integer, Integer> m : moves) {
+                    if (m.first == null || m.second == null) continue;
+                    PlanMeal p1 = (PlanMeal) plans.stream().filter(p -> m.first.equals(p.getOrder())).toArray()[0];
+                    PlanMeal p2 = (PlanMeal) plans.stream().filter(p -> m.second.equals(p.getOrder())).toArray()[0];
+
+                    int tmp = p1.getOrder();
+                    int tmpHour = p1.getHour();
+                    int tmpMinute = p1.getMinute();
+                    p1.setOrder(p2.getOrder());
+                    p1.setHour(p2.getHour());
+                    p1.setMinute(p2.getMinute());
+                    p2.setOrder(tmp);
+                    p2.setHour(tmpHour);
+                    p2.setMinute(tmpMinute);
+                }
+
+                m_repo.update(plans);
+                liveData.removeObserver(this);
+            }
+        };
+        liveData.observe(owner, o);
     }
 
-    public void insertPlanRecipe(PlanRecipe pr) {
-        m_repo.insert(pr);
-    }
     public void deletePlanRecipe(Long p_id, String r_id) {
         m_repo.deletePlanRecipe(p_id, r_id);
     }
