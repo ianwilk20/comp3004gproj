@@ -1,0 +1,60 @@
+Development Log – Week #7
+Ian Wilkinson, 101073244
+
+The goal for this week was to attempt to clean up some of the final touches of the grocery list for the D2 presentation. Cleaning up what the groceryItemInfo shows (maybe adding more room), filtering the data set prior so nulls and empties don't show up and rather empty is shown. Altering the parsing of API food results to clean up food_labels by making them camel case, and possibly duplicate names with varying spelling/capitalization. Possibly remove the aisles/recipes thing and only filter on the department if there is one or by ascending. Utilizing the custom adapter on the Got it List too, in the case that we deem it necessary for users to be able to edit Got It List items or delete them individually (instead of clearing them). Implementation with Gavin's meal plan.
+
+Thursday, March 2, 2020 to Sunday, March 9, 2020
+ - [3 Hr] Bug Fixes From Demo
+    - Exportation would generate errors and crash the app
+    - Nullpointer exceptions have been handled
+    - Food names would be randomly capitalized
+    - Fixed to have consistent Capitalization on the first letter of each word
+    - Increased size of additional information box in grocery list so all letters fit
+    - API would generate error condition if '%' was used in the query
+   
+   
+ - [3.25 Hr] Optimizations of DB Queries and API
+    - API Timeout and Retry
+        - API will retry the request after 5 seconds and continue to retry until it either gets a timeout exception or returns a value
+    - Offline shopping mode
+
+ - [3 Hr] UI Improvements - Focus on simplistic neutral colour schemes
+    - Made Custom Error Dialog
+    - Made Custom Find Ingredient Dialog
+    - Made Custom Add Ingredient Button
+
+ - [1.5 Hr] Database Alterations
+    - Users can now add multiple of the same item (used existing Food ID and an additionally appended UUID - as to differentiate the two)
+    - Changes to one of the duplicated items now have no impact on the other
+        ie. Edits, Deletes are independent
+
+ - [2 Hr] Using Async Queries For Specific Attribute Queries Instead of Retrieving Entire Table
+    - Made async tasks for:
+        - Checking the inPantry status for grocery items
+            - Useful for clearing the items inPantry and differentiating that from regular non-crossed off grocery items
+        - Getting Food By Label
+            - For fetching an ingredient by the label from our DB of retrieved food requests
+        - Getting Ingredient By Label 
+            - In the case, we need to search for specific food items in the grocery list (even if there are duplicates)
+    
+    - Made subsequent private functions (for code reuse) for async tasks with error handling for cases that Async Tasks fail 
+
+ - [2 Hr] Integration with Gavin's Meal Planner
+    - User can press the import button and import their recipe's ingredients for next week as long as
+        1. They have created a meal plan
+        2. They have scheduled said meal plan for the next week
+
+    - Further testing is TO BE DONE since I cannot test it thoroughly until the following is solved on MacKenzie's and Gavin's end for this SQL error:
+        "android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: table_Recipe.recipe_id (code 1555 SQLITE_CONSTRAINT_PRIMARYKEY)"
+        - ie. I cannot add recipes to the meal plan so I cannot test if it in fact works or not since there's no way to add recipes to the meal plan
+
+
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+-Verifying proper integration with Gavins Meal Planner to get all recipes from next week and add ingredients to the grocery list
+    - Cleaning up of the parsed ingredients from the list of recipes ingredient's returned??
+-Offline Mode - so API isn't triggered when internet connectivity is limited
+-Scroll View Resets when the item is "crossed off" and goes back to the top of the view 
+-Add graphics to the grocery list when it's empty to prompt users to add things

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/error_image"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center"
+        android:background="#DA5F6A"
+        android:src="@drawable/ic_report_white_48dp"
+        android:padding="15dp" />
+
+    <LinearLayout
+        android:id="@+id/rectangleSeperatorError"
+        android:layout_below="@id/error_image"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:background="@color/grocery_list_sherling_gray"
+        >
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_below="@id/rectangleSeperatorError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="Error Message"
+        android:fontFamily="@font/montserrat"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimary_Dark"/>
+
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_height="40dp"
+            android:layout_width="150dp"
+            android:background="#DA5F6A"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_below="@id/dialog_message"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/colorPrimary"
+            android:text="Close"
+            android:layout_marginBottom="15dp"
+            />
+
+</RelativeLayout>

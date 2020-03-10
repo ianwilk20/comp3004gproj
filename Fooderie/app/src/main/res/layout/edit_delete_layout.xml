@@ -17,7 +17,7 @@
             android:paddingStart="5dp"
             android:paddingTop="3dp"
             android:textColor="@color/text_color"
-            android:text="TESTTESTTESTTESTTESTTESTTEST"
+            android:text="Cray"
             android:ellipsize="end"
             android:maxLines="1"
             />
@@ -25,11 +25,11 @@
         <TextView
             android:id="@+id/groceryItemInfo"
             android:layout_width="280dp"
-            android:layout_height="18dp"
+            android:layout_height="20dp"
             android:paddingStart="10dp"
             android:layout_below="@id/groceryItem"
             android:fontFamily="@font/montserrat"
-            android:text="TESTTEST"
+            android:text="craycray"
             android:ellipsize="end"
             android:maxLines="1"/>
 

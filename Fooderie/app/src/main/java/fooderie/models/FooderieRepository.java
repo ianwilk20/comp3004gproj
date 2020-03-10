@@ -122,9 +122,9 @@ public class FooderieRepository {
             fooderieDao.update(item);
         });
     }
-    public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department, boolean inPantry){
+    public void updateGroceryItemAttributes(String food_id, String newName, String quantity, String notes, String department, boolean inPantry){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            fooderieDao.updateGroceryItemAttributes(prevName, newName, quantity, notes, department, inPantry);
+            fooderieDao.updateGroceryItemAttributes(food_id, newName, quantity, notes, department, inPantry);
         });
     }
     public void updateInPantryStatus(String foodId, boolean inPantry){
@@ -204,9 +204,10 @@ public class FooderieRepository {
     public LiveData<List<Recipe>> getRecipes(Long id) { return fooderieDao.getRecipes(id); }
     public LiveData<List<Food>> getAllAPIIngredients() { return  fooderieDao.getAllAPIIngredients(); }
     public LiveData<Food> getFoodByID(String food_id) { return fooderieDao.getFoodByID(food_id); }
-    public LiveData<List<Food>> getFoodByLabel(String label) {return fooderieDao.getFoodByLabel(label); }
+    public List<Food> getFoodByLabel(String label) {return fooderieDao.getFoodByLabel(label); }
     public LiveData<List<UserGroceryListItem>> getAllGroceryItems() { return fooderieDao.getAllGroceryItems(); }
-    public LiveData<List<UserGroceryListItem>> getItemsInPantry() {return fooderieDao.getItemsInPantry(); }
+    public List<UserGroceryListItem> getItemsInPantry() {return fooderieDao.getItemsInPantry(); }
+    public List<UserGroceryListItem> getItemInGroceryList(String food_name) {return fooderieDao.getItemInGroceryList(food_name);}
 
     private void updatePlanMealRecipeCount(Long id, int change) {
         PlanMeal pm = fooderieDao.getPlanMeal(id);

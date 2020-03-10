@@ -151,12 +151,13 @@ public interface FooderieDao {
             "WHERE table_APIIngredient.food_id = :food_id")
     LiveData<Food> getFoodByID(String food_id);
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_APIIngredient " +
             "WHERE table_APIIngredient.label LIKE '%' || :label || '%'")
-    LiveData<List<Food>> getFoodByLabel(String label); //MUST enter label as "apple%" to get all results with apples
+    List<Food> getFoodByLabel(String label); //MUST enter label as "apple%" to get all results with apples
 
     /* Entity=UserGroceryListItem dao interactions */
-    @Insert
+    @Insert(onConflict = REPLACE)
     void insert(UserGroceryListItem item);
     @Update
     void update(UserGroceryListItem item);
@@ -173,15 +174,23 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_userGroceryList")
     LiveData<List<UserGroceryListItem>> getAllGroceryItems();
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_userGroceryList " +
             "WHERE table_userGroceryList.inPantry = 1")
-    LiveData<List<UserGroceryListItem>> getItemsInPantry();
+    List<UserGroceryListItem> getItemsInPantry();
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT * FROM table_userGroceryList " +
+            "WHERE table_userGroceryList.food_name LIKE '%' || :food_name || '%'")
+    List<UserGroceryListItem> getItemInGroceryList(String food_name);
+
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("UPDATE table_userGroceryList " +
             "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department, inPantry = :inPantry " +
-            "WHERE table_userGroceryList.food_name = :prevName")
-    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department, boolean inPantry);
+            "WHERE table_userGroceryList.food_id = :food_id")
+    void updateGroceryItemAttributes(String food_id, String newName, String quantity, String notes, String department, boolean inPantry);
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("UPDATE table_userGroceryList " +
             "SET inPantry = :inPantry " +
             "WHERE table_userGroceryList.food_id = :foodId")
