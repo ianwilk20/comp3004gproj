@@ -1,17 +1,13 @@
 package fooderie.mealPlanner.models;
 
 import java.io.Serializable;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import fooderie.models.FooderieRepository;
 
@@ -19,33 +15,33 @@ import fooderie.models.FooderieRepository;
 public abstract class Plan implements Serializable {
     @PrimaryKey (autoGenerate = true)
     protected Long planId;
-    protected Long parentId;
-    protected int recipeCount;
-    protected String name;
+    private Long parentId;
+    private String name;
+    private int recipeCount;
 
     @Ignore
-    public static final boolean editable = true;
+    private final PropertiesForPlan m_properties;
     @Ignore
-    public static final boolean draggable = false;
+    private final PropertiesForPlan m_propertiesOfChild;
     @Ignore
-    public static final boolean schedulable = false;
+    private LiveData children;
     @Ignore
-    public static final String planName = "UNKNOWN";
-    @Ignore
-    protected LiveData children;
+    private static PlanRoot ROOT;
 
-    public Plan(Long parentId, String name, int recipeCount) {
-        this.parentId = parentId;
-        this.name = name;
-        this.recipeCount = recipeCount;
+    public static PlanRoot getROOT() {
+        if (ROOT != null)
+            return ROOT;
+        ROOT = new PlanRoot(PlanRoot.properties, PlanWeek.properties);
+        return ROOT;
     }
 
-    @Ignore
-    public Plan(Long planId, Long parentId, String name, int recipeCount) {
-        this.planId = planId;
+    public Plan(Long parentId, String name, int recipeCount, PropertiesForPlan properties, PropertiesForPlan propertiesOfChild) {
         this.parentId = parentId;
         this.name = name;
         this.recipeCount = recipeCount;
+
+        this.m_properties = properties;
+        this.m_propertiesOfChild = propertiesOfChild;
     }
 
     public String getName() {return name;}
@@ -62,21 +58,47 @@ public abstract class Plan implements Serializable {
         this.parentId = id;
     }
     public int getRecipeCount() {return recipeCount;}
-    public void setRecipeCount(int r) {this.recipeCount = r;}
+    public void setRecipeCount(int i) {
+        this.recipeCount = i;
+    }
 
     public abstract void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o);
-    public abstract void removeLiveData(LifecycleOwner owner);
+    @SuppressWarnings("unchecked")
+    void setLiveDataHelper(LiveData ld, LifecycleOwner owner, Observer o) {
+        removeLiveData(owner);
+        children = ld;
+        children.observe(owner, o);
+    }
 
-    public abstract boolean isEditable();
-    public abstract boolean isChildEditable();
+    public void removeLiveData(LifecycleOwner owner) {
+        if (children == null)
+            return;
 
-    public abstract boolean isDraggable();
-    public abstract boolean isChildDraggable();
+        children.removeObservers(owner);
+        children = null;
+    }
 
-    public abstract boolean isSchedulable();
-    public abstract boolean isChildSchedulable();
+    public boolean isEditable() {
+        return m_properties.editable;
+    }
+    public boolean isChildEditable() {
+        return m_propertiesOfChild.editable;
+    }
 
-    public abstract String childName();
+    public boolean isDraggable() {
+        return m_properties.draggable;
+    }
+    public boolean isChildDraggable() {
+        return m_propertiesOfChild.draggable;
+    }
+
+    public boolean isSchedulable() {
+        return m_properties.schedulable;
+    }
+
+    public String childName() {
+        return m_propertiesOfChild.name;
+    }
 
     public void changeCount(int value) {
         recipeCount += value;
@@ -85,7 +107,7 @@ public abstract class Plan implements Serializable {
     }
 
     @Override
-    @SuppressWarnings("All")
+    @SuppressWarnings("DefaultLocale")
     public @NonNull String toString() {
         return String.format("[id:%d, parentId:%d, name:%s]", planId, parentId, name);
     }

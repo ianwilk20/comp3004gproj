@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.models.PlanRecipe;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
@@ -28,7 +27,6 @@ public class PlanRecipeViewModel extends AndroidViewModel {
     }
 
     public void setupDisplay(Plan p, LifecycleOwner owner, Observer o) {
-        p.removeLiveData(owner);
         p.setLiveData(m_repo, owner, o);
     }
 
