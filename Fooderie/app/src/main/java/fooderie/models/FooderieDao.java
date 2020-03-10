@@ -120,6 +120,11 @@ public interface FooderieDao {
     @Delete
     void delete(Recipe r);
 
+    @Query("UPDATE table_Recipe " +
+            "SET favorite = :value " +
+            "WHERE table_Recipe.recipe_id = :url")
+    void updateRecipeFav(String url, Boolean value);
+
     @Query("DELETE FROM table_Recipe")
     void deleteAllRecipes();
 

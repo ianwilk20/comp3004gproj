@@ -85,22 +85,32 @@ public class rbSelected extends AppCompatActivity {
         //Click Listener for image button
         recipeImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Recipe recipeIfExists = FetchRecipe(selected.url);
                 Recipe favIfExists = FetchFav(selected.url);
 
-                //If it isn't in the db
-                //add recipe to favorites list with favorite attr
-                if(favIfExists == null) {
+                //It's in the db
+                if(recipeIfExists != null){
+                    //And it's not a fav
+                    if(favIfExists == null) {
+                        //update value - true
+                        selected.favorite = true;
+                        viewModel.updateRecipeFav(selected.url, selected.favorite);
+                        Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    }
+                    //And it's a fav
+                    if(favIfExists != null) {
+                        //update value - false
+                        selected.favorite = false;
+                        viewModel.updateRecipeFav(selected.url, selected.favorite);
+                        Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //It's not in the db
+                else{
+                    //insert into db as a fav
                     selected.favorite = true;
                     viewModel.insert(selected);
                     Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-                }
-                //If it is already in the db
-                //delete recipe from favorites list, remove favorite attr
-                if(favIfExists != null) {
-                    selected.favorite = true;
-                    viewModel.delete(selected);
-                    selected.favorite = false;
-                    Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -239,6 +249,21 @@ public class rbSelected extends AppCompatActivity {
         return r;
     }
 
+    public Recipe FetchRecipe(String url){
+        GetRecipeAsyncTask task = new GetRecipeAsyncTask();
+        task.execute(url);
+
+        Recipe r = null;
+        try{
+            r = task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
     private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
         @Override
         protected Recipe doInBackground(String... strings) {
@@ -246,6 +271,18 @@ public class rbSelected extends AppCompatActivity {
             int count = strings == null ? 0 : strings.length;
             for(int i = 0; i < count; i++){
                 r = viewModel.getFav(strings[i]);
+            }
+            return r;
+        }
+    }
+
+    private class GetRecipeAsyncTask extends AsyncTask<String, Void, Recipe>{
+        @Override
+        protected Recipe doInBackground(String... strings) {
+            Recipe r = null;
+            int count = strings == null ? 0 : strings.length;
+            for(int i = 0; i < count; i++){
+                r = viewModel.getRecipe(strings[i]);
             }
             return r;
         }

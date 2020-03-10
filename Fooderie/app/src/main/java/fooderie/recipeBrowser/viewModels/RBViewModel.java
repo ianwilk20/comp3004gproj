@@ -17,6 +17,7 @@ public class RBViewModel extends AndroidViewModel {
     public void insert(Recipe r){repo.insert(r);}
     public void delete(Recipe r){repo.delete(r);}
     public void deleteAllRecipes(){repo.deleteAllRecipes();}
+    public void updateRecipeFav(String url, Boolean value){repo.updateRecipeFav(url, value);}
     public List<Recipe> getAllRecipes(){return repo.getAllRecipes();}
     public List<Recipe> getAllFavs(){return repo.getAllFavs();}
     public Recipe getRecipe(String url){return repo.getRecipe(url);}
