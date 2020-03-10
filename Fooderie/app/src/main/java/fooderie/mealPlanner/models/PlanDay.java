@@ -59,6 +59,14 @@ public class PlanDay extends Plan {
         return PlanMeal.draggable;
     }
     @Override
+    public boolean isSchedulable() {
+        return schedulable;
+    }
+    @Override
+    public boolean isChildSchedulable() {
+        return PlanMeal.schedulable;
+    }
+    @Override
     public String childName() {
         return PlanMeal.planName;
     }

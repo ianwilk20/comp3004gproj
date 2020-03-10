@@ -63,6 +63,8 @@ public interface FooderieDao {
     void update(PlanMeal p);
     @Update
     void update(PlanRecipe p);
+    @Update
+    void update(List<PlanMeal> p);
 
     @Delete
     void delete(PlanWeek p);

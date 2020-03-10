@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.CookingAssistant.views.CookingAssistantViewer;
 import fooderie.groceryList.views.GroceryListView;
+import fooderie.models.NotificationHelper;
 import fooderie.recipeBrowser.rbActivity;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-
         final AppCompatActivity tmp = this;
         mealPlannerButton = findViewById(R.id.mealPlannerButton);
         mealPlannerButton.setOnClickListener((View v) -> {
@@ -100,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements
     public void openGroceryList(){
         Intent intent = new Intent(this, GroceryListView.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotificationHelper nh = new NotificationHelper(this);
+        nh.InitMealPlannerNotification();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package fooderie.mealPlanner.views;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.util.Pair;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +36,9 @@ import fooderie.recipeBrowser.rbSelected;
 
 import com.example.fooderie.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -78,8 +83,8 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         m_toolbar.setNavigationOnClickListener( v -> selectParentPlan());
         m_toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
 
-        m_itemOrderTouchHelper = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+        AppCompatActivity activity = this;
+        m_itemOrderTouchHelper = new ItemTouchHelper( new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
                     ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0) {
                 private List<Pair<Integer, Integer>> moves;
                 @Override
@@ -106,7 +111,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
                 @Override
                 public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
-                    m_viewModel.updatePlanMealsOrder(m_current().getPlanId(), moves);
+                    m_viewModel.updatePlanMealsOrder(activity, m_current().getPlanId(), moves);
                     moves = null;
                 }
         });
@@ -114,7 +119,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
         Intent intent = getIntent();
         SELECTING = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
 
-        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (SELECTING) ? this::selectPlanWeek : null);
+        m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (SELECTING) ? this::selectPlanWeek : null, this::updatePlan);
         m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayRecipe);
 
         m_planRecipeRecyclerView = findViewById(R.id.PlanRecipeRecyclerView);
@@ -145,6 +150,21 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
             Recipe r = (Recipe) data.getSerializableExtra(RECIPE_KEY);
             m_viewModel.insertRecipeAndPlanRecipe(m_current().getPlanId(), r);
         }
+    }
+
+    private Void updatePlan(Plan p) {
+        if (p instanceof PlanMeal) {
+            final Calendar getDate = Calendar.getInstance();
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+                ((PlanMeal) p).setHour(hourOfDay);
+                ((PlanMeal) p).setMinute(minute);
+                m_viewModel.updatePlan(p);
+            }, ((PlanMeal) p).getHour(), ((PlanMeal) p).getMinute(), false);
+            timePickerDialog.show();
+        } else {
+            m_viewModel.updatePlan(p);
+        }
+        return null;
     }
 
     private Void deletePlan(Plan p) {

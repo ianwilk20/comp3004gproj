@@ -38,16 +38,24 @@
 
         <TextView
             android:id="@+id/planItemRecipeCount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:text="@string/placeHolder"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/planItemTitle"
+            app:layout_constraintTop_toBottomOf="@+id/planItemTitle" />
+
+        <TextView
+            android:id="@+id/planItemSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@string/placeHolder"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@+id/planItemTitle"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/planItemTitle"
-            app:layout_constraintTop_toBottomOf="@+id/planItemTitle"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/planItemRecipeCount"
+            app:layout_constraintTop_toBottomOf="@+id/planItemTitle" />
 
         <ImageView
             android:id="@+id/planItemDeleteButton"
@@ -95,11 +103,11 @@
             android:id="@+id/planItemHorizontalLine"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="28dp"
             android:background="#c0c0c0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/planItemRecipeCount" />
+            app:layout_constraintTop_toBottomOf="@+id/planItemTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

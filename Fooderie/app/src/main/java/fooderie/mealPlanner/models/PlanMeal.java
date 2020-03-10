@@ -21,6 +21,8 @@ import fooderie.recipeBrowser.models.Recipe;
 )
 public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     private int order;
+    private int hour;
+    private int minute;
     @Ignore
     private LiveData<List<Recipe>> recipes;
 
@@ -28,10 +30,14 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     public static final String planName = "Meal Plan";
     @Ignore
     public static final boolean draggable = true;
+    @Ignore
+    public static final boolean schedulable = true;
 
     public PlanMeal(Long parentId, String name, int recipeCount, int order) {
         super(parentId, name, recipeCount);
         this.order = order;
+        this.hour = 12;
+        this.minute = 0;
     }
 
     @Override
@@ -55,6 +61,11 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     public int getOrder() {
         return order;
     }
+    public void setHour(int hour) {this.hour = hour;}
+    public int getHour() {return hour;}
+    public void setMinute(int minute) {this.minute = minute;}
+    public int getMinute() {return minute;}
+
     public void setRecipes(LiveData<List<Recipe>> recipes) {
         this.recipes = recipes;
     }
@@ -76,6 +87,14 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     }
     @Override
     public boolean isChildDraggable() {
+        return false;
+    }
+    @Override
+    public boolean isSchedulable() {
+        return schedulable;
+    }
+    @Override
+    public boolean isChildSchedulable() {
         return false;
     }
     @Override

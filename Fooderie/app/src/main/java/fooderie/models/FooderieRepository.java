@@ -111,6 +111,11 @@ public class FooderieRepository {
             fooderieDao.update(p);
         });
     }
+    public void update(List<PlanMeal> plans) {
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
+            fooderieDao.update(plans);
+        });
+    }
     //Necessary? To update food if only populated once
     public void update(Food f){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -125,25 +130,6 @@ public class FooderieRepository {
     public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
             fooderieDao.updateGroceryItemAttributes(prevName, newName, quantity, notes, department);
-        });
-    }
-    public void updatePlanMealsOrder(Long id, List<Pair<Integer, Integer>> moves) {
-        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {
-            List<PlanMeal> plans = fooderieDao.getAllMealPlans(id);
-
-            for (Pair<Integer, Integer> m : moves) {
-                if (m.first == null || m.second == null) continue;
-                PlanMeal p1 = (PlanMeal) plans.stream().filter(p -> m.first.equals(p.getOrder())).toArray()[0];
-                PlanMeal p2 = (PlanMeal) plans.stream().filter(p -> m.second.equals(p.getOrder())).toArray()[0];
-
-                int tmp = p1.getOrder();
-                p1.setOrder(p2.getOrder());
-                p2.setOrder(tmp);
-            }
-
-            for (PlanMeal p : plans) {
-                fooderieDao.update(p);
-            }
         });
     }
 

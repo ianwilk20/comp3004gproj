@@ -1,6 +1,7 @@
 package fooderie.mealPlannerScheduler.models;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -36,9 +37,13 @@ public class Schedule  {
         planWeekId = id;
     }
 
-
     public Schedule(@NonNull Long weekOfYearId, Long planWeekId) {
         this.weekOfYearId = weekOfYearId;
         this.planWeekId = planWeekId;
+    }
+
+    public static Long getNextWeekID() {
+        Calendar c = Calendar.getInstance();
+        return (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
     }
 }

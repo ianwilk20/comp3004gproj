@@ -28,6 +28,8 @@ public abstract class Plan implements Serializable {
     @Ignore
     public static final boolean draggable = false;
     @Ignore
+    public static final boolean schedulable = false;
+    @Ignore
     public static final String planName = "UNKNOWN";
     @Ignore
     protected LiveData children;
@@ -70,6 +72,9 @@ public abstract class Plan implements Serializable {
 
     public abstract boolean isDraggable();
     public abstract boolean isChildDraggable();
+
+    public abstract boolean isSchedulable();
+    public abstract boolean isChildSchedulable();
 
     public abstract String childName();
 
