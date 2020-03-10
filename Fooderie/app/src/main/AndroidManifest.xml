@@ -19,13 +19,15 @@
         <activity android:name="fooderie.recipeBrowser.rbSelected" />
         <activity android:name="fooderie.recipeBrowser.rbActivity" />
         <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView" />
+        <activity android:name="fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment_Proxy" />
         <activity android:name="fooderie.groceryList.views.GroceryListView" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
         <activity android:name="fooderie.CookingAssistant.views.CookingAssistantPreview" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

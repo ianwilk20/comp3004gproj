@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,12 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.fooderie.R;
+
+import java.util.List;
 
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
 import fooderie.mealPlannerScheduler.models.Schedule;
+import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.mealPlannerScheduler.viewModels.WeeklyScheduleViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -35,10 +40,6 @@ public class WeeklyScheduleFragment extends Fragment {
     private static final int PLANRECIPE_REQUEST_VIEW = 1;
     private Schedule m_scheduleToModify;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public WeeklyScheduleFragment() {
     }
 
@@ -67,7 +68,11 @@ public class WeeklyScheduleFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         AdapterWeeklySchedule adaptor = new AdapterWeeklySchedule(mListener, this::setWeeklySchedule);
-        m_viewModel.getSchedules().observe(getViewLifecycleOwner(), adaptor::setDisplaySchedules);
+        TextView noPlans = view.findViewById(R.id.WeeklyScheduleNoMealPlans);
+        m_viewModel.getSchedules().observe(getViewLifecycleOwner(), (List<ScheduleAndPlanWeek> objects) -> {
+            noPlans.setVisibility((objects.size() == 0) ? View.VISIBLE : View.INVISIBLE);
+            adaptor.setDisplaySchedules(objects);
+        });
         recyclerView.setAdapter(adaptor);
 
         return view;
@@ -75,7 +80,7 @@ public class WeeklyScheduleFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
@@ -103,14 +108,13 @@ public class WeeklyScheduleFragment extends Fragment {
             if (p == null || m_scheduleToModify == null)
                 return;
 
-            m_scheduleToModify.setPlanId(p.getPlanId());
-            m_scheduleToModify.setName(p.getName());
+            m_scheduleToModify.setPlanWeekId(p.getPlanId());
             m_viewModel.updateSchedule(m_scheduleToModify);
             m_scheduleToModify = null;
         }
     }
 
-    public Void setWeeklySchedule(Schedule s) {
+    private Void setWeeklySchedule(Schedule s) {
         Intent intent = new Intent(getActivity(), PlanRecipeRecyclerView.class);
 
         intent.putExtra(PlanRecipeRecyclerView.LOOKING_FOR_PLANWEEK_KEY, true);

@@ -70,12 +70,10 @@ public abstract class FooderieRoomDatabase extends RoomDatabase {
                 List<Schedule> schedules = dao.getAllSchedulesNonLiveData();
                 if (schedules.size() == 0) {
                     for (Long i = 1L; i < 53; i++) {
-                        Schedule p = new Schedule(i, null, null);
+                        Schedule p = new Schedule(i, null);
                         dao.insert(p);
                     }
                 }
-
-
 
                 //dao.deleteAllRecipes();
 
