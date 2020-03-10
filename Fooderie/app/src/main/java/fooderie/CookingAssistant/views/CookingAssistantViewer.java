@@ -1,5 +1,6 @@
 package fooderie.CookingAssistant.views;
 
+import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
 import fooderie.recipeBrowser.models.Recipe;
 
@@ -13,6 +14,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -37,23 +40,47 @@ public class CookingAssistantViewer extends AppCompatActivity
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
     Context context;
+    Button btnMenu;
+    Recipe selected;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "\n\n\n --------");
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        Log.d(TAG, "\n\n\n --------");  //Log to indicate we have started the viewer
 
         //Get selected recipe from rbActivity
         Intent intent = getIntent();
-        Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+        selected = (Recipe)intent.getSerializableExtra("RECIPE");
         selectedUrl = selected.url;
         new jSoupParse().execute();
         context = this;
 
+        //Set our context
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant);
 
+        //Have to reset invisibility multiple times as the async return view breaks it
+        btnMenu = findViewById(R.id.btnMainMenu);
+        View v = findViewById(android.R.id.content);
+        btnMenu.setVisibility(v.GONE);
     }
 
+    //Menu button on click
+    public void onClick(View v)
+    {
+        Log.d(TAG, "\n\n\n RETURN TO MAIN MENU");
+        goToSteps(selected);
+    }
+
+    //Go to the main menu
+    public void goToSteps(Recipe selected)
+    {
+        Intent rbIntent = new Intent(this, MainActivity.class);
+        rbIntent.putExtra("RECIPE", selected);
+        startActivity(rbIntent);
+    }
+
+    //JSoupParsing the website to get the instructions
     public class jSoupParse extends AsyncTask<Void, Void, Void>
     {
         //String url = getUrl();
@@ -68,7 +95,7 @@ public class CookingAssistantViewer extends AppCompatActivity
             {
                 Document doc = Jsoup.connect(url).get();
 
-                if (url.contains("food52"))
+                if (url.contains("food52"))     //Parse food52 websites
                 {
                     Elements recipeList = doc.select("ol");
                     int count = 0;
@@ -82,12 +109,11 @@ public class CookingAssistantViewer extends AppCompatActivity
                             Node step2 = step1.childNode(1);
                             Node step3 = step2.childNode(0);
                             String val = step3.toString();
-                            //listText += count + ". " + val + "\n\n";
                             returnIns.add(val);
                         }
                     }
                 }
-                else if (url.contains("foodnetwork"))
+                else if (url.contains("foodnetwork"))   //Parse foodnetwork websites
                 {
                     Elements recipeList = doc.select("ol");
                     int count = 0;
@@ -100,13 +126,12 @@ public class CookingAssistantViewer extends AppCompatActivity
                             Node step1 = recipeL.childNode(i);
                             Node step3 = step1.childNode(0);
                             String val = step3.toString();
-                            //listText += count + ". " + val + "\n\n";
                             returnIns.add(val);
                         }
                     }
                 }
 
-                else if (url.contains("seriouseats"))
+                else if (url.contains("seriouseats"))   //Parse seriouseats websites
                 {
                     Elements recipeList = doc.select("ol");
                     int count = 0;
@@ -128,19 +153,16 @@ public class CookingAssistantViewer extends AppCompatActivity
                             else
                             {
                                 Node step4 = step1.childNode(3).childNode(2).childNode(0); //Get actual step info
-
                                 val = step4.toString();
                             }
-                            //listText += count + " - " + val + "\n\n";
+
                             returnIns.add(val);
                         }
                     }
                 }
                 else
-                {
                     Log.d(TAG, "Non parsable website, do something here...");
 
-                }
             }
             catch(Exception e)
             {
@@ -151,23 +173,30 @@ public class CookingAssistantViewer extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Void aVoid)    //When our parsing finishes
+        {
+            //Log and set new view
             super.onPostExecute(aVoid);
             instructionList = returnIns;
-
+            instructionList.add("Finished! \n");
             setContentView(R.layout.activity_cooking_assistant);
 
-            Log.d(TAG, instructionList.toString());
-
+            //Find our elements we are modifiying
             mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
             mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
 
+            //Set our element values
             sliderAdapter = new SliderAdapter(context, instructionList);
             mSlideViewPager.setAdapter((sliderAdapter));
             numSteps = instructionList.size();
             addStepStatus(numSteps, 0);
 
             mSlideViewPager.addOnPageChangeListener(viewListener);
+
+            //Hide the menu button (only shown on last page)
+            View v = findViewById(android.R.id.content);
+            btnMenu = findViewById(R.id.btnMainMenu);
+            btnMenu.setVisibility(v.GONE);
         }
     }
 
@@ -201,6 +230,14 @@ public class CookingAssistantViewer extends AppCompatActivity
                 mDots[i].setTextColor(getResources().getColor(R.color.colorPrimary_Dark));
 
             mDotLayout.addView(mDots[i]);   //Add to our view
+        }
+
+        if (btnMenu != null)    //If we have our btnMenu created
+        {
+            if (position == mDots.length - 1)   //If we are on the last page, show the done button, if not, don't
+                btnMenu.setVisibility(View.VISIBLE);
+            else
+                btnMenu.setVisibility(View.GONE);
         }
     }
 

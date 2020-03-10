@@ -1,0 +1,56 @@
+Development Log – Week #6
+Gavin Jackson, 101065531
+Being the last week of production before D2 it was critical that all members connected their functional components together. 
+Everyone’s component, to some degree, requires information from another component. For a proper demo it makes sense to ensure 
+all the connections are made to show the full potential of the application and that of the individual components.
+
+Monday, Feb 24th, 2020
+    -	[0.75 Hr] Groundwork for connection with Recipe Browser. Made the framework for displaying recipes already in the Meal Planner 
+        via rbSelected. Made the framework for connecting to rbActivity for finding new recipes and adding them to the Meal Planner. 
+        Reorganized filenames and removed warnings from PlanRecipeRecyclerView.
+    -	[1.0 Hr] Fixed oversight on Primary key inside recipe class, thought it couldn’t be a long so changed to string, realized it 
+        should be long and changed back, only to properly realize that it must be a string. Struggled launching fragment that displays 
+        the meals/recipes of the current day. Main activity needed to implement abstract class.
+    -	[2.0 Hr] Worked on fragments
+        o	Made TodayMeal fragment 
+        o	Made the Today Meal Recycler view for displaying the meals for today. Created the Today Meal item, along required adapter 
+            for displaying purposes.
+        o	Made the Today Recipe Recycler view to be displayed inside each Today Meal item. Created Today Recipe item, and the 
+            required adapter.
+    -	[1.0Hr] Created a scheduler class for storing the meal plan chosen for any given week. Prepopulated the database with all 
+        weeks of the year pointing to the first weekly meal plan returned by the database. 
+
+Tuesday, Feb 25th, 2020
+    -	[1.0 Hr] General tasks:
+        o	Debugged dao, instead of returning the meals for one day it was returning the meals for all days within the weekly plan. 
+            Database required the use of LIKE when comparing two strings not ==.
+        o	Changed layout of main activity, changed to constraint layout.
+        o	Touched up Today’s Meals fragment.
+    -	[1.0 Hr] Made scheduler into a fragment just like the Today’s Meals fragment (Made recycler view, recycler view item, added 
+        to main activity, created adapter, etc.). Debugged incorrect spelling of fragment, one reference inside of main activity 
+        was incorrectly spelled but not problematic enough to trigger compile time error.
+    -	[1.0 Hr] Implemented a recycler view dot page indicator, shown at the bottom of the horizontal recycler view for displaying 
+        todays meals is a series of dots, the active page is represented by a blue dot. Got schedule widget to display weekly meal 
+        plan names. Added “NOTHING PLANNED” indicator for both the scheduler and the today’s meals.
+    -	[1.0 Hr] Modified Meal Planner activity, created select button and added way for the activity to return the id of a weekly 
+        meal plan. Had to ensure the select button was only displayed when activity was made with the desire for a return value, 
+        and that the select button would only show at the weekly meal plan level.
+    -	[0.5 Hr] Added sorting of scheduler. Shows the current week first, followed by all subsequent weeks in order.
+    -	[2.5 Hr] Merge conflict problems. Solution boiled down to merging into master local, making new branch, then making a 
+        PR for the new branch and closing the old PR request with merge conflicts. Also required to test new branch before 
+        approving PR and still making modifications. Many branches were made, many PR requests opened then closed, attempts 
+        to revert were taken…this was certainly a big ordeal.
+
+Wednesday, Feb 26th, 2020
+    -	[1.0 Hr] Continued merge conflict resolution. Although my branch was fixed, many other branches still needed fixing. 
+        Ensured all members merged and deleted their branches. Full team wide reset.
+    -	[1.0 Hr] Fixed recyclerview items in TodayRecipeRecyclerView. Original set up would have led to memory leak problems 
+        due to the creation of LiveData observers, without their later deletion. 
+    -	[0.5 Hr] Fixed recipe items in Today’s Meals Fragment, recipes were not being displayed because incorrect view was 
+        being provided to the holder.
+
+Friday, Feb 28th, 2020
+    -	[0.5 Hr] Created component diagram.
+
+Sunday, March 1st, 2020
+    -	[0.75 Hr]  Log Writing.

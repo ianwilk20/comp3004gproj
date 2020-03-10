@@ -10,19 +10,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import fooderie.groceryList.models.Food;
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.models.FooderieRepository;
 import fooderie.groceryList.models.UserGroceryListItem;
+import fooderie.recipeBrowser.models.Recipe;
 
 public class GroceryListViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
+    private LiveData<List<Recipe>> allRecipesForNextWeek;
     private LiveData<List<UserGroceryListItem>> allGroceryItems;
     private LiveData<List<Food>> allFoodItems;
+    private LiveData<List<Food>> specificFoodLabel;
 
     public GroceryListViewModel(Application application){
         super(application);
         m_repo = new FooderieRepository(application);
         allGroceryItems = m_repo.getAllGroceryItems();
         allFoodItems = m_repo.getAllAPIIngredients();
+        allRecipesForNextWeek = m_repo.getNextWeeksRecipes();
     }
 
     public void insert(UserGroceryListItem item){
@@ -41,8 +46,12 @@ public class GroceryListViewModel extends AndroidViewModel {
         m_repo.update(f);
     }
 
-    public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department) {
-        m_repo.updateGroceryItemAttributes(prevName, newName, quantity, notes, department);}
+    public void updateGroceryItemAttributes(String food_id, String newName, String quantity, String notes, String department, boolean inPantry) {
+        m_repo.updateGroceryItemAttributes(food_id, newName, quantity, notes, department, inPantry);}
+
+    public void updateInPantryStatus(String foodId, boolean inPantry) {
+        m_repo.updateInPantryStatus(foodId, inPantry);
+    }
 
     public void delete(UserGroceryListItem item){
         m_repo.delete(item);
@@ -55,10 +64,12 @@ public class GroceryListViewModel extends AndroidViewModel {
     public LiveData<List<UserGroceryListItem>> getUserGroceryList() {return allGroceryItems;}
     public LiveData<List<Food>> getAllFoodItems() {return  allFoodItems;}
     public LiveData<Food> getFoodByID(String id) {return m_repo.getFoodByID(id);}
-    public LiveData<List<Food>> getFoodByLabel(String label) {
-        String alteredLabel = label + "%"; //allow to find all ingredients starting with the string specifed by label
-        return m_repo.getFoodByLabel(alteredLabel);
+    public List<Food> getFoodByLabel(String label) {
+        return m_repo.getFoodByLabel(label);
     }
+    public List<UserGroceryListItem> getItemsInPantry() {return m_repo.getItemsInPantry();}
+    public LiveData<List<Recipe>> getAllRecipesForNextWeek() {return allRecipesForNextWeek; }
+    public List<UserGroceryListItem> getItemInGroceryList(String food_name) {return m_repo.getItemInGroceryList(food_name);}
 
 
 }

@@ -33,23 +33,23 @@
         android:textColor="#F8F8F8"
         android:textSize="85px" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addGroceryItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:layout_centerHorizontal="false"
-        android:clickable="true"
-        android:gravity="bottom|right"
-        app:elevation="8dp"
-        app:fabSize="normal"
-        app:maxImageSize="28dp"
-        app:backgroundTint="#373737"
-        app:srcCompat="@mipmap/ic_add_white_48" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/addGroceryItem"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentRight="false"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginEnd="25dp"-->
+<!--        android:layout_marginBottom="25dp"-->
+<!--        android:layout_centerHorizontal="false"-->
+<!--        android:clickable="true"-->
+<!--        android:gravity="bottom|right"-->
+<!--        app:elevation="8dp"-->
+<!--        app:fabSize="normal"-->
+<!--        app:maxImageSize="28dp"-->
+<!--        app:backgroundTint="@color/grocery_list_sherling_gray"-->
+<!--        app:srcCompat="@mipmap/ic_add_white_48" />-->
 
     <RadioGroup
         android:id="@+id/filterGroup"
@@ -57,46 +57,92 @@
         android:layout_height="40dp"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:background="#373737"
+        android:background="@color/grocery_list_sherling_gray"
+        android:clipToPadding="false"
         android:paddingTop="4dp"
         android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/filterAisles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:buttonTint="@color/rbutton_color"
-            android:checked="true"
-            android:fontFamily="@font/montserrat"
-            android:text="Aisles"
-            android:textColor="@color/colorPrimary" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/filterAisles"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:buttonTint="@color/rbutton_color"-->
+<!--            android:checked="true"-->
+<!--            android:fontFamily="@font/montserrat"-->
+<!--            android:text="Aisles"-->
+<!--            android:textColor="@color/colorPrimary" />-->
 
-        <RadioButton
-            android:id="@+id/filterRecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+<!--        <RadioButton-->
+<!--            android:id="@+id/filterRecipe"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:buttonTint="@color/rbutton_color"-->
+<!--            android:fontFamily="@font/montserrat"-->
+<!--            android:text="Recipe"-->
+<!--            android:textColor="@color/colorPrimary" />-->
+
+        <ImageButton
+            android:id="@+id/addRecipesToGroceries"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/mealplanner_to_groclist"/>
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/share_button"/>
+
+        <ImageButton
+            android:id="@+id/optionsButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
             android:layout_marginLeft="10dp"
-            android:buttonTint="@color/rbutton_color"
-            android:fontFamily="@font/montserrat"
-            android:text="Recipe"
-            android:textColor="@color/colorPrimary" />
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/clear_list"
+            />
+
     </RadioGroup>
+
 
     <ListView
     android:id="@+id/groceryListDisplay"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="match_parent"
     android:layout_below="@id/filterGroup"
     android:layout_marginTop="1dp"></ListView>
 
-    <ListView
-        android:id="@+id/gotItListDisplay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/groceryListDisplay"
-        android:layout_marginTop="1dp"
-        android:visibility="invisible"></ListView>
+        <Button
+            android:id="@+id/addGroceryItem"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp"
+            android:text="Add to List"
+            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/grocery_list_sherling_gray"
+            android:background="@drawable/rounded_layout_bg"
+            android:elevation="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            />
 
 
 </RelativeLayout>
