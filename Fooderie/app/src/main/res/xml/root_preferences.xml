@@ -38,73 +38,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Attributions">
+        <Preference
+            android:icon="@drawable/edamam"
+            android:selectable="false"
+            android:layout="@layout/activity_options"
+            ></Preference>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
-
-<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:fillViewport="false">-->
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:orientation="vertical" android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
-
-    <!--        <ToggleButton-->
-    <!--            android:id="@+id/units_toggle_button"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:textOff="Metric"-->
-    <!--            android:textOn="Imperial" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/alcohol_free_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Alcohol-Free"-->
-<!--        android:textOn="Alcohol-Free" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/low_carb_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Low Carb"-->
-<!--        android:textOn="Low Carb" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/low_fat_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Low Fat"-->
-<!--        android:textOn="Low Fat" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/peanut_free_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Peanut-Free"-->
-<!--        android:textOn="Peanut-Free" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/tree_nut_free_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Tree-Nut-Free"-->
-<!--        android:textOn="Tree-Nut-Free" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/vegan_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Vegan"-->
-<!--        android:textOn="Vegan" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/vegetarian_toggle_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textOff="Not Vegetarian"-->
-<!--        android:textOn="Vegetarian" />-->
-
-<!--</LinearLayout>-->
-
-<!--</ScrollView>-->

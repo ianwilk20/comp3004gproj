@@ -14,10 +14,12 @@
             android:layout_height="32dp"
             android:textSize="18sp"
             android:fontFamily="@font/montserrat"
-            android:paddingStart="0dp"
+            android:paddingStart="5dp"
             android:paddingTop="3dp"
             android:textColor="@color/text_color"
-            android:text=""
+            android:text="TESTTESTTESTTESTTESTTESTTEST"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
 
         <TextView
@@ -27,7 +29,9 @@
             android:paddingStart="10dp"
             android:layout_below="@id/groceryItem"
             android:fontFamily="@font/montserrat"
-            android:text=""/>
+            android:text="TESTTEST"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <ImageButton
             android:id="@+id/editButton"
@@ -35,7 +39,7 @@
             android:layout_height="50dp"
             android:layout_toRightOf="@id/groceryItemInfo"
             android:scaleType="fitCenter"
-            android:padding="16dp"
+            android:padding="13dp"
             android:src="@drawable/edit_button"
             android:layout_marginLeft="10dp"
             android:background="@null"/>
@@ -46,7 +50,7 @@
             android:layout_height="50dp"
             android:layout_toRightOf="@id/editButton"
             android:background="@null"
-            android:padding="16dp"
+            android:padding="13dp"
             android:scaleType="fitCenter"
             android:layout_marginLeft="10dp"
             android:src="@drawable/trash_button" />

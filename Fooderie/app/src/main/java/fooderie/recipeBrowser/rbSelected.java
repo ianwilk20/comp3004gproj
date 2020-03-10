@@ -1,6 +1,7 @@
 package fooderie.recipeBrowser;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,13 +22,17 @@ import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.recipeBrowser.models.Nutrient;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.Tag;
+import fooderie.recipeBrowser.viewModels.RBViewModel;
 
 public class rbSelected extends AppCompatActivity {
+    private RBViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_selected);
+
+        viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
         //Get selected recipe from rbActivity
         //Get String from Meal Plan or MainActivity
@@ -79,10 +84,10 @@ public class rbSelected extends AppCompatActivity {
         recipeImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //If it isn't in the db
-                //add recipe to favorites list
+                //add recipe to favorites list with attribute
                 Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                 //If it is already in the db
-                //delete recipe from favorites list
+                //delete recipe from favorites list, remove attribute
                 Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
             }
         });

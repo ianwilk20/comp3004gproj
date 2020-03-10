@@ -10,13 +10,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import fooderie.groceryList.models.Food;
+import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.models.FooderieRepository;
 import fooderie.groceryList.models.UserGroceryListItem;
+import fooderie.recipeBrowser.models.Recipe;
 
 public class GroceryListViewModel extends AndroidViewModel {
     private FooderieRepository m_repo;
+    private LiveData<List<Recipe>> allRecipesForNextWeek;
     private LiveData<List<UserGroceryListItem>> allGroceryItems;
     private LiveData<List<Food>> allFoodItems;
+    private LiveData<List<Food>> specificFoodLabel;
 
     public GroceryListViewModel(Application application){
         super(application);
@@ -41,8 +45,12 @@ public class GroceryListViewModel extends AndroidViewModel {
         m_repo.update(f);
     }
 
-    public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department) {
-        m_repo.updateGroceryItemAttributes(prevName, newName, quantity, notes, department);}
+    public void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department, boolean inPantry) {
+        m_repo.updateGroceryItemAttributes(prevName, newName, quantity, notes, department, inPantry);}
+
+    public void updateInPantryStatus(String foodId, boolean inPantry) {
+        m_repo.updateInPantryStatus(foodId, inPantry);
+    }
 
     public void delete(UserGroceryListItem item){
         m_repo.delete(item);
@@ -56,9 +64,17 @@ public class GroceryListViewModel extends AndroidViewModel {
     public LiveData<List<Food>> getAllFoodItems() {return  allFoodItems;}
     public LiveData<Food> getFoodByID(String id) {return m_repo.getFoodByID(id);}
     public LiveData<List<Food>> getFoodByLabel(String label) {
-        String alteredLabel = label + "%"; //allow to find all ingredients starting with the string specifed by label
-        return m_repo.getFoodByLabel(alteredLabel);
+        return m_repo.getFoodByLabel(label);
     }
+    public LiveData<List<UserGroceryListItem>> getItemsInPantry() {return m_repo.getItemsInPantry();}
+
+//    public LiveData<List<Recipe>> getAllRecipesForNextWeek() {
+//        LiveData<List<PlanMeal>> nWMP = m_repo.getNextWeeksMealPlan();
+//        List<PlanMeal> nWMPParsed = nWMP.getValue();
+//        if (nWMPParsed != null && nWMPParsed.size() != 0){
+//            nWMPParsed.
+//        }
+//    }
 
 
 }

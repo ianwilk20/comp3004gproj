@@ -1,5 +1,6 @@
 package fooderie.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -20,6 +21,7 @@ import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlannerScheduler.models.Schedule;
 import fooderie.mealPlannerScheduler.models.ScheduleAndPlanWeek;
 import fooderie.recipeBrowser.models.Recipe;
+import io.reactivex.Flowable;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -107,13 +109,11 @@ public interface FooderieDao {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
     LiveData<List<Recipe>> getRecipes(Long id);
-
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * FROM table_PlanWeek w, table_PlanDay d, table_PlanMeal m, table_PlanRecipe pr, table_Recipe r " +
-            "WHERE w.planId == :id AND d.parentId == w.planId AND m.parentId == d.planId AND pr.parentId == m.planId " +
-            "AND pr.recipeId == r.recipe_id")
-    LiveData<List<Recipe>> getAllRecipesFromWeeklyMealPlanId(Long id);
-
+    @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm, table_PlanRecipe pr, table_Recipe r " +
+            "WHERE s.weekOfYearId == :weekNum AND s.planId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId " +
+            "AND pr.parentId == pm.planId AND r.recipe_id == pr.recipeId")
+    LiveData<List<Recipe>> getNextWeeksRecipes(Long weekNum);
 
     /* Entity=Recipe dao interactions */
     @Insert
@@ -127,9 +127,14 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
 
-    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :id")
-    Recipe getRecipe(String id);
+    @Query("SELECT * FROM table_Recipe WHERE favorite ==" + true)
+    List<Recipe> getAllFavs();
 
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url")
+    Recipe getRecipe(String url);
+
+    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url AND favorite ==" + true)
+    Recipe getFav(String url);
 
     /* Entity=Food dao interactions */
     @Insert(onConflict = REPLACE)
@@ -150,7 +155,7 @@ public interface FooderieDao {
     LiveData<Food> getFoodByID(String food_id);
 
     @Query("SELECT * FROM table_APIIngredient " +
-            "WHERE table_APIIngredient.label LIKE :label")
+            "WHERE table_APIIngredient.label LIKE '%' || :label || '%'")
     LiveData<List<Food>> getFoodByLabel(String label); //MUST enter label as "apple%" to get all results with apples
 
     /* Entity=UserGroceryListItem dao interactions */
@@ -171,9 +176,18 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_userGroceryList")
     LiveData<List<UserGroceryListItem>> getAllGroceryItems();
 
+    @Query("SELECT * FROM table_userGroceryList " +
+            "WHERE table_userGroceryList.inPantry = 1")
+    LiveData<List<UserGroceryListItem>> getItemsInPantry();
+
     @Query("UPDATE table_userGroceryList " +
-            "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department " +
+            "SET food_name = :newName, quantity = :quantity, notes = :notes, department = :department, inPantry = :inPantry " +
             "WHERE table_userGroceryList.food_name = :prevName")
-    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department);
+    void updateGroceryItemAttributes(String prevName, String newName, String quantity, String notes, String department, boolean inPantry);
+
+    @Query("UPDATE table_userGroceryList " +
+            "SET inPantry = :inPantry " +
+            "WHERE table_userGroceryList.food_id = :foodId")
+    void updateInPantryStatus(String foodId, boolean inPantry);
 
 }

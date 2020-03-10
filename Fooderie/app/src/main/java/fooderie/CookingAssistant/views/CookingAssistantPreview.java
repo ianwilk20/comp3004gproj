@@ -3,20 +3,27 @@ package fooderie.CookingAssistant.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fooderie.R;
+import com.squareup.picasso.Picasso;
 
 import fooderie.recipeBrowser.models.Recipe;
+import fooderie.recipeBrowser.rbSelected;
 
 
 public class CookingAssistantPreview extends AppCompatActivity
 {
     private Button startButton;
-    private TextView ingridentText;
+    //private TextView ingridentText;
+    private ListView ingridentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +35,16 @@ public class CookingAssistantPreview extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant_pre);
         startButton = findViewById(R.id.btnStart);
-        ingridentText = findViewById(R.id.txtIngridents);
 
-        /*
-        TODO: FILL IN IMAGE PREVIEW HERE
-        ImageView recipeImage = findViewById(R.id._____);
+        //Image
+        ImageView recipeImage = findViewById(R.id.imgPreview);
         Picasso.get().load(selected.image).into(recipeImage);
-         */
 
-        String steps = "Ingredients: \n";
-        for(String ingredient : selected.theIngredients)
-        {
-            steps += "- " + ingredient + "\n";
-        }
-        ingridentText.setText(steps);   //Set text to steps
+        //Ingredients list
+        ingridentList = findViewById(R.id.ingridentView);
+        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(CookingAssistantPreview.this, android.R.layout.simple_list_item_1, selected.theIngredients);
+        ingridentList.setAdapter(rbArrAdapt);
 
-        final AppCompatActivity cAssistThis = this;
         startButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
