@@ -1,5 +1,7 @@
 package fooderie.mealPlanner.models;
 
+import java.io.Serializable;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.room.Entity;
@@ -10,7 +12,7 @@ import fooderie.models.FooderieRepository;
 @Entity(tableName = "table_PlanWeek",
         indices = {@Index("planId"), @Index("parentId")}
         )
-public class PlanWeek extends Plan{
+public class PlanWeek extends Plan {
     @Ignore
     private static final String planName = "Week Plan";
     @Ignore

@@ -189,9 +189,11 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     }
 
     private Void selectPlanWeek(PlanWeek p) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(PLANWEEK_KEY, p);
-        setResult(Activity.RESULT_OK, returnIntent);
+        if (p != null) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(PLANWEEK_KEY, p.getPlanId().longValue());
+            setResult(Activity.RESULT_OK, returnIntent);
+        }
         finish();
         return null;
     }
