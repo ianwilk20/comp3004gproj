@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.AdapterView;
@@ -25,9 +26,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.viewModels.RBViewModel;
-
 import android.widget.Toast;
 import android.app.ProgressDialog;
 
@@ -40,6 +42,9 @@ public class rbActivity extends AppCompatActivity {
     ListView favListView;
     RequestQueue rbRequestQueue;
     ArrayAdapter<String> rbArrAdapt;
+    ArrayAdapter<String> arrAdapt;
+    ArrayList<Recipe> recipeFavList;
+    ArrayList<String> stringFavList = new ArrayList<String>();
     ArrayList<String> rbResults = new ArrayList<String>();
     ArrayList<Recipe> rbRecipeArr = new ArrayList<Recipe>();
     String preferencesUrl = "";
@@ -48,7 +53,6 @@ public class rbActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb);
-
         viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
         //Get String from Meal Plan or MainActivity
@@ -58,6 +62,7 @@ public class rbActivity extends AppCompatActivity {
         rbSearchView = findViewById(R.id.rbSearchView);
         rbListView = findViewById(R.id.rbListView);
         favListView = findViewById(R.id.favListView);
+
         rbRequestQueue = Volley.newRequestQueue(this);
         dialog = new ProgressDialog(rbActivity.this);
 
@@ -65,23 +70,20 @@ public class rbActivity extends AppCompatActivity {
         rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
         rbListView.setAdapter(rbArrAdapt);
 
-        //put favourties list into list
-        ArrayList<Recipe> recipeFavList;
-        ArrayList<String> stringFavList = new ArrayList<String>();
-
-        //WHERE YOU LEFT THINGS
-
-//        if(viewModel.getAllFavs() != null) {
-//            recipeFavList = new ArrayList<Recipe>(viewModel.getAllFavs());
-//            for (Recipe r : recipeFavList) {
-//                stringFavList.add(r.label);
-//            }
-//        }
-//        else{
-//            recipeFavList = new ArrayList<Recipe>();
-//        }
-//        ArrayAdapter<String> arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
-//        favListView.setAdapter(arrAdapt);
+        //put fav list into list
+        arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
+        favListView.setAdapter(arrAdapt);
+        List<Recipe> allFavsList = FetchAllFavs();
+        if((allFavsList != null)&&(allFavsList.size() != 0)) {
+            recipeFavList = new ArrayList<Recipe>(allFavsList);
+            for (Recipe r : recipeFavList) {
+                stringFavList.add(r.label);
+            }
+        }
+        else {
+            recipeFavList = new ArrayList<Recipe>();
+        }
+        arrAdapt.notifyDataSetChanged();
 
         //If an option switch is checked, add its query parameter
         //Otherwise, remove its query parameter
@@ -182,16 +184,39 @@ public class rbActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Recipe selected = null;
-//                for (int i = 0; i < recipeFavList.size(); ++i){
-//                    if(recipeFavList.get(i).label.equals(stringFavList.get(position))){
-//                        selected = recipeFavList.get(i);
-//                    }
-//                }
+                for (int i = 0; i < recipeFavList.size(); ++i){
+                    if(recipeFavList.get(i).label.equals(stringFavList.get(position))){
+                        selected = recipeFavList.get(i);
+                    }
+                }
                 if (selected != null) {
                     openSelected(selected, fromPlan);
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        stringFavList.clear();
+
+        favListView = findViewById(R.id.favListView);
+
+        arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
+        favListView.setAdapter(arrAdapt);
+        List<Recipe> allFavsList = FetchAllFavs();
+        if((allFavsList != null)&&(allFavsList.size() != 0)) {
+            recipeFavList = new ArrayList<Recipe>(allFavsList);
+            for (Recipe r : recipeFavList) {
+                stringFavList.add(r.label);
+            }
+        }
+        else {
+            recipeFavList = new ArrayList<Recipe>();
+        }
+        arrAdapt.notifyDataSetChanged();
     }
 
     //make Query continued
@@ -294,6 +319,30 @@ public class rbActivity extends AppCompatActivity {
             catch(Exception e){
                 Log.e("No Error", "Recipe not returned");
             }
+        }
+    }
+
+    public List<Recipe> FetchAllFavs(){
+        GetAllFavsAsyncTask task = new GetAllFavsAsyncTask();
+        task.execute();
+
+        List<Recipe> r = null;
+        try{
+            r = task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    private class GetAllFavsAsyncTask extends AsyncTask<Void, Void, List<Recipe>> {
+        @Override
+        protected List<Recipe> doInBackground(Void... voids) {
+            List<Recipe> r = null;
+            r = viewModel.getAllFavs();
+            return r;
         }
     }
 }

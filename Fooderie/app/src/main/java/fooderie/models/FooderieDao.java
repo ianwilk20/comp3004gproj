@@ -118,19 +118,24 @@ public interface FooderieDao {
     @Delete
     void delete(Recipe r);
 
+    @Query("UPDATE table_Recipe " +
+            "SET favorite = :value " +
+            "WHERE table_Recipe.recipe_id = :url")
+    void updateRecipeFav(String url, Boolean value);
+
     @Query("DELETE FROM table_Recipe")
     void deleteAllRecipes();
 
     @Query("SELECT * FROM table_Recipe")
     List<Recipe> getAllRecipes();
 
-    @Query("SELECT * FROM table_Recipe WHERE favorite ==" + true)
+    @Query("SELECT * FROM table_Recipe WHERE table_Recipe.favorite = 1")
     List<Recipe> getAllFavs();
 
-    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url")
+    @Query("SELECT * FROM table_Recipe WHERE table_Recipe.recipe_id == :url")
     Recipe getRecipe(String url);
 
-    @Query("SELECT * FROM table_Recipe WHERE recipe_id == :url AND favorite ==" + true)
+    @Query("SELECT * FROM table_Recipe WHERE table_Recipe.recipe_id == :url AND table_Recipe.favorite = 1")
     Recipe getFav(String url);
 
     /* Entity=Food dao interactions */

@@ -239,6 +239,9 @@ public class FooderieRepository {
     public void deleteAllRecipes(){
         FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {fooderieDao.deleteAllRecipes();});
     }
+    public void updateRecipeFav(String url, Boolean value){
+        FooderieRoomDatabase.databaseWriteExecutor.execute(() -> {fooderieDao.updateRecipeFav(url, value);});
+    }
     public List<Recipe> getAllRecipes(){return fooderieDao.getAllRecipes();}
     public List<Recipe> getAllFavs(){return fooderieDao.getAllFavs();}
     public Recipe getRecipe(String url){return fooderieDao.getRecipe(url);}
