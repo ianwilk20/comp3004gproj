@@ -1,7 +1,5 @@
 package fooderie.mealPlanner.models;
 
-import java.util.List;
-
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.room.Entity;
@@ -19,55 +17,16 @@ import fooderie.models.FooderieRepository;
 )
 public class PlanDay extends Plan {
     @Ignore
-    public static final String planName = "Day Plan";
+    private static final String planName = "Day Plan";
     @Ignore
-    public static final boolean editable = false;
+    static final PropertiesForPlan properties = new PropertiesForPlan(true, false, false, planName);
 
     public PlanDay(Long parentId, String name, int recipeCount) {
-        super(parentId, name, recipeCount);
+        super(parentId, name, recipeCount, properties, PlanMeal.properties);
     }
 
     @Override
     public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
-        children = repo.getMealPlans(planId);
-        children.observe(owner, o);
-    }
-
-    @Override
-    public void removeLiveData(LifecycleOwner owner){
-        if (children == null)
-            return;
-
-        children.removeObservers(owner);
-        children = null;
-    }
-
-    @Override
-    public boolean isEditable() {
-        return editable;
-    }
-    @Override
-    public boolean isChildEditable() {
-        return PlanMeal.editable;
-    }
-    @Override
-    public boolean isDraggable() {
-        return draggable;
-    }
-    @Override
-    public boolean isChildDraggable() {
-        return PlanMeal.draggable;
-    }
-    @Override
-    public boolean isSchedulable() {
-        return schedulable;
-    }
-    @Override
-    public boolean isChildSchedulable() {
-        return PlanMeal.schedulable;
-    }
-    @Override
-    public String childName() {
-        return PlanMeal.planName;
+        setLiveDataHelper(repo.getMealPlans(planId), owner, o);
     }
 }

@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TimePicker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,9 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.util.Pair;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,9 +33,7 @@ import fooderie.recipeBrowser.rbSelected;
 
 import com.example.fooderie.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -56,7 +51,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private RecyclerView m_planRecipeRecyclerView;
 
     private boolean SELECTING;
-    private final Plan ROOT = new PlanRoot();
+    private final Plan ROOT = Plan.getROOT();
     private Plan m_current() {return m_path.peek();}
     private Stack<Plan> m_path = new Stack<>();
 
@@ -154,7 +149,6 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
 
     private Void updatePlan(Plan p) {
         if (p instanceof PlanMeal) {
-            final Calendar getDate = Calendar.getInstance();
             TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
                 ((PlanMeal) p).setHour(hourOfDay);
                 ((PlanMeal) p).setMinute(minute);
@@ -195,9 +189,11 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     }
 
     private Void selectPlanWeek(PlanWeek p) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(PLANWEEK_KEY, p);
-        setResult(Activity.RESULT_OK, returnIntent);
+        if (p != null) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(PLANWEEK_KEY, p.getPlanId().longValue());
+            setResult(Activity.RESULT_OK, returnIntent);
+        }
         finish();
         return null;
     }
@@ -284,7 +280,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
                 } else if (m_current() instanceof PlanWeek) {
                     p = new PlanDay(m_current().getPlanId(), planName, 0);
                 } else if (m_current() instanceof PlanRoot) {
-                    p = new PlanWeek(m_current().getPlanId(), planName, 0);
+                    p = new PlanWeek(planName, 0);
                 }
 
                 if (p != null)

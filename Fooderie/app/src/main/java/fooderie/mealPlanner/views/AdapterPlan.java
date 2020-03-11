@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanMeal;
