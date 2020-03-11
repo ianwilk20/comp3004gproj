@@ -33,7 +33,7 @@ import fooderie.recipeBrowser.viewModels.RBViewModel;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 
-public class rbActivity extends AppCompatActivity {
+public class rbSearch extends AppCompatActivity {
     private RBViewModel viewModel;
 
     ProgressDialog dialog;
@@ -52,7 +52,7 @@ public class rbActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rb);
+        setContentView(R.layout.activity_rb_search);
         viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
         //Get String from Meal Plan or MainActivity
@@ -64,14 +64,14 @@ public class rbActivity extends AppCompatActivity {
         favListView = findViewById(R.id.favListView);
 
         rbRequestQueue = Volley.newRequestQueue(this);
-        dialog = new ProgressDialog(rbActivity.this);
+        dialog = new ProgressDialog(rbSearch.this);
 
         //put search results into list
-        rbArrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, rbResults);
+        rbArrAdapt = new ArrayAdapter(rbSearch.this, android.R.layout.simple_list_item_1, rbResults);
         rbListView.setAdapter(rbArrAdapt);
 
         //put fav list into list
-        arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
+        arrAdapt = new ArrayAdapter(rbSearch.this, android.R.layout.simple_list_item_1, stringFavList);
         favListView.setAdapter(arrAdapt);
         List<Recipe> allFavsList = FetchAllFavs();
         if((allFavsList != null)&&(allFavsList.size() != 0)) {
@@ -163,7 +163,7 @@ public class rbActivity extends AppCompatActivity {
             }
         });
 
-        //Get Item Selected and redirect to rbSelected activity from results list
+        //Get Item Selected and redirect to rbDisplay activity from results list
         rbListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -179,7 +179,7 @@ public class rbActivity extends AppCompatActivity {
             }
         });
 
-        //Get Item Selected and redirect to rbSelected activity from fav list
+        //Get Item Selected and redirect to rbDisplay activity from fav list
         favListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -204,7 +204,7 @@ public class rbActivity extends AppCompatActivity {
 
         favListView = findViewById(R.id.favListView);
 
-        arrAdapt = new ArrayAdapter(rbActivity.this, android.R.layout.simple_list_item_1, stringFavList);
+        arrAdapt = new ArrayAdapter(rbSearch.this, android.R.layout.simple_list_item_1, stringFavList);
         favListView.setAdapter(arrAdapt);
         List<Recipe> allFavsList = FetchAllFavs();
         if((allFavsList != null)&&(allFavsList.size() != 0)) {
@@ -240,7 +240,7 @@ public class rbActivity extends AppCompatActivity {
                             JSONArray rbResponse = response.getJSONArray("hits");
                             if (rbResponse.length() <= 0) {
                                 dialog.dismiss();
-                                Toast.makeText(rbActivity.this, "No Results", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(rbSearch.this, "No Results", Toast.LENGTH_SHORT).show();
                                 throw new Exception("No Results");
                             }
 
@@ -267,7 +267,7 @@ public class rbActivity extends AppCompatActivity {
 
                             if(rbRecipeArr.size() <= 0){
                                 dialog.dismiss();
-                                Toast.makeText(rbActivity.this, "No Results", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(rbSearch.this, "No Results", Toast.LENGTH_SHORT).show();
                                 throw new Exception("No Results");
                             }
 
@@ -289,17 +289,17 @@ public class rbActivity extends AppCompatActivity {
         rbRequestQueue.add(objectReq);
     }
 
-    //Redirect to rbSelected activity
+    //Redirect to rbDisplay activity
     //and pass selected recipe
     //and the Meal Plan or Main Activity in fromPlan
     public void openSelected(Recipe selected, String fromPlan){
-        Intent rbIntent = new Intent(this, rbSelected.class);
+        Intent rbIntent = new Intent(this, rbDisplay.class);
         rbIntent.putExtra("RECIPE", selected);
         rbIntent.putExtra("FROMPLAN", fromPlan);
         startActivityForResult(rbIntent, 1);
     }
 
-    //If data is returned from rbSelected
+    //If data is returned from rbDisplay
     //Redirect back to Meal Plan
     //and pass selected recipe
     //and pass recipe ID

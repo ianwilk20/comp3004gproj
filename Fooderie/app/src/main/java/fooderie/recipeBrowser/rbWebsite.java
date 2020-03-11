@@ -16,7 +16,7 @@ public class rbWebsite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_website);
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe from rbSearch
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
 

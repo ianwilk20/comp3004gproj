@@ -26,17 +26,17 @@ import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.Tag;
 import fooderie.recipeBrowser.viewModels.RBViewModel;
 
-public class rbSelected extends AppCompatActivity {
+public class rbDisplay extends AppCompatActivity {
     private RBViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rb_selected);
+        setContentView(R.layout.activity_rb_display);
 
         viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe from rbSearch
         //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
@@ -95,14 +95,14 @@ public class rbSelected extends AppCompatActivity {
                         //update value - true
                         selected.favorite = true;
                         viewModel.updateRecipeFav(selected.url, selected.favorite);
-                        Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(rbDisplay.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                     }
                     //And it's a fav
                     if(favIfExists != null) {
                         //update value - false
                         selected.favorite = false;
                         viewModel.updateRecipeFav(selected.url, selected.favorite);
-                        Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(rbDisplay.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
                     }
                 }
                 //It's not in the db
@@ -110,14 +110,14 @@ public class rbSelected extends AppCompatActivity {
                     //insert into db as a fav
                     selected.favorite = true;
                     viewModel.insert(selected);
-                    Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(rbDisplay.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
-        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.theIngredients);
+        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbDisplay.this, android.R.layout.simple_list_item_1, selected.theIngredients);
         ingredientsView.setAdapter(rbArrAdapt);
 
         //Nutritional Information

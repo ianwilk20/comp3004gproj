@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,7 +14,6 @@ import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 
 import fooderie.recipeBrowser.models.Recipe;
-import fooderie.recipeBrowser.rbSelected;
 
 
 public class CookingAssistantPreview extends AppCompatActivity
@@ -28,7 +25,7 @@ public class CookingAssistantPreview extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe from rbSearch
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
 

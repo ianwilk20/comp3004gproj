@@ -16,8 +16,8 @@
             android:name=".OptionsActivity"
             android:label="@string/title_activity_options"></activity>
         <activity android:name="fooderie.recipeBrowser.rbWebsite" />
-        <activity android:name="fooderie.recipeBrowser.rbSelected" />
-        <activity android:name="fooderie.recipeBrowser.rbActivity" />
+        <activity android:name="fooderie.recipeBrowser.rbDisplay" />
+        <activity android:name="fooderie.recipeBrowser.rbSearch" />
         <activity android:name="fooderie.mealPlanner.views.PlanRecipeRecyclerView" />
         <activity android:name="fooderie.mealPlannerScheduler.views.WeeklyScheduleFragment_Proxy" />
         <activity android:name="fooderie.groceryList.views.GroceryListView" />
