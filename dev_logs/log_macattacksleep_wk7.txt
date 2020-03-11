@@ -1,2 +1,5 @@
 2.5 hrs
 -making favorites list work
+
+1.5 hrs
+-making favorites list work with meal planner
