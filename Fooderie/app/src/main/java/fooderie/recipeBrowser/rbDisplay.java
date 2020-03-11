@@ -82,6 +82,7 @@ public class rbDisplay extends AppCompatActivity {
         //Image
         ImageButton recipeImage = findViewById(R.id.recipeImage);
         Picasso.get().load(selected.image).into(recipeImage);
+
         //Click Listener for image button
         recipeImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -117,8 +118,8 @@ public class rbDisplay extends AppCompatActivity {
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
-        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbDisplay.this, android.R.layout.simple_list_item_1, selected.theIngredients);
-        ingredientsView.setAdapter(rbArrAdapt);
+        ArrayAdapter<String> arrAdapt = new ArrayAdapter(rbDisplay.this, android.R.layout.simple_list_item_1, selected.theIngredients);
+        ingredientsView.setAdapter(arrAdapt);
 
         //Nutritional Information
         setNutritionalInfo(selected, selected.totalNutrients.ENERC_KCAL, findViewById(R.id.ENERC_KCAL), findViewById(R.id.ENERC_KCALunit));
@@ -156,7 +157,7 @@ public class rbDisplay extends AppCompatActivity {
         finish();
     }
 
-    public void setNutritionalInfo(Recipe selected, Nutrient n, TextView quantityView, TextView unitView){
+    public void setNutritionalInfo(Recipe selected, Nutrient nutrient, TextView quantityView, TextView unitView){
         //Get option units
         String units;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -168,12 +169,12 @@ public class rbDisplay extends AppCompatActivity {
             units = "g";
         }
 
-        if(n != null) {
-            if(n != selected.totalNutrients.ENERC_KCAL){
-                n.setUnits(units);
+        if(nutrient != null) {
+            if(nutrient != selected.totalNutrients.ENERC_KCAL){
+                nutrient.setUnits(units);
             }
-            quantityView.setText(n.round());
-            unitView.setText(n.unit);
+            quantityView.setText(nutrient.round());
+            unitView.setText(nutrient.unit);
         }
         else{
             quantityView.setText("Unknown");
@@ -238,53 +239,53 @@ public class rbDisplay extends AppCompatActivity {
         GetRecipeFromFavsAsyncTask task = new GetRecipeFromFavsAsyncTask();
         task.execute(url);
 
-        Recipe r = null;
+        Recipe recipe = null;
         try{
-            r = task.get();
+            recipe = task.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return r;
+        return recipe;
     }
 
     public Recipe FetchRecipe(String url){
         GetRecipeAsyncTask task = new GetRecipeAsyncTask();
         task.execute(url);
 
-        Recipe r = null;
+        Recipe recipe = null;
         try{
-            r = task.get();
+            recipe = task.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return r;
+        return recipe;
     }
 
     private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
         @Override
         protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
+            Recipe recipe = null;
             int count = strings == null ? 0 : strings.length;
             for(int i = 0; i < count; i++){
-                r = viewModel.getFav(strings[i]);
+                recipe = viewModel.getFav(strings[i]);
             }
-            return r;
+            return recipe;
         }
     }
 
     private class GetRecipeAsyncTask extends AsyncTask<String, Void, Recipe>{
         @Override
         protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
+            Recipe recipe = null;
             int count = strings == null ? 0 : strings.length;
             for(int i = 0; i < count; i++){
-                r = viewModel.getRecipe(strings[i]);
+                recipe = viewModel.getRecipe(strings[i]);
             }
-            return r;
+            return recipe;
         }
     }
 }
