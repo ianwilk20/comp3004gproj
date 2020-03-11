@@ -104,11 +104,11 @@ public class WeeklyScheduleFragment extends Fragment {
                 return;
 
             // -- Get PlanWeek to modify selected DB entry -- //
-            PlanWeek p = (PlanWeek) data.getSerializableExtra(PlanRecipeRecyclerView.PLANWEEK_KEY);
-            if (p == null || m_scheduleToModify == null)
+            long l = data.getLongExtra(PlanRecipeRecyclerView.PLANWEEK_KEY, -1);
+            if (l == -1 || m_scheduleToModify == null)
                 return;
 
-            m_scheduleToModify.setPlanWeekId(p.getPlanId());
+            m_scheduleToModify.setPlanWeekId(l);
             m_viewModel.updateSchedule(m_scheduleToModify);
             m_scheduleToModify = null;
         }

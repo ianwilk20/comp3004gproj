@@ -1,16 +1,12 @@
 package fooderie.mealPlanner.models;
 
-import java.util.List;
-
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import fooderie.models.FooderieRepository;
-import fooderie.recipeBrowser.models.Recipe;
 
 @Entity(tableName = "table_PlanMeal",
         indices = {@Index("planId"), @Index("parentId")},
@@ -23,18 +19,14 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
     private int order;
     private int hour;
     private int minute;
-    @Ignore
-    private LiveData<List<Recipe>> recipes;
 
     @Ignore
-    public static final String planName = "Meal Plan";
+    private static final String planName = "Meal Plan";
     @Ignore
-    public static final boolean draggable = true;
-    @Ignore
-    public static final boolean schedulable = true;
+    static final PropertiesForPlan properties = new PropertiesForPlan(true, true, true, planName);
 
     public PlanMeal(Long parentId, String name, int recipeCount, int order) {
-        super(parentId, name, recipeCount);
+        super(parentId, name, recipeCount, properties, PlanRecipe.properties);
         this.order = order;
         this.hour = 12;
         this.minute = 0;
@@ -42,65 +34,15 @@ public class PlanMeal extends Plan implements Comparable<PlanMeal>{
 
     @Override
     public void setLiveData(FooderieRepository repo, LifecycleOwner owner, Observer o) {
-        recipes = repo.getRecipes(planId);
-        recipes.observe(owner, o);
+        setLiveDataHelper(repo.getRecipes(planId), owner, o);
     }
 
-    @Override
-    public void removeLiveData(LifecycleOwner owner){
-        if (recipes == null)
-            return;
-
-        recipes.removeObservers(owner);
-        recipes = null;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-    public int getOrder() {
-        return order;
-    }
+    public void setOrder(int order) {this.order = order;}
+    public int getOrder() { return order;}
     public void setHour(int hour) {this.hour = hour;}
     public int getHour() {return hour;}
     public void setMinute(int minute) {this.minute = minute;}
     public int getMinute() {return minute;}
-
-    public void setRecipes(LiveData<List<Recipe>> recipes) {
-        this.recipes = recipes;
-    }
-    public LiveData<List<Recipe>> getRecipes() {
-        return recipes;
-    }
-
-    @Override
-    public boolean isEditable() {
-        return editable;
-    }
-    @Override
-    public boolean isChildEditable() {
-        return true;
-    }
-    @Override
-    public boolean isDraggable() {
-        return draggable;
-    }
-    @Override
-    public boolean isChildDraggable() {
-        return false;
-    }
-    @Override
-    public boolean isSchedulable() {
-        return schedulable;
-    }
-    @Override
-    public boolean isChildSchedulable() {
-        return false;
-    }
-    @Override
-    public String childName() {
-        return PlanRecipe.planName;
-    }
 
     @Override
     public int compareTo(PlanMeal a) {

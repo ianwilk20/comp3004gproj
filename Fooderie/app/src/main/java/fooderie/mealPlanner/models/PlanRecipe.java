@@ -1,12 +1,10 @@
 package fooderie.mealPlanner.models;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import fooderie.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
 
 @Entity(tableName = "table_PlanRecipe",
@@ -27,7 +25,10 @@ public class PlanRecipe {
     private Long parentId;
     private String recipeId;
 
-    public static final String planName = "Recipe";
+    @Ignore
+    private static final String planName = "Recipe";
+    @Ignore
+    static final PropertiesForPlan properties = new PropertiesForPlan(true, false, false, planName);
 
     public Long getPlanId() {
         return planId;
@@ -38,14 +39,8 @@ public class PlanRecipe {
     public Long getParentId() {
         return parentId;
     }
-    public void setParentId(Long id) {
-        this.parentId = id;
-    }
     public String getRecipeId() {
         return recipeId;
-    }
-    public void setRecipeId(String id) {
-        this.recipeId = id;
     }
 
     public PlanRecipe(Long parentId, String recipeId) {
