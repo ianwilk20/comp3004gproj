@@ -38,6 +38,27 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="The Developers">
+        <Preference
+            app:title="MacKenzie Bedard"
+            ></Preference>
+        <Preference
+            app:title="Gavin Jackson"
+            ></Preference>
+        <Preference
+            app:title="Michael Ting"
+            ></Preference>
+        <Preference
+            app:title="Ian Wilkinson"
+            ></Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Report Problems to:">
+        <Preference
+            app:title="mackenziebedard@cmail.carleton.ca"
+            ></Preference>
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Attributions">
         <Preference
             android:icon="@drawable/edamam"

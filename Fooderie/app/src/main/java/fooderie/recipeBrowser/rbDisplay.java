@@ -26,17 +26,17 @@ import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.Tag;
 import fooderie.recipeBrowser.viewModels.RBViewModel;
 
-public class rbSelected extends AppCompatActivity {
+public class rbDisplay extends AppCompatActivity {
     private RBViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rb_selected);
+        setContentView(R.layout.activity_rb_display);
 
         viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe from rbSearch
         //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
@@ -82,6 +82,7 @@ public class rbSelected extends AppCompatActivity {
         //Image
         ImageButton recipeImage = findViewById(R.id.recipeImage);
         Picasso.get().load(selected.image).into(recipeImage);
+
         //Click Listener for image button
         recipeImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -95,14 +96,14 @@ public class rbSelected extends AppCompatActivity {
                         //update value - true
                         selected.favorite = true;
                         viewModel.updateRecipeFav(selected.url, selected.favorite);
-                        Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(rbDisplay.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                     }
                     //And it's a fav
                     if(favIfExists != null) {
                         //update value - false
                         selected.favorite = false;
                         viewModel.updateRecipeFav(selected.url, selected.favorite);
-                        Toast.makeText(rbSelected.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(rbDisplay.this, "Deleted from Favourites", Toast.LENGTH_SHORT).show();
                     }
                 }
                 //It's not in the db
@@ -110,15 +111,15 @@ public class rbSelected extends AppCompatActivity {
                     //insert into db as a fav
                     selected.favorite = true;
                     viewModel.insert(selected);
-                    Toast.makeText(rbSelected.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(rbDisplay.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         //Ingredients list
         ListView ingredientsView = findViewById(R.id.ingredientsView);
-        ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(rbSelected.this, android.R.layout.simple_list_item_1, selected.theIngredients);
-        ingredientsView.setAdapter(rbArrAdapt);
+        ArrayAdapter<String> arrAdapt = new ArrayAdapter(rbDisplay.this, android.R.layout.simple_list_item_1, selected.theIngredients);
+        ingredientsView.setAdapter(arrAdapt);
 
         //Nutritional Information
         setNutritionalInfo(selected, selected.totalNutrients.ENERC_KCAL, findViewById(R.id.ENERC_KCAL), findViewById(R.id.ENERC_KCALunit));
@@ -156,7 +157,7 @@ public class rbSelected extends AppCompatActivity {
         finish();
     }
 
-    public void setNutritionalInfo(Recipe selected, Nutrient n, TextView quantityView, TextView unitView){
+    public void setNutritionalInfo(Recipe selected, Nutrient nutrient, TextView quantityView, TextView unitView){
         //Get option units
         String units;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -168,12 +169,12 @@ public class rbSelected extends AppCompatActivity {
             units = "g";
         }
 
-        if(n != null) {
-            if(n != selected.totalNutrients.ENERC_KCAL){
-                n.setUnits(units);
+        if(nutrient != null) {
+            if(nutrient != selected.totalNutrients.ENERC_KCAL){
+                nutrient.setUnits(units);
             }
-            quantityView.setText(n.round());
-            unitView.setText(n.unit);
+            quantityView.setText(nutrient.round());
+            unitView.setText(nutrient.unit);
         }
         else{
             quantityView.setText("Unknown");
@@ -238,53 +239,53 @@ public class rbSelected extends AppCompatActivity {
         GetRecipeFromFavsAsyncTask task = new GetRecipeFromFavsAsyncTask();
         task.execute(url);
 
-        Recipe r = null;
+        Recipe recipe = null;
         try{
-            r = task.get();
+            recipe = task.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return r;
+        return recipe;
     }
 
     public Recipe FetchRecipe(String url){
         GetRecipeAsyncTask task = new GetRecipeAsyncTask();
         task.execute(url);
 
-        Recipe r = null;
+        Recipe recipe = null;
         try{
-            r = task.get();
+            recipe = task.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return r;
+        return recipe;
     }
 
     private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
         @Override
         protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
+            Recipe recipe = null;
             int count = strings == null ? 0 : strings.length;
             for(int i = 0; i < count; i++){
-                r = viewModel.getFav(strings[i]);
+                recipe = viewModel.getFav(strings[i]);
             }
-            return r;
+            return recipe;
         }
     }
 
     private class GetRecipeAsyncTask extends AsyncTask<String, Void, Recipe>{
         @Override
         protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
+            Recipe recipe = null;
             int count = strings == null ? 0 : strings.length;
             for(int i = 0; i < count; i++){
-                r = viewModel.getRecipe(strings[i]);
+                recipe = viewModel.getRecipe(strings[i]);
             }
-            return r;
+            return recipe;
         }
     }
 }

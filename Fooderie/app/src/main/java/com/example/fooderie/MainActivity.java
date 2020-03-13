@@ -1,23 +1,20 @@
 package com.example.fooderie;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
 
-import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.groceryList.views.GroceryListView;
 import fooderie.models.NotificationHelper;
-import fooderie.recipeBrowser.rbActivity;
+import fooderie.recipeBrowser.rbSearch;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.views.PlanRecipeRecyclerView;
 import fooderie.mealPlanner.views.TodayMealFragment;
@@ -74,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void openRecipeBrowser(){
-        Intent rbIntent = new Intent(this, rbActivity.class);
+        Intent rbIntent = new Intent(this, rbSearch.class);
         rbIntent.putExtra("FROMPLAN", "no");
         startActivity(rbIntent);
     }

@@ -28,8 +28,8 @@ import fooderie.mealPlanner.models.PlanRoot;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.viewModels.PlanRecipeViewModel;
 import fooderie.recipeBrowser.models.Recipe;
-import fooderie.recipeBrowser.rbActivity;
-import fooderie.recipeBrowser.rbSelected;
+import fooderie.recipeBrowser.rbSearch;
+import fooderie.recipeBrowser.rbDisplay;
 
 import com.example.fooderie.R;
 
@@ -172,8 +172,8 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     }
 
     private Void displayRecipe(Recipe r) {
-        // -- Connect to recipe browser(rb) selected (rbSelected) -- //
-        Intent rbIntent = new Intent(this, rbSelected.class);
+        // -- Connect to recipe browser(rb) selected (rbDisplay) -- //
+        Intent rbIntent = new Intent(this, rbDisplay.class);
         rbIntent.putExtra(RECIPE_KEY, r);
         rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_NO);
         startActivity(rbIntent);
@@ -258,7 +258,7 @@ public class PlanRecipeRecyclerView extends AppCompatActivity {
     private void addPlanDialog() {
         if (m_current() instanceof PlanMeal) {
             // -- Addition at the recipe level, make activity to get recipe from recipe browser -- //
-            Intent rbIntent = new Intent(this, rbActivity.class);
+            Intent rbIntent = new Intent(this, rbSearch.class);
             rbIntent.putExtra(REQUEST_RECIPE_KEY, REQUEST_RECIPE_VALUE_YES);
             startActivityForResult(rbIntent, RECIPE_REQUEST_VIEW);
 

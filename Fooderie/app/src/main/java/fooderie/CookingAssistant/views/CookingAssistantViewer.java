@@ -48,7 +48,7 @@ public class CookingAssistantViewer extends AppCompatActivity
     {
         Log.d(TAG, "\n\n\n --------");  //Log to indicate we have started the viewer
 
-        //Get selected recipe from rbActivity
+        //Get selected recipe from rbSearch
         Intent intent = getIntent();
         selected = (Recipe)intent.getSerializableExtra("RECIPE");
         selectedUrl = selected.url;
