@@ -1,4 +1,4 @@
-package fooderie.CookingAssistant.views;
+package fooderie.CookingAssistant.views.views;
 
 import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
@@ -27,6 +27,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import fooderie.recipeBrowser.viewModels.RBViewModel;
+
+import java.util.concurrent.ExecutionException;
+
+import android.widget.Toast;
+
 /* TODO: fix for this 'https://www.seriouseats.com/recipes/2013/04/eggs-in-a-bacon-basket-recipe.html' */
 public class CookingAssistantViewer extends AppCompatActivity
 {
@@ -42,6 +48,9 @@ public class CookingAssistantViewer extends AppCompatActivity
     Context context;
     Button btnMenu;
     Recipe selected;
+
+    private RBViewModel viewModel;
+    Button btnFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,6 +72,104 @@ public class CookingAssistantViewer extends AppCompatActivity
         btnMenu = findViewById(R.id.btnMainMenu);
         View v = findViewById(android.R.id.content);
         btnMenu.setVisibility(v.GONE);
+
+        btnFavourite = findViewById(R.id.btnFavourite);
+        v = findViewById(android.R.id.content);
+        btnFavourite.setVisibility(v.GONE);
+    }
+
+    //Favourite button clicked
+    public void btnFavClick(View v)
+    {
+        Recipe recipeIfExists = FetchRecipe(selected.url);
+        Recipe favIfExists = FetchFav(selected.url);
+
+        //It's in the db
+        if(recipeIfExists != null)
+        {
+            //And it's not a fav
+            if(favIfExists == null)
+            {
+                //update value - true
+                selected.favorite = true;
+                viewModel.updateRecipeFav(selected.url, selected.favorite);
+                Toast.makeText(CookingAssistantViewer.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+            }
+        }
+        //It's not in the db
+        else
+        {
+            //insert into db as a fav
+            selected.favorite = true;
+            viewModel.insert(selected);
+            Toast.makeText(CookingAssistantViewer.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
+        @Override
+        protected Recipe doInBackground(String... strings) {
+            Recipe r = null;
+            int count = strings == null ? 0 : strings.length;
+            for(int i = 0; i < count; i++){
+                r = viewModel.getFav(strings[i]);
+            }
+            return r;
+        }
+    }
+
+    private class GetRecipeAsyncTask extends AsyncTask<String, Void, Recipe>{
+        @Override
+        protected Recipe doInBackground(String... strings) {
+            Recipe r = null;
+            int count = strings == null ? 0 : strings.length;
+            for(int i = 0; i < count; i++){
+                r = viewModel.getRecipe(strings[i]);
+            }
+            return r;
+        }
+    }
+
+    public Recipe FetchFav(String url)
+    {
+        GetRecipeFromFavsAsyncTask task = new GetRecipeFromFavsAsyncTask();
+        task.execute(url);
+
+        Recipe r = null;
+        try
+        {
+            r = task.get();
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+    public Recipe FetchRecipe(String url)
+    {
+        GetRecipeAsyncTask task = new GetRecipeAsyncTask();
+        task.execute(url);
+
+        Recipe r = null;
+        try
+        {
+            r = task.get();
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        }
+        return r;
     }
 
     //Menu button on click
@@ -143,7 +250,8 @@ public class CookingAssistantViewer extends AppCompatActivity
 
                             Node step1 = recipeL.childNode(i);
                             Node step2 = step1.childNode(3).childNode(2).childNode(0);
-                            if (step2.toString().contains("<strong>"))
+
+                            if (step2.toString().contains("<"))
                             {
                                 Node step3 = step2.childNode(0); //Get actual step info
                                 Node step4 = step1.childNode(3).childNode(2).childNode(1); //Get actual step info
@@ -197,6 +305,10 @@ public class CookingAssistantViewer extends AppCompatActivity
             View v = findViewById(android.R.id.content);
             btnMenu = findViewById(R.id.btnMainMenu);
             btnMenu.setVisibility(v.GONE);
+
+            //Hide the favourite button (only shown on last page)
+            btnFavourite = findViewById(R.id.btnFavourite);
+            btnFavourite.setVisibility(v.GONE);
         }
     }
 
@@ -238,6 +350,13 @@ public class CookingAssistantViewer extends AppCompatActivity
                 btnMenu.setVisibility(View.VISIBLE);
             else
                 btnMenu.setVisibility(View.GONE);
+        }
+        if (btnMenu != null)    //If we have our btnFavourite created
+        {
+            if (position == mDots.length - 1)   //If we are on the last page, show the done button, if not, don't
+                btnFavourite.setVisibility(View.VISIBLE);
+            else
+                btnFavourite.setVisibility(View.GONE);
         }
     }
 
