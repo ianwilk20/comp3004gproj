@@ -2,9 +2,13 @@ package fooderie.CookingAssistant.views.views;
 
 import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
+
+import fooderie.CookingAssistant.views.models.FavouriteClick;
+import fooderie.CookingAssistant.views.viewModels.CookingAssistantViewerViewModel;
 import fooderie.recipeBrowser.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -48,14 +52,20 @@ public class CookingAssistantViewer extends AppCompatActivity
     Context context;
     Button btnMenu;
     Recipe selected;
+    FavouriteClick favClick;
 
-    private RBViewModel viewModel;
+    private RBViewModel rbViewModel;
+    private CookingAssistantViewerViewModel caViewModel;
     Button btnFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Log.d(TAG, "\n\n\n --------");  //Log to indicate we have started the viewer
+
+        //Get view models
+        rbViewModel = ViewModelProviders.of(this).get(RBViewModel.class);
+        caViewModel = ViewModelProviders.of(this).get(CookingAssistantViewerViewModel.class);
 
         //Get selected recipe from rbSearch
         Intent intent = getIntent();
@@ -67,6 +77,9 @@ public class CookingAssistantViewer extends AppCompatActivity
         //Set our context
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant);
+
+        //Crete our favClicker
+        favClick = new FavouriteClick(selected, rbViewModel);
 
         //Have to reset invisibility multiple times as the async return view breaks it
         btnMenu = findViewById(R.id.btnMainMenu);
@@ -81,95 +94,9 @@ public class CookingAssistantViewer extends AppCompatActivity
     //Favourite button clicked
     public void btnFavClick(View v)
     {
-        Recipe recipeIfExists = FetchRecipe(selected.url);
-        Recipe favIfExists = FetchFav(selected.url);
-
-        //It's in the db
-        if(recipeIfExists != null)
-        {
-            //And it's not a fav
-            if(favIfExists == null)
-            {
-                //update value - true
-                selected.favorite = true;
-                viewModel.updateRecipeFav(selected.url, selected.favorite);
-                Toast.makeText(CookingAssistantViewer.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-            }
-        }
-        //It's not in the db
-        else
-        {
-            //insert into db as a fav
-            selected.favorite = true;
-            viewModel.insert(selected);
-            Toast.makeText(CookingAssistantViewer.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class GetRecipeFromFavsAsyncTask extends AsyncTask<String, Void, Recipe>{
-        @Override
-        protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
-            int count = strings == null ? 0 : strings.length;
-            for(int i = 0; i < count; i++){
-                r = viewModel.getFav(strings[i]);
-            }
-            return r;
-        }
-    }
-
-    private class GetRecipeAsyncTask extends AsyncTask<String, Void, Recipe>{
-        @Override
-        protected Recipe doInBackground(String... strings) {
-            Recipe r = null;
-            int count = strings == null ? 0 : strings.length;
-            for(int i = 0; i < count; i++){
-                r = viewModel.getRecipe(strings[i]);
-            }
-            return r;
-        }
-    }
-
-    public Recipe FetchFav(String url)
-    {
-        GetRecipeFromFavsAsyncTask task = new GetRecipeFromFavsAsyncTask();
-        task.execute(url);
-
-        Recipe r = null;
-        try
-        {
-            r = task.get();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-        return r;
-    }
-
-    public Recipe FetchRecipe(String url)
-    {
-        GetRecipeAsyncTask task = new GetRecipeAsyncTask();
-        task.execute(url);
-
-        Recipe r = null;
-        try
-        {
-            r = task.get();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-        return r;
+        Log.d(TAG, "Add/Delete from favourites");
+        String toastDisplay = favClick.favouriteClicked();
+        Toast.makeText(CookingAssistantViewer.this, toastDisplay, Toast.LENGTH_SHORT).show();
     }
 
     //Menu button on click
@@ -310,20 +237,6 @@ public class CookingAssistantViewer extends AppCompatActivity
             btnFavourite = findViewById(R.id.btnFavourite);
             btnFavourite.setVisibility(v.GONE);
         }
-    }
-
-    public String getUrl()
-    {
-        Random rng = new Random();
-
-        String[] urls = {
-                "https://food52.com/recipes/22633-strawberry-basil-lemonade",
-                "https://www.foodnetwork.com/recipes/food-network-kitchen/strawberries-with-basil-granita-recipe-1928457",
-                "https://www.seriouseats.com/recipes/2013/06/whole-wheat-oatmeal-pancakes-maple-roast-rhubarb-recipe.html",
-                "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html"
-        };
-
-        return urls[rng.nextInt(urls.length)];
     }
 
     public void addStepStatus(int stepLength, int position) // From https://www.youtube.com/watch?v=byLKoPgB7yA
