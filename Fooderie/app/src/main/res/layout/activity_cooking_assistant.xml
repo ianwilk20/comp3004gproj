@@ -23,6 +23,17 @@
         android:text="Main Menu"
         tools:visibility="invisible" />
 
+    <Button
+        android:id="@+id/btnFavourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:text="Favourite"
+        android:onClick="btnFavClick"
+        tools:visibility="invisible" />
+
     <LinearLayout
         android:id="@+id/dotsLayout"
         android:layout_width="wrap_content"

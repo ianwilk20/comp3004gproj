@@ -20,7 +20,7 @@ import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import fooderie.CookingAssistant.views.CookingAssistantPreview;
+import fooderie.CookingAssistant.views.views.CookingAssistantPreview;
 import fooderie.recipeBrowser.models.Nutrient;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.models.Tag;

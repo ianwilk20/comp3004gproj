@@ -1,10 +1,14 @@
-package fooderie.CookingAssistant.views;
+package fooderie.CookingAssistant.views.views;
 
 import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
+
+import fooderie.CookingAssistant.views.models.FavouriteClick;
+import fooderie.CookingAssistant.views.viewModels.CookingAssistantViewerViewModel;
 import fooderie.recipeBrowser.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -27,6 +31,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import fooderie.recipeBrowser.viewModels.RBViewModel;
+
+import java.util.concurrent.ExecutionException;
+
+import android.widget.Toast;
+
 /* TODO: fix for this 'https://www.seriouseats.com/recipes/2013/04/eggs-in-a-bacon-basket-recipe.html' */
 public class CookingAssistantViewer extends AppCompatActivity
 {
@@ -42,11 +52,20 @@ public class CookingAssistantViewer extends AppCompatActivity
     Context context;
     Button btnMenu;
     Recipe selected;
+    FavouriteClick favClick;
+
+    private RBViewModel rbViewModel;
+    private CookingAssistantViewerViewModel caViewModel;
+    Button btnFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Log.d(TAG, "\n\n\n --------");  //Log to indicate we have started the viewer
+
+        //Get view models
+        rbViewModel = ViewModelProviders.of(this).get(RBViewModel.class);
+        caViewModel = ViewModelProviders.of(this).get(CookingAssistantViewerViewModel.class);
 
         //Get selected recipe from rbSearch
         Intent intent = getIntent();
@@ -59,10 +78,25 @@ public class CookingAssistantViewer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant);
 
+        //Crete our favClicker
+        favClick = new FavouriteClick(selected, rbViewModel);
+
         //Have to reset invisibility multiple times as the async return view breaks it
         btnMenu = findViewById(R.id.btnMainMenu);
         View v = findViewById(android.R.id.content);
         btnMenu.setVisibility(v.GONE);
+
+        btnFavourite = findViewById(R.id.btnFavourite);
+        v = findViewById(android.R.id.content);
+        btnFavourite.setVisibility(v.GONE);
+    }
+
+    //Favourite button clicked
+    public void btnFavClick(View v)
+    {
+        Log.d(TAG, "Add/Delete from favourites");
+        String toastDisplay = favClick.favouriteClicked();
+        Toast.makeText(CookingAssistantViewer.this, toastDisplay, Toast.LENGTH_SHORT).show();
     }
 
     //Menu button on click
@@ -143,7 +177,8 @@ public class CookingAssistantViewer extends AppCompatActivity
 
                             Node step1 = recipeL.childNode(i);
                             Node step2 = step1.childNode(3).childNode(2).childNode(0);
-                            if (step2.toString().contains("<strong>"))
+
+                            if (step2.toString().contains("<"))
                             {
                                 Node step3 = step2.childNode(0); //Get actual step info
                                 Node step4 = step1.childNode(3).childNode(2).childNode(1); //Get actual step info
@@ -197,21 +232,11 @@ public class CookingAssistantViewer extends AppCompatActivity
             View v = findViewById(android.R.id.content);
             btnMenu = findViewById(R.id.btnMainMenu);
             btnMenu.setVisibility(v.GONE);
+
+            //Hide the favourite button (only shown on last page)
+            btnFavourite = findViewById(R.id.btnFavourite);
+            btnFavourite.setVisibility(v.GONE);
         }
-    }
-
-    public String getUrl()
-    {
-        Random rng = new Random();
-
-        String[] urls = {
-                "https://food52.com/recipes/22633-strawberry-basil-lemonade",
-                "https://www.foodnetwork.com/recipes/food-network-kitchen/strawberries-with-basil-granita-recipe-1928457",
-                "https://www.seriouseats.com/recipes/2013/06/whole-wheat-oatmeal-pancakes-maple-roast-rhubarb-recipe.html",
-                "https://www.seriouseats.com/recipes/2015/06/grilled-scallion-pancake-recipe.html"
-        };
-
-        return urls[rng.nextInt(urls.length)];
     }
 
     public void addStepStatus(int stepLength, int position) // From https://www.youtube.com/watch?v=byLKoPgB7yA
@@ -238,6 +263,13 @@ public class CookingAssistantViewer extends AppCompatActivity
                 btnMenu.setVisibility(View.VISIBLE);
             else
                 btnMenu.setVisibility(View.GONE);
+        }
+        if (btnMenu != null)    //If we have our btnFavourite created
+        {
+            if (position == mDots.length - 1)   //If we are on the last page, show the done button, if not, don't
+                btnFavourite.setVisibility(View.VISIBLE);
+            else
+                btnFavourite.setVisibility(View.GONE);
         }
     }
 
