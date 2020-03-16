@@ -179,6 +179,10 @@ public interface FooderieDao {
             "WHERE table_userGroceryList.food_name = :ingredientName")
     void deleteGroceryItemByName(String ingredientName);
 
+    @Query("DELETE FROM table_userGroceryList " +
+            "WHERE table_userGroceryList.food_id = :id")
+    void deleteGroceryItemByID(String id);
+
     @Query("SELECT * FROM table_userGroceryList")
     LiveData<List<UserGroceryListItem>> getAllGroceryItems();
 

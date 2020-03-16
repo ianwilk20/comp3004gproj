@@ -1,6 +1,9 @@
 package fooderie.groceryList.viewModels;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class GroceryListViewModel extends AndroidViewModel {
     public void deleteGroceryItemByName(String ingredientName) {m_repo.deleteGroceryItemByName(ingredientName);}
     public void delete(Food f){m_repo.delete(f);}
     public void deleteAllFoodFromAPI(){m_repo.deleteAllFoodFromAPI();}
+    public void deleteGroceryItemByID(String id){m_repo.deleteGroceryItemByID(id);}
 
     public LiveData<List<UserGroceryListItem>> getUserGroceryList() {return allGroceryItems;}
     public LiveData<List<Food>> getAllFoodItems() {return  allFoodItems;}
@@ -70,6 +74,5 @@ public class GroceryListViewModel extends AndroidViewModel {
     public List<UserGroceryListItem> getItemsInPantry() {return m_repo.getItemsInPantry();}
     public LiveData<List<Recipe>> getAllRecipesForNextWeek() {return allRecipesForNextWeek; }
     public List<UserGroceryListItem> getItemInGroceryList(String food_name) {return m_repo.getItemInGroceryList(food_name);}
-
 
 }

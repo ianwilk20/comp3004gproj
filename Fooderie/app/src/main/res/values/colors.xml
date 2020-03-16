@@ -11,4 +11,5 @@
     <color name="colorPrimary_Dark">#3C3C3C</color>
     <color name="colorSelected_Dark">#87DBF3</color>
     <color name="grocery_list_sherling_gray">#373737</color>
+    <color name="yellow">#F9D300</color>
 </resources>

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,8 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
         //The grocery item displayed - as food_name
         TextView groceryItem = (TextView) v.findViewById(R.id.groceryItem);
+        ListView groceryList = (ListView) v.findViewById(R.id.groceryListDisplay);
+
         groceryItem.setText(list.get(position).getFood_name());
 
         //The grocery item's additional information - as quantity, notes, and department
@@ -107,9 +110,11 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
                 //Toast.makeText(v.getContext(), itemSelected, Toast.LENGTH_SHORT).show();
                 if ((groceryItem.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
                     groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), false);
+                    v.setFocusable(position);
                     //notifyDataSetChanged();
                 } else {
                     groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), true);
+                    //groceryList.setSelection(position);
                 }
             }
         });
@@ -168,8 +173,8 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemSelected = groceryItem.getText().toString();
-                groceryListViewModel.deleteGroceryItemByName(itemSelected);
+                String idForItem = list.get(position).getFood_id();
+                groceryListViewModel.deleteGroceryItemByID(idForItem);
                 notifyDataSetChanged();
             }
         });
