@@ -51,12 +51,13 @@ public class CookingAssistantViewer extends AppCompatActivity
     private TextView[] mDots;
     Context context;
     Button btnMenu;
+    Button btnFavourite;
+    Button btnTimer;
     Recipe selected;
     FavouriteClick favClick;
 
     private RBViewModel rbViewModel;
     private CookingAssistantViewerViewModel caViewModel;
-    Button btnFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,6 +90,16 @@ public class CookingAssistantViewer extends AppCompatActivity
         btnFavourite = findViewById(R.id.btnFavourite);
         v = findViewById(android.R.id.content);
         btnFavourite.setVisibility(v.GONE);
+
+        btnTimer = findViewById(R.id.btnOpenTimer);
+        btnTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                goToTimer();
+            }
+        });
     }
 
     //Favourite button clicked
@@ -97,6 +108,12 @@ public class CookingAssistantViewer extends AppCompatActivity
         Log.d(TAG, "Add/Delete from favourites");
         String toastDisplay = favClick.favouriteClicked();
         Toast.makeText(CookingAssistantViewer.this, toastDisplay, Toast.LENGTH_SHORT).show();
+    }
+
+    public void goToTimer()
+    {
+        Intent rbIntent = new Intent(this, MainActivity.class);
+        startActivity(rbIntent);
     }
 
     //Menu button on click

@@ -21,7 +21,8 @@
         android:layout_above="@+id/dotsLayout"
         android:onClick="onClick"
         android:text="Main Menu"
-        tools:visibility="invisible" />
+        tools:visibility="invisible"
+        />
 
     <Button
         android:id="@+id/btnFavourite"
@@ -32,7 +33,18 @@
         android:layout_marginBottom="25dp"
         android:text="Favourite"
         android:onClick="btnFavClick"
-        tools:visibility="invisible" />
+        tools:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/btnOpenTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="27dp"
+        android:text="Start Timer" />
 
     <LinearLayout
         android:id="@+id/dotsLayout"
