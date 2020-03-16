@@ -19,7 +19,7 @@ public class PlanDay extends Plan {
     @Ignore
     private static final String planName = "Day Plan";
     @Ignore
-    static final PropertiesForPlan properties = new PropertiesForPlan(true, false, false, planName);
+    static final PropertiesForPlan properties = new PropertiesForPlan(false, false, false, planName);
 
     public PlanDay(Long parentId, String name, int recipeCount) {
         super(parentId, name, recipeCount, properties, PlanMeal.properties);
