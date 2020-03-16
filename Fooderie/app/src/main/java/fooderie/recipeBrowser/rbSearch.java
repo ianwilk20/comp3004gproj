@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import fooderie.groceryList.VolleySingleton;
 import fooderie.recipeBrowser.models.Recipe;
 import fooderie.recipeBrowser.viewModels.RBViewModel;
 import android.widget.Toast;
@@ -64,7 +66,7 @@ public class rbSearch extends AppCompatActivity {
         resultsListView = findViewById(R.id.rbListView);
         favListView = findViewById(R.id.favListView);
 
-        rbRequestQueue = Volley.newRequestQueue(this);
+        rbRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();;
         dialog = new ProgressDialog(rbSearch.this);
 
         //put search results into list

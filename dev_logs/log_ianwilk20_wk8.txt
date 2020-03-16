@@ -1,0 +1,59 @@
+Development Log – Week #8
+Ian Wilkinson, 101073244
+
+The goal for this week was to attempt to clean up some of the final touches of the grocery list for the D3 and implementing design patterns that suit our already built product.
+
+Friday, March 13, 2020 to Sunday, March 15, 2020
+ - [1.0 Hr] Implementation of Singleton Design Pattern and Testing
+	- Implemented a Singleton Design Pattern for Volley API Requests
+	- The Singleton is used for the request queue that is needed when creating an API request
+	- Testing was completed in the impacting subsystems to verify no functionality is broken:
+		- Grocery List
+		- Recipe Search
+ - [1.0 Hr] Meal Planner and Grocery List Integration
+	- Fixed flaw in importation of meal plan recipe ingredients
+	- Caused ingredients to be fabricated instead of following this pattern:
+		- If ingredient already in grocery list, create a duplicate based off of the ones metadata in the list
+		- Otherwise check our food table for it, add it to the grocery list
+		- Otherwise check the API for it, add it to grocery list
+		- Otherwise fabricate it from scratch
+	- Previously steps 2-4 were not being executed due to an oversight of only seeing if when the grocery list table was queried for a food label, it returned null, it didn't check if it's null and the list is empty
+	- Fixed this issue
+
+ - [2.5 Hr] Shopping Mode
+	- Enabled a mode that users can enter when they have no internet (either no active WIFI or Data signal)
+	- Will notify the users
+	- Will no longer try to access the API and freeze the request
+	- Added condition to the Meal Planner import to check if the network is unavailable
+		- will do standard db table checks
+		- if network not available it will fabricate the ingredient
+		- otherwise will proceed to check API
+	- Will show a banner saying, "You are in Shopping Mode" so users know when they're in which mode
+
+ - [1.0 Hr] Empty Grocery List View
+	- Added UI elements to make user aware when their grocery list is empty
+
+ - [0.5 Hr] UI Design in Photoshop
+	- Created a logo for Fooderie 
+	- Created a backsplash for an empty grocery list
+	- Enabled both of their use in our application
+
+ - [0.5 Hr] Deletion bug fix
+	- DeleteFoodById function added to DB
+	- Fixed bug where when duplicate items are deleted both get deleted
+	- Now if there's more than one of the same ingredient, only the one selected is deleted
+
+ - [3.0 Hr] Deliverable 3 Document Write-up
+	- Documented:
+		- Singleton Design Pattern
+		- Accomodating Design
+		- Rationalization
+		- Work Delegation
+
+ - [0.5 Hr] Reviewing and Accepting PR's
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+-Scroll View Resets when the item is "crossed off" and goes back to the top of the view 
+-Make app look nice
