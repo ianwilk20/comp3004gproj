@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="300dp"
-    android:background="@color/colorOffColour"
     android:layout_gravity="center"
     android:padding="5dp">
 

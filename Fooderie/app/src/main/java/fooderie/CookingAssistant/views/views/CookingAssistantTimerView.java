@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,8 +21,10 @@ public class CookingAssistantTimerView extends AppCompatActivity
     private TextView countDownText;
     private Button countDownButton;
     private Button setButton;
+    private Button resetButton;
 
     private CountDownTimer countDownTimer;
+    private long startTime = 60000;
     private long timeLeftInMillisecond = 60000; // 10 min
     private boolean timerRunning;
 
@@ -36,6 +39,16 @@ public class CookingAssistantTimerView extends AppCompatActivity
         countDownText = findViewById(R.id.txtCounter);
         countDownButton = findViewById(R.id.btnStartTimer);
         setButton = findViewById(R.id.btnSetTimer);
+        resetButton = findViewById(R.id.btnResetTimer);
+
+        resetButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                timeLeftInMillisecond = 60000;
+            }
+        });
 
         countDownButton.setOnClickListener(new View.OnClickListener()
         {
@@ -62,17 +75,38 @@ public class CookingAssistantTimerView extends AppCompatActivity
     //Set new timer time
     public void newTime()
     {
-        NumberPicker numPicker;
+        NumberPicker numberPicker;
         Button setTime;
         RadioButton radioSeconds;
         RadioButton radioMinutes;
+        String timeType;
 
-
-        myDialog.setContentView(R.layout.activity_cooking_assistant_timer_popup);
-        numPicker = (NumberPicker) myDialog.findViewById(R.id.numPicker);
+        myDialog.setContentView(R.layout.activity_cooking_assistant_timer_popup);   //Create popup window
+        numberPicker = (NumberPicker) myDialog.findViewById(R.id.numPicker);
         setTime = (Button) myDialog.findViewById(R.id.btnTimerSetTime);
         radioSeconds = (RadioButton) myDialog.findViewById(R.id.rdoSecond);
         radioMinutes = (RadioButton) myDialog.findViewById(R.id.rdoMinute);
+
+        if (numberPicker != null)
+        {
+            numberPicker.setMinValue(0);
+            numberPicker.setMaxValue(1000);
+            numberPicker.setWrapSelectorWheel(false);
+            numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
+            {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+                {
+                    //Get the time type
+                    String timeType = "Seconds";
+                    if (radioMinutes.isSelected())
+                        timeType = "Minutes";
+
+                    String text = "CurrentTimer: " + newVal + " " + timeType;
+                    Toast.makeText(CookingAssistantTimerView.this, text, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         setTime.setOnClickListener(new View.OnClickListener()
         {
@@ -80,7 +114,7 @@ public class CookingAssistantTimerView extends AppCompatActivity
             public void onClick(View v)
             {
                 //Get the time value
-                int selectedTime = numPicker.getValue();
+                int selectedTime = numberPicker.getValue();
 
                 //Get the time type
                 String timeType = "Seconds";

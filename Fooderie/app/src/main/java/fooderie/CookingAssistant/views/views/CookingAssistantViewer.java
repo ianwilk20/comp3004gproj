@@ -92,14 +92,18 @@ public class CookingAssistantViewer extends AppCompatActivity
         btnFavourite.setVisibility(v.GONE);
 
         btnTimer = findViewById(R.id.btnOpenTimer);
-        btnTimer.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                goToTimer();
-            }
-        });
+    }
+
+    //Open timer clicked
+    public void btnOpenStartTimer(View v)
+    {
+        goToTimer();
+    }
+
+    public void goToTimer()
+    {
+        Intent rbIntent = new Intent(this, CookingAssistantTimerView.class);
+        startActivity(rbIntent);
     }
 
     //Favourite button clicked
@@ -108,12 +112,6 @@ public class CookingAssistantViewer extends AppCompatActivity
         Log.d(TAG, "Add/Delete from favourites");
         String toastDisplay = favClick.favouriteClicked();
         Toast.makeText(CookingAssistantViewer.this, toastDisplay, Toast.LENGTH_SHORT).show();
-    }
-
-    public void goToTimer()
-    {
-        Intent rbIntent = new Intent(this, MainActivity.class);
-        startActivity(rbIntent);
     }
 
     //Menu button on click
