@@ -24,15 +24,15 @@
 
     <TextView
         android:id="@+id/dialog_message"
-        android:layout_below="@id/rectangleSeperatorError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/rectangleSeperatorError"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center_horizontal"
         android:padding="15dp"
         android:text="Error Message"
-        android:fontFamily="@font/montserrat"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:textColor="@color/colorPrimary_Dark"/>
+        android:textColor="@color/colorPrimary_Dark" />
 
 
         <Button
