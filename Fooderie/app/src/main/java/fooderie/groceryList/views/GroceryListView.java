@@ -89,6 +89,7 @@ public class GroceryListView extends AppCompatActivity {
     ProgressDialog progressDialog;
     ProgressDialog mealPlanAddProgressDialog;
     ProgressDialog noInternetDialog;
+    AlertDialog ingredientNotFoundDialog;
 
     String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
     String queryParams;
@@ -121,7 +122,6 @@ public class GroceryListView extends AppCompatActivity {
                 } else { emptyListLayout.setVisibility(View.INVISIBLE);};
                 groceryListAdapter = new CustomAdapter(userGroceryListItems, getApplicationContext(), groceryListViewModel, GroceryListView.this);
                 groceryList.setAdapter(groceryListAdapter);
-                //groceryListAdapter.notifyDataSetChanged();
                 progressDialog.dismiss();
 
             }
@@ -138,8 +138,6 @@ public class GroceryListView extends AppCompatActivity {
         groceryListViewModel.getAllRecipesForNextWeek().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
-//                populateGroceryListWithNWMealPlanRecipes(true);
-//                mealPlanAddProgressDialog.dismiss();
             }
         });
 
@@ -298,7 +296,7 @@ public class GroceryListView extends AppCompatActivity {
 
                 if (nextWeeksRecipeIngredients != null && nextWeeksRecipeIngredients.size() != 0){
                     for (Recipe r : nextWeeksRecipeIngredients){
-                        for (String s : r.theIngredients){
+                        for (String s : r.getTheIngredients()){
 
                             //Check if an ingredient is in the grocery list
                             List<UserGroceryListItem> groceryListItem = FetchIngredientFromGroceryList(s);
@@ -601,7 +599,11 @@ public class GroceryListView extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("API ERROR response", error.toString());
-                        createDialog("Sorry, but there was an error in processing your ingredient search. Please try again.");
+                        createDialog("Sorry, we've exceeded our API requests, please try to add the ingredient again later. For now we've added it to your list, but it cannot be nutritionally verified.");
+                        String foodId = "food_" + UUID.randomUUID().toString();
+                        UserGroceryListItem item = new UserGroceryListItem(foodId, ingredient);
+                        item.setNotes("From Your Week Meal Plan");
+                        groceryListViewModel.insert(item);
                     }
                 });
 
@@ -614,12 +616,14 @@ public class GroceryListView extends AppCompatActivity {
     }
 
     public void createDialog(String errorMessage){
+        if (isAlertDialogShowing(ingredientNotFoundDialog)){return;}
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroceryListView.this);
         LayoutInflater inflater = getLayoutInflater();
         View customView = inflater.inflate(R.layout.error_dialog_grocery, null, false);
 
         alertDialog.setView(customView);
-        final AlertDialog showAD = alertDialog.show();
+        ingredientNotFoundDialog = alertDialog.show();
 
         TextView text = (TextView) customView.findViewById(R.id.dialog_message);
         text.setText(errorMessage);
@@ -627,9 +631,17 @@ public class GroceryListView extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAD.dismiss();
+                ingredientNotFoundDialog.dismiss();
             }
         });
+    }
+
+    public boolean isAlertDialogShowing(AlertDialog alertDialog){
+        if (alertDialog != null){
+            return alertDialog.isShowing();
+        } else {
+            return false;
+        }
     }
 
     private class GetFoodByLabelAsyncTask extends AsyncTask<String, Void, Food>{

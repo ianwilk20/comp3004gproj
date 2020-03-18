@@ -1,0 +1,22 @@
+Development Log – Week #8
+Ian Wilkinson, 101073244
+
+The goal for this week was to fix bugs and add any features we discussed in our scrum meeting that pertain to this component of the app.
+
+Tuesday, March 17, 2020 to Sunday, March 29, 2020
+ - [1 Hr] Bug Fix and Testing
+	- When multiple API requests failed because of limited calls to API, it would show multiple alert dialogs 
+	- This is fixed, now it'll check if an alert dialog already on screen and if so it won't create another
+	- Testing API through-put
+
+ - [0.5 Hr] Using Recipe Interface
+	- Using "Recipe" interface as opposed to the attributes directly
+	- Tested interface ensure that the new usage works with grocery list's next week meal plan's import feature
+
+ - [0.5 Hr] Reviewing and Accepting PR's
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+-Scroll View Resets when the item is "crossed off" and goes back to the top of the view 
+-Make app look nice
