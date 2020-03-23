@@ -1,4 +1,4 @@
-COMP3004 Dev Log - Week #7
+COMP3004 Dev Log - Week #8
 Michael Ting - 101068936
 
 Overview: 

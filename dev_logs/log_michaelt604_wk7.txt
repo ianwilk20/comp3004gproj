@@ -5,7 +5,7 @@ Overview:
 This week was largely focused on researching future plans and preparing for the group demo.
 
 Weekly Progress:
-[3 Hr]
+[4 Hr]
 - Push notification scheduling and timing.
 
 [0.5 Hr]

@@ -1,0 +1,20 @@
+COMP3004 Dev Log - Week #9
+Michael Ting - 101068936
+
+Overview: 
+This weeks focus was preparing for the Oral Exam as well as polishing the app and final features.
+
+Weekly Progress:
+[3 hr]
+- Oral Exam practice and reviewing other group members work
+
+[4 hr]
+- Code polishing
+- Timer implementation in cooking assistant fixed and fully implemented with reset and set features
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
