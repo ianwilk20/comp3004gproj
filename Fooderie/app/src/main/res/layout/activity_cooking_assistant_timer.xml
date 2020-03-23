@@ -24,6 +24,7 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="10dp"
         android:text="@string/start"
+        android:visibility="invisible"
         android:textSize="30sp" />
 
     <Button
@@ -35,16 +36,29 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="60dp"
         android:text="@string/reset"
+        android:visibility="invisible"
         android:textSize="30sp" />
 
     <Button
         android:id="@+id/btnSetTimer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnStartTimer"
-        android:layout_marginTop="15dp"
+        android:layout_alignBottom="@+id/editTextInput"
+        android:layout_toEndOf="@+id/editTextInput"
         android:text="@string/set"
         android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/editTextInput"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnStartTimer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:hint="Minutes"
+        android:inputType="number"
+        android:maxLength="4" />
+
 
 
 </RelativeLayout>

@@ -1,34 +1,43 @@
 package fooderie.CookingAssistant.views.views;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.VibrationEffect;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.os.Vibrator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fooderie.R;
 
+import java.util.Locale;
+
 public class CookingAssistantTimerView extends AppCompatActivity
 {
     private TextView countDownText;
-    private Button countDownButton;
-    private Button setButton;
-    private Button resetButton;
+    private EditText editTextInput;
+    private Button btnStartTimer;
+    private Button btnResetTimer;
+    private Button btnSetTimer;
 
     private CountDownTimer countDownTimer;
-    private long startTime = 60000;
-    private long timeLeftInMillisecond = 60000; // 10 min
-    private boolean timerRunning;
 
-    Dialog myDialog;
+    private long startTime;
+    private long endTime;
+    private long timeLeftInMillisecond;
+    private boolean timerRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,166 +45,241 @@ public class CookingAssistantTimerView extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooking_assistant_timer);
 
+        //Find elements
+        editTextInput = findViewById(R.id.editTextInput);
         countDownText = findViewById(R.id.txtCounter);
-        countDownButton = findViewById(R.id.btnStartTimer);
-        setButton = findViewById(R.id.btnSetTimer);
-        resetButton = findViewById(R.id.btnResetTimer);
+        btnStartTimer = findViewById(R.id.btnStartTimer);
+        btnSetTimer = findViewById(R.id.btnSetTimer);
+        btnResetTimer = findViewById(R.id.btnResetTimer);
 
-        resetButton.setOnClickListener(new View.OnClickListener()
+        btnStartTimer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                timeLeftInMillisecond = 60000;
+                if (timerRunning)
+                    pauseTimer();
+                else
+                    startTimer();
             }
         });
 
-        countDownButton.setOnClickListener(new View.OnClickListener()
+        btnResetTimer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                startStop();
+                resetTimer();
             }
         });
 
-        setButton.setOnClickListener(new View.OnClickListener()
+        btnSetTimer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                newTime();
-            }
-        });
+                String input = editTextInput.getText().toString();
 
-        myDialog = new Dialog(this);
-        updateTimer();
-    }
-
-    //Set new timer time
-    public void newTime()
-    {
-        NumberPicker numberPicker;
-        Button setTime;
-        RadioButton radioSeconds;
-        RadioButton radioMinutes;
-        String timeType;
-
-        myDialog.setContentView(R.layout.activity_cooking_assistant_timer_popup);   //Create popup window
-        numberPicker = (NumberPicker) myDialog.findViewById(R.id.numPicker);
-        setTime = (Button) myDialog.findViewById(R.id.btnTimerSetTime);
-        radioSeconds = (RadioButton) myDialog.findViewById(R.id.rdoSecond);
-        radioMinutes = (RadioButton) myDialog.findViewById(R.id.rdoMinute);
-
-        if (numberPicker != null)
-        {
-            numberPicker.setMinValue(0);
-            numberPicker.setMaxValue(1000);
-            numberPicker.setWrapSelectorWheel(false);
-            numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
-            {
-                @Override
-                public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+                if (input.length() < 1)
                 {
-                    //Get the time type
-                    String timeType = "Seconds";
-                    if (radioMinutes.isSelected())
-                        timeType = "Minutes";
-
-                    String text = "CurrentTimer: " + newVal + " " + timeType;
-                    Toast.makeText(CookingAssistantTimerView.this, text, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CookingAssistantTimerView.this, "Please set a number of minutes to run the timer for", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            });
-        }
 
-        setTime.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //Get the time value
-                int selectedTime = numberPicker.getValue();
+                long millInput = Long.parseLong(input) * 60000; //Number of milliseconds from minutes
+                if (millInput == 0)
+                {
+                    Toast.makeText(CookingAssistantTimerView.this, "Please enter a positive number of minutes to run the timer for", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                //Get the time type
-                String timeType = "Seconds";
-                if (radioMinutes.isSelected())
-                    timeType = "Minutes";
-
-                newTime(selectedTime, timeType);
-                //Remove the popup
-                myDialog.dismiss();
+                setTotalTime(millInput);
+                editTextInput.setText("");
             }
         });
 
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.show();
+        setCountDownText();
     }
 
-    public void newTime(int selectedTime, String timeType)
+    public void setTotalTime(long milliseconds)
     {
-        int multiplier = 1000;  //1000 ms per second * 60 for minutes
-        if (timeType == "Minutes")
-            multiplier *= 60;
-
-        timeLeftInMillisecond = selectedTime * multiplier;  //Set the number of miliseconds on the timer remaining
-        changeTimer("Start");   //Starts the timer again if its not started
-        updateTimer();  //Updates current time
+        startTime = milliseconds;
+        resetTimer();
+        closeKeyboard();
     }
 
-    public void startStop()
+    //Hides the popup keyboard from the edit text field
+    public void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+        if (view != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    //Updates the screen layout
+    public void updateTimerLayout()
     {
         if (timerRunning)
-            changeTimer("Stop");
-        else
-            changeTimer("Start");
-    }
-
-    public void changeTimer(String which)
-    {
-        if (which == "Start")
         {
-            countDownTimer = new CountDownTimer(timeLeftInMillisecond, 1000)
+            btnResetTimer.setVisibility(View.INVISIBLE);
+            btnStartTimer.setText("Pause");
+            btnSetTimer.setVisibility(View.INVISIBLE);
+            editTextInput.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            editTextInput.setVisibility(View.VISIBLE);
+            btnSetTimer.setVisibility(View.VISIBLE);
+            btnStartTimer.setText("Start");
+
+            //If greater than 1 second left show pause
+            if (timeLeftInMillisecond < 1000)
+                btnStartTimer.setVisibility(View.INVISIBLE);
+            else
+                btnStartTimer.setVisibility(View.VISIBLE);
+
+            //If are started, hide reset and set time buttons
+            if (timeLeftInMillisecond < startTime)
             {
-                @Override
-                public void onTick(long millisUntilFinished)
-                {
-                    timeLeftInMillisecond = millisUntilFinished;
-                    updateTimer();
-                }
+                btnResetTimer.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                btnResetTimer.setVisibility(View.INVISIBLE);
+            }
 
-                @Override
-                public void onFinish()
-                {
-
-                }
-            }.start();
-
-            countDownButton.setText("PAUSE");
-            timerRunning = true;
         }
-        else
-        {
-            countDownTimer.cancel();
-            countDownButton.setText("START");
-            timerRunning = false;
-        }
-
     }
 
-    public void updateTimer()
+    //Starts the timer
+    public void startTimer()
     {
-        int minutes = (int) timeLeftInMillisecond / 60000;  //Turns milliseconds into minutes
-        int seconds = (int) timeLeftInMillisecond % 60000 / 10000;  // Get remainder of seconds
+        endTime = System.currentTimeMillis() + timeLeftInMillisecond;
 
-        String timeLeft = "";
-        timeLeft += minutes + ":";
+        //Create a new countdown timer
+        countDownTimer = new CountDownTimer(timeLeftInMillisecond, 1000)
+        {
+            @Override
+            public void onTick(long millisecondsLeft)   //Every tick
+            {
+                timeLeftInMillisecond = millisecondsLeft;
+                setCountDownText();
+            }
 
-        if (seconds < 10)
-            timeLeft += "0";
-        timeLeft += seconds;
+            @Override
+            public void onFinish()  //Timer done
+            {
+                timerRunning = false;
+                updateTimerLayout();
+                vibratePhone();
+            }
+        }.start();
 
-        countDownText.setText(timeLeft);
+        timerRunning = true;
+        updateTimerLayout();
     }
+
+    //Pause the timer
+    public void pauseTimer()
+    {
+        countDownTimer.cancel();
+        timerRunning = false;
+        updateTimerLayout();
+    }
+
+    //Reset the timer
+    public void resetTimer()
+    {
+        timeLeftInMillisecond = startTime;
+        setCountDownText();
+        updateTimerLayout();
+    }
+
+    public void setCountDownText()
+    {
+        int hours = (int) (timeLeftInMillisecond / 1000) / 3600;
+        int minutes = (int) ((timeLeftInMillisecond / 1000) % 3600) / 60;
+        int seconds = (int) (timeLeftInMillisecond / 1000) % 60;
+
+        String formatedTime;
+        if (hours > 0)
+            formatedTime = String.format(Locale.getDefault(),"%d:%02d:%02d", hours, minutes, seconds);
+        else
+            formatedTime = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
+
+        countDownText.setText(formatedTime);
+    }
+
+    public void vibratePhone()
+    {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        //Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        else
+            v.vibrate(500); //For depreciated from before API 26
+
+    }
+
+
+    /*
+    //Override when app stops to save our timer data
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putLong("startTimeInMills", startTime);
+        editor.putLong("millsLeft", timeLeftInMillisecond);
+        editor.putBoolean("timerRunning", timerRunning);
+        editor.putLong("endTime", endTime);
+
+        editor.apply();
+
+        if (countDownTimer != null)
+            countDownTimer.cancel();
+    }
+
+    //Override when app starts again and retrieves the saved state
+    protected void onStart()
+    {
+        super.onStart();
+
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+
+        startTime = prefs.getLong("startTimeInMills", 600000);
+        timeLeftInMillisecond = prefs.getLong("millsLeft", startTime);
+        timerRunning = prefs.getBoolean("timerRunning", false);
+
+        setCountDownText();
+        updateTimerLayout();
+
+        //If our timer was running before, start it running again
+        if (timerRunning)
+        {
+            endTime = prefs.getLong("endTime", 0);
+            timeLeftInMillisecond = endTime - System.currentTimeMillis();
+
+            if (timeLeftInMillisecond < 0)
+            {
+                timeLeftInMillisecond = 0;
+                timerRunning = false;
+
+                setCountDownText();
+                updateTimerLayout();
+            }
+            else
+                startTimer();
+        }
+    }*/
+
 }
 
 
