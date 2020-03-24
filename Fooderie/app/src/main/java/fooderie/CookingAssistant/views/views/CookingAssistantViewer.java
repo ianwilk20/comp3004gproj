@@ -51,12 +51,13 @@ public class CookingAssistantViewer extends AppCompatActivity
     private TextView[] mDots;
     Context context;
     Button btnMenu;
+    Button btnFavourite;
+    Button btnTimer;
     Recipe selected;
     FavouriteClick favClick;
 
     private RBViewModel rbViewModel;
     private CookingAssistantViewerViewModel caViewModel;
-    Button btnFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,6 +90,20 @@ public class CookingAssistantViewer extends AppCompatActivity
         btnFavourite = findViewById(R.id.btnFavourite);
         v = findViewById(android.R.id.content);
         btnFavourite.setVisibility(v.GONE);
+
+        btnTimer = findViewById(R.id.btnOpenTimer);
+    }
+
+    //Open timer clicked
+    public void btnOpenStartTimer(View v)
+    {
+        goToTimer();
+    }
+
+    public void goToTimer()
+    {
+        Intent rbIntent = new Intent(this, CookingAssistantTimerView.class);
+        startActivity(rbIntent);
     }
 
     //Favourite button clicked

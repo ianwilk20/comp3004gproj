@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:padding="5dp">
+
+    <NumberPicker
+        android:id="@+id/numPicker"
+        android:layout_width="155dp"
+        android:layout_height="47dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp" />
+
+    <RadioGroup
+        android:id="@+id/rdoGroup"
+        android:layout_width="109dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/numPicker">
+
+
+        <RadioButton
+            android:id="@+id/rdoSecond"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            tools:text="Seconds" />
+
+        <RadioButton
+            android:id="@+id/rdoMinute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            tools:text="Minutes" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnTimerSetTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numPicker"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Set Time" />
+
+
+</RelativeLayout>

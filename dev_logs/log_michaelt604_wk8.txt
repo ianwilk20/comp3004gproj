@@ -1,0 +1,20 @@
+COMP3004 Dev Log - Week #8
+Michael Ting - 101068936
+
+Overview: 
+This week was largely focused on polishing and writing the D3.
+
+Weekly Progress:
+[6.5 hr]
+- D3 writeup
+
+[1.5hr]
+- Code polishing
+- Timer implementation in cooking assistant
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
