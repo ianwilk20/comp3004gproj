@@ -15,7 +15,7 @@ import fooderie.mealPlanner.models.Plan;
 import fooderie.mealPlanner.models.PlanDay;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanWeek;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
 
 public class PlanRecipeViewModel extends AndroidViewModel {

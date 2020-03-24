@@ -119,6 +119,64 @@
 
     </RadioGroup>
 
+    <RelativeLayout
+        android:id="@+id/emptyGroceryListPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filterGroup"
+        android:layout_marginTop="-10dp"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/emptygroceryicon"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/empty_grocery_list" />
+
+        <TextView
+            android:id="@+id/headerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emptygroceryicon"
+            android:layout_marginTop="60dp"
+            android:textSize="30dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Your List is Empty"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:id="@+id/footerText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerText"
+            android:textSize="12dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Create your grocery list now and to make for an easy shopping experience"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/shoppingModeBanner"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:text="You are in Shopping Mode"
+        android:gravity="center"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/yellow"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:background="@color/grocery_list_sherling_gray"
+        android:visibility="invisible"/>
+
 
     <ListView
     android:id="@+id/groceryListDisplay"
@@ -127,22 +185,28 @@
     android:layout_below="@id/filterGroup"
     android:layout_marginTop="1dp"></ListView>
 
-        <Button
-            android:id="@+id/addGroceryItem"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20dp"
-            android:text="Add to List"
-            android:textColor="@color/colorPrimary"
-            android:backgroundTint="@color/grocery_list_sherling_gray"
-            android:background="@drawable/rounded_layout_bg"
-            android:elevation="10dp"
-            android:layout_marginBottom="15dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            />
+    <Button
+        android:id="@+id/addGroceryItem"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/rounded_layout_bg"
+        android:backgroundTint="@color/grocery_list_sherling_gray"
+        android:elevation="10dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Add to List"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp" />
+
+    <include
+        layout="@layout/content_bottom_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp" />
 
 
 </RelativeLayout>

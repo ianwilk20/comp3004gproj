@@ -1,0 +1,21 @@
+Development Log – Week #8
+Gavin Jackson, 101065531
+Work pertained to D3, and continued touch ups. Primary focus on completing requirements.
+
+Monday, March 9th, 2020
+    -	[2.0 Hr] Added schedule times. When changing the ordering of meals, schedule times maintain given order. Moved meal ordering 
+        logic out of repo and into view model.
+    -	[3.5 Hr] Worked on notifications. Made 3 different notifications.
+        o	Looked into how to initiate function such that it calls onActivityResult. Required to simulate the selection of a weekly 
+            meal plan for next week, as per one of the notifications.
+        o	Made proxy activity that does get onActivityResult to save and store the selected weekly meal plan.
+        o	Notifications are difficult to work with. Tried forever to get smooth screen changes.
+
+Tuesday, March 10th, 2020
+-	[1.5 Hr] Changed Plan Object. Major redesign and simplification of code
+-	[0.75 Hr] Attempted to change Proxy Weekly Schedule Fragment. Reverted work. Changed return information of selected weekly meal 
+    plan from a whole PlanWeek object to a plan id.
+
+Sunday, March 16th, 2020
+-	[6.0 Hr] D3 Report Writing
+-	[0.5 Hr] Log Writing.

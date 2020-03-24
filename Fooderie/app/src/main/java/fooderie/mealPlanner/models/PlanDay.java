@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 
 @Entity(tableName = "table_PlanDay",
         indices = {@Index("planId"), @Index("parentId")},
@@ -19,7 +19,7 @@ public class PlanDay extends Plan {
     @Ignore
     private static final String planName = "Day Plan";
     @Ignore
-    static final PropertiesForPlan properties = new PropertiesForPlan(true, false, false, planName);
+    static final PropertiesForPlan properties = new PropertiesForPlan(false, false, false, planName);
 
     public PlanDay(Long parentId, String name, int recipeCount) {
         super(parentId, name, recipeCount, properties, PlanMeal.properties);

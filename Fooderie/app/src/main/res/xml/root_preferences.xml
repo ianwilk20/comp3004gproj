@@ -40,31 +40,36 @@
 
     <PreferenceCategory app:title="The Developers">
         <Preference
+            android:selectable="false"
             app:title="MacKenzie Bedard"
-            ></Preference>
+            />
         <Preference
+            android:selectable="false"
             app:title="Gavin Jackson"
-            ></Preference>
+            />
         <Preference
+            android:selectable="false"
             app:title="Michael Ting"
-            ></Preference>
+            />
         <Preference
+            android:selectable="false"
             app:title="Ian Wilkinson"
-            ></Preference>
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Report Problems to:">
         <Preference
+            android:selectable="false"
             app:title="mackenziebedard@cmail.carleton.ca"
-            ></Preference>
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Attributions">
         <Preference
             android:icon="@drawable/edamam"
             android:selectable="false"
-            android:layout="@layout/activity_options"
-            ></Preference>
+            app:title="Powered by Edamam"
+            />
 
     </PreferenceCategory>
 

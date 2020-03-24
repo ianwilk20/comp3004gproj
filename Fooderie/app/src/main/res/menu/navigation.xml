@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.fooderie.fooderie._Main.MainActivity">
+    <item
+        android:id="@+id/action_options"
+        android:icon="@drawable/ic_options_black_24dp"
+        android:title="" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title=""/>
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title=""/>
+    <item
+        android:id="@+id/action_mealPlanner"
+        android:icon="@drawable/ic_local_dining_black_24dp"
+        android:title=""/>
+    <item
+        android:id="@+id/action_grocery"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
+        android:title=""/>
+</menu>

@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,15 +21,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -37,11 +35,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,18 +45,15 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import fooderie._main.models.BottomNavigation;
+import fooderie.groceryList.VolleySingleton;
 import fooderie.groceryList.models.IngredientNotFoundException;
 import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.groceryList.viewModels.GroceryListViewModel;
-import fooderie.groceryList.viewModels.Utility;
 import fooderie.groceryList.models.Food;
 import fooderie.recipeBrowser.models.Recipe;
 
@@ -73,6 +65,7 @@ public class GroceryListView extends AppCompatActivity {
 
     View v;
     RequestQueue requestQueue;
+    TextView shoppingModeBanner;
     ListView groceryList;
     ImageButton saveButton;
     ImageButton optionsButton;
@@ -81,6 +74,8 @@ public class GroceryListView extends AppCompatActivity {
     Button addItem;
     ProgressDialog progressDialog;
     ProgressDialog mealPlanAddProgressDialog;
+    ProgressDialog noInternetDialog;
+    AlertDialog ingredientNotFoundDialog;
 
     String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
     String queryParams;
@@ -93,21 +88,28 @@ public class GroceryListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list);
 
+        BottomNavigation navigation = new BottomNavigation(this, 4);
+
         //Getting tagged items from activity
         groceryList = findViewById(R.id.groceryListDisplay);
         optionsButton = findViewById(R.id.optionsButton);
-        requestQueue = Volley.newRequestQueue(this);
+        requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        //requestQueue = Volley.newRequestQueue(this);
         addItem = findViewById(R.id.addGroceryItem);
         saveButton = findViewById(R.id.saveButton);
         mealPlanRecipes = findViewById(R.id.addRecipesToGroceries);
+        shoppingModeBanner = findViewById(R.id.shoppingModeBanner);
+        RelativeLayout emptyListLayout = (RelativeLayout) findViewById(R.id.emptyGroceryListPicture);
 
         groceryListViewModel = ViewModelProviders.of(this).get(GroceryListViewModel.class);
         groceryListViewModel.getUserGroceryList().observe(this, new Observer<List<UserGroceryListItem>>() {
             @Override
             public void onChanged(List<UserGroceryListItem> userGroceryListItems) {
+                if (userGroceryListItems.size() == 0){
+                        emptyListLayout.setVisibility(View.VISIBLE);
+                } else { emptyListLayout.setVisibility(View.INVISIBLE);};
                 groceryListAdapter = new CustomAdapter(userGroceryListItems, getApplicationContext(), groceryListViewModel, GroceryListView.this);
                 groceryList.setAdapter(groceryListAdapter);
-                groceryListAdapter.notifyDataSetChanged();
                 progressDialog.dismiss();
 
             }
@@ -124,8 +126,6 @@ public class GroceryListView extends AppCompatActivity {
         groceryListViewModel.getAllRecipesForNextWeek().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
-//                populateGroceryListWithNWMealPlanRecipes(true);
-//                mealPlanAddProgressDialog.dismiss();
             }
         });
 
@@ -133,7 +133,24 @@ public class GroceryListView extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         progressDialog = new ProgressDialog(GroceryListView.this);
         mealPlanAddProgressDialog = new ProgressDialog(GroceryListView.this);
+        noInternetDialog = new ProgressDialog(GroceryListView.this);
 
+        if (!isNetworkAvailable()){
+            shoppingModeBanner.setVisibility(View.VISIBLE);
+            AlertDialog.Builder finalDialog = new AlertDialog.Builder(GroceryListView.this)
+                    .setTitle("Shopping Mode Enabled")
+                    .setMessage("Shopping mode is enabled because you are not connected to the internet. Please note that we cannot verify the validity of ingredients unless they are added with an active internet connection.")
+                    .setCancelable(true)
+                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            finalDialog.show();
+        } else {
+            shoppingModeBanner.setVisibility(View.INVISIBLE);
+        }
 
         final PopupMenu dropDownSaveMenu = new PopupMenu(this, saveButton);
         final Menu save_menu = dropDownSaveMenu.getMenu();
@@ -267,11 +284,11 @@ public class GroceryListView extends AppCompatActivity {
 
                 if (nextWeeksRecipeIngredients != null && nextWeeksRecipeIngredients.size() != 0){
                     for (Recipe r : nextWeeksRecipeIngredients){
-                        for (String s : r.theIngredients){
+                        for (String s : r.getTheIngredients()){
 
                             //Check if an ingredient is in the grocery list
                             List<UserGroceryListItem> groceryListItem = FetchIngredientFromGroceryList(s);
-                            if (groceryListItem != null){
+                            if (groceryListItem != null && groceryListItem.size() != 0){
                                 String foodId = "food_" + UUID.randomUUID().toString();
                                 UserGroceryListItem fabricatedItem = new UserGroceryListItem(foodId, s);
                                 fabricatedItem.setNotes("From Your Weekly Meal Plan");
@@ -287,6 +304,13 @@ public class GroceryListView extends AppCompatActivity {
                                 fabricatedItem.setNotes("From Your Week Meal Plan");
                                 groceryListViewModel.insert(fabricatedItem);
                                 continue;
+                            }
+
+                            if (!isNetworkAvailable()) {
+                                String foodId = "food_" + UUID.randomUUID().toString();
+                                UserGroceryListItem item = new UserGroceryListItem(foodId, s);
+                                item.setNotes("From Your Week Meal Plan");
+                                groceryListViewModel.insert(item);
                             } else {
                                 // Fetch From API if not there...
                                 // Create our own entry into GroceryList Table fabricating food_id
@@ -331,7 +355,6 @@ public class GroceryListView extends AppCompatActivity {
         alertDialog.show();
     }
 
-
     private void addIngredient() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(GroceryListView.this);
         //builder.setTitle("Add to List");
@@ -366,6 +389,12 @@ public class GroceryListView extends AppCompatActivity {
                         UserGroceryListItem newItem = new UserGroceryListItem(foodReturnedFromDB.foodId, foodReturnedFromDB.label);
                         groceryListViewModel.insert(newItem);
                         return;
+                    }
+                    if (!isNetworkAvailable()){
+                        String foodId = "food_" + UUID.randomUUID().toString();
+                        UserGroceryListItem fabricatedItem = new UserGroceryListItem(foodId, query);
+                        fabricatedItem.setNotes("Added through shopping mode");
+                        groceryListViewModel.insert(fabricatedItem);
                     } else {
                         //If not in our DB get it from the API, save to Food table in DB and insert first occurrence into Grocery List
                         FetchIngredientFromAPI(query); //Get Ingredients from API and save to DB
@@ -542,6 +571,7 @@ public class GroceryListView extends AppCompatActivity {
                                 groceryListViewModel.insert(f); //insert Food into DB
                                 if (i == 0){
                                     firstItem = new UserGroceryListItem(f.foodId, f.label);
+                                    firstItem.setNotes("From Your Weekly Meal Plan");
                                     groceryListViewModel.insert(firstItem); //insert first item into Grocery List DB
                                 }
                             }
@@ -557,7 +587,11 @@ public class GroceryListView extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("API ERROR response", error.toString());
-                        createDialog("Sorry, but there was an error in processing your ingredient search. Please try again.");
+                        createDialog("Sorry, we've exceeded our API requests, please try to add the ingredient again later. For now we've added it to your list, but it cannot be nutritionally verified.");
+                        String foodId = "food_" + UUID.randomUUID().toString();
+                        UserGroceryListItem item = new UserGroceryListItem(foodId, ingredient);
+                        item.setNotes("From Your Week Meal Plan");
+                        groceryListViewModel.insert(item);
                     }
                 });
 
@@ -570,12 +604,14 @@ public class GroceryListView extends AppCompatActivity {
     }
 
     public void createDialog(String errorMessage){
+        if (isAlertDialogShowing(ingredientNotFoundDialog)){return;}
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroceryListView.this);
         LayoutInflater inflater = getLayoutInflater();
         View customView = inflater.inflate(R.layout.error_dialog_grocery, null, false);
 
         alertDialog.setView(customView);
-        final AlertDialog showAD = alertDialog.show();
+        ingredientNotFoundDialog = alertDialog.show();
 
         TextView text = (TextView) customView.findViewById(R.id.dialog_message);
         text.setText(errorMessage);
@@ -583,9 +619,17 @@ public class GroceryListView extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAD.dismiss();
+                ingredientNotFoundDialog.dismiss();
             }
         });
+    }
+
+    public boolean isAlertDialogShowing(AlertDialog alertDialog){
+        if (alertDialog != null){
+            return alertDialog.isShowing();
+        } else {
+            return false;
+        }
     }
 
     private class GetFoodByLabelAsyncTask extends AsyncTask<String, Void, Food>{
@@ -616,6 +660,13 @@ public class GroceryListView extends AppCompatActivity {
             }
             return ingredientFromDB;
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) { return networkInfo.isConnected();}
+        return false;
     }
 
 
