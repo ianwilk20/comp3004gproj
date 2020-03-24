@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 
 @Entity(tableName = "table_PlanMeal",
         indices = {@Index("planId"), @Index("parentId")},

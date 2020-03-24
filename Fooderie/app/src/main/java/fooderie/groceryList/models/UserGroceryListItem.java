@@ -1,15 +1,11 @@
 package fooderie.groceryList.models;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import fooderie.models.FooderieRepository;
 
 
 @Entity (tableName = "table_userGroceryList",

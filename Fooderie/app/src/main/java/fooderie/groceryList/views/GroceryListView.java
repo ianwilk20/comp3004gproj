@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,16 +21,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.SearchView;
@@ -42,11 +35,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.fooderie.MainActivity;
 import com.example.fooderie.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -55,19 +45,15 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import fooderie._main.models.BottomNavigation;
 import fooderie.groceryList.VolleySingleton;
 import fooderie.groceryList.models.IngredientNotFoundException;
 import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.groceryList.viewModels.GroceryListViewModel;
-import fooderie.groceryList.viewModels.Utility;
 import fooderie.groceryList.models.Food;
 import fooderie.recipeBrowser.models.Recipe;
 
@@ -101,6 +87,8 @@ public class GroceryListView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list);
+
+        BottomNavigation navigation = new BottomNavigation(this, 4);
 
         //Getting tagged items from activity
         groceryList = findViewById(R.id.groceryListDisplay);

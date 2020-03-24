@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 
 @Entity
 public abstract class Plan implements Serializable {

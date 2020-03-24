@@ -11,7 +11,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
 
 public class TodayMealViewModel extends AndroidViewModel {

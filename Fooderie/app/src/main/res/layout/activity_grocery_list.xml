@@ -185,22 +185,28 @@
     android:layout_below="@id/filterGroup"
     android:layout_marginTop="1dp"></ListView>
 
-        <Button
-            android:id="@+id/addGroceryItem"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20dp"
-            android:text="Add to List"
-            android:textColor="@color/colorPrimary"
-            android:backgroundTint="@color/grocery_list_sherling_gray"
-            android:background="@drawable/rounded_layout_bg"
-            android:elevation="10dp"
-            android:layout_marginBottom="15dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            />
+    <Button
+        android:id="@+id/addGroceryItem"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/rounded_layout_bg"
+        android:backgroundTint="@color/grocery_list_sherling_gray"
+        android:elevation="10dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Add to List"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp" />
+
+    <include
+        layout="@layout/content_bottom_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp" />
 
 
 </RelativeLayout>

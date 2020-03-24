@@ -3,7 +3,7 @@ package fooderie.recipeBrowser.viewModels;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import java.util.List;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 import fooderie.recipeBrowser.models.Recipe;
 
 public class RBViewModel extends AndroidViewModel {
