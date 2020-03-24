@@ -20,8 +20,18 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/dotsLayout"
         android:onClick="onClick"
-        android:text="Main Menu"
+        android:text="Finish"
         tools:visibility="invisible"
+        />
+
+    <ProgressBar
+        android:id="@+id/loadIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        tools:visibility="visible"
         />
 
     <Button
@@ -45,7 +55,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginBottom="29dp"
         android:onClick="btnOpenStartTimer"
-        android:text="Start Timer" />
+        android:text="Start Timer"
+        tools:visibility="invisible"
+        />
 
     <LinearLayout
         android:id="@+id/dotsLayout"

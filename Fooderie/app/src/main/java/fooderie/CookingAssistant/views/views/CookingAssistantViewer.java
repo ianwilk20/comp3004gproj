@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
@@ -49,12 +50,14 @@ public class CookingAssistantViewer extends AppCompatActivity
     private LinearLayout mDotLayout;
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
+
     Context context;
     Button btnMenu;
     Button btnFavourite;
     Button btnTimer;
     Recipe selected;
     FavouriteClick favClick;
+    ProgressBar progressBar;
 
     private RBViewModel rbViewModel;
     private CookingAssistantViewerViewModel caViewModel;
@@ -88,10 +91,13 @@ public class CookingAssistantViewer extends AppCompatActivity
         btnMenu.setVisibility(v.GONE);
 
         btnFavourite = findViewById(R.id.btnFavourite);
-        v = findViewById(android.R.id.content);
         btnFavourite.setVisibility(v.GONE);
 
+        progressBar = findViewById(R.id.loadIndicator);
+        progressBar.setVisibility(View.VISIBLE);
+
         btnTimer = findViewById(R.id.btnOpenTimer);
+        btnTimer.setVisibility(v.GONE);
     }
 
     //Open timer clicked
@@ -119,14 +125,16 @@ public class CookingAssistantViewer extends AppCompatActivity
     {
         Log.d(TAG, "\n\n\n RETURN TO MAIN MENU");
         goToSteps(selected);
+
     }
 
     //Go to the main menu
     public void goToSteps(Recipe selected)
     {
-        Intent rbIntent = new Intent(this, MainActivity.class);
-        rbIntent.putExtra("RECIPE", selected);
-        startActivity(rbIntent);
+        Intent intent = new Intent();
+        intent.putExtra("RECIPE", selected);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     //JSoupParsing the website to get the instructions
@@ -243,8 +251,16 @@ public class CookingAssistantViewer extends AppCompatActivity
 
             mSlideViewPager.addOnPageChangeListener(viewListener);
 
-            //Hide the menu button (only shown on last page)
             View v = findViewById(android.R.id.content);
+
+            //Show timer and hide progress bar when everything is loaded
+            btnTimer = findViewById(R.id.btnOpenTimer);
+            btnTimer.setVisibility(v.VISIBLE);
+
+            progressBar = findViewById(R.id.loadIndicator);
+            progressBar.setVisibility(View.GONE);
+
+            //Hide the menu button (only shown on last page)
             btnMenu = findViewById(R.id.btnMainMenu);
             btnMenu.setVisibility(v.GONE);
 
