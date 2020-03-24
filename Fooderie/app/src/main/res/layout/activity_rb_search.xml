@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="fooderie.recipeBrowser.rbSearch">
+    tools:context="fooderie.recipeBrowser.views.rbSearch">
 
     <TextView
         android:id="@+id/textView"
@@ -29,14 +29,14 @@
         android:id="@+id/rbSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
         android:layout_marginTop="96dp"
+        android:iconifiedByDefault="true"
         android:queryHint="Search Here"
-        android:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_below="@id/textView"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/rbListView"
@@ -55,14 +55,21 @@
     <ListView
         android:id="@+id/favListView"
         android:layout_width="380dp"
-        android:layout_height="441dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/rbSearchView"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901"
         android:focusableInTouchMode="false"
-        android:isScrollContainer="false"></ListView>
+        android:isScrollContainer="false"
+        app:layout_constraintBottom_toTopOf="@+id/include3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rbSearchView"
+        app:layout_constraintVertical_bias="0.0"></ListView>
+
+    <include
+        android:id="@+id/include3"
+        layout="@layout/content_bottom_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

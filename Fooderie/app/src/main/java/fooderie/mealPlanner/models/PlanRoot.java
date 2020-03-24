@@ -3,7 +3,7 @@ package fooderie.mealPlanner.models;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.room.Ignore;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 
 public class PlanRoot extends Plan {
     @Ignore

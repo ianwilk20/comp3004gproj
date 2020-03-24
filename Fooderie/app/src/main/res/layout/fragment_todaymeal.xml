@@ -10,7 +10,7 @@
     android:layout_marginRight="16dp"
     android:background="@drawable/fragment_border"
     app:layoutManager="LinearLayoutManager"
-    tools:context="fooderie.mealPlanner.views.TodayMealFragment"
+    tools:context="fooderie.mealPlanner.views.mpTodayMealFragment"
     tools:listitem="@layout/fragment_todaymeal_item">
 
     <TextView
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/TodayMealFragmentTitle"
         app:layout_constraintTop_toBottomOf="@+id/TodayMealFragmentTitle"
-        tools:context="fooderie.mealPlanner.views.TodayMealFragment"
+        tools:context="fooderie.mealPlanner.views.mpTodayMealFragment"
         tools:listitem="@layout/fragment_todaymeal_item" />
 
     <com.kingfisher.easyviewindicator.RecyclerViewIndicator

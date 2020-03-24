@@ -1,20 +1,14 @@
 package fooderie.groceryList.viewModels;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import fooderie.groceryList.models.Food;
-import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.models.FooderieRepository;
+import fooderie._main.models.FooderieRepository;
 import fooderie.groceryList.models.UserGroceryListItem;
 import fooderie.recipeBrowser.models.Recipe;
 
