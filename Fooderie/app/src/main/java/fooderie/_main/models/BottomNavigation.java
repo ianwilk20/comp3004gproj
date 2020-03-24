@@ -46,7 +46,7 @@ public class BottomNavigation {
                 default:
                     intent = new Intent(activity, MainActivity.class);
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             activity.startActivity(intent);
             return false;
         }
