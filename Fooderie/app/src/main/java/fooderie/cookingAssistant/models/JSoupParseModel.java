@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.models;
+package fooderie.CookingAssistant.models;
 
 public class JSoupParseModel
 {

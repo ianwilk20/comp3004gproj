@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.viewModels;
+package fooderie.CookingAssistant.viewModels;
 
 import android.app.Application;
 

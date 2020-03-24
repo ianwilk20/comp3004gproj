@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.views;
+package fooderie.CookingAssistant.views;
 
 import fooderie._main.MainActivity;
 import com.example.fooderie.R;
