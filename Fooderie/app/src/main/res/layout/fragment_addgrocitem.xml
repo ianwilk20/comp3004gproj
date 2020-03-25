@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addgrocitemfrag"
+    android:name="fooderie.groceryList.views.sGroceryListAddItemFragment"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    app:layoutManager="LinearLayoutManager">
+
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/grocery_list_sherling_gray">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/addGroceryItemFromFragment"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:foreground="@drawable/gradient_shape"
+                android:background="@drawable/shopping_basket_for_fragment"
+                android:text="@string/multilinedaddgroceryfrag"
+                android:padding="1dp"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:shadowColor="@color/text_shadow"
+                android:shadowDx="4"
+                android:shadowDy="4"
+                android:shadowRadius="10"
+                android:text="@string/multilinedaddgroceryfrag"
+                android:textColor="#F8F8F8"
+                android:textSize="70px"
+                />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
