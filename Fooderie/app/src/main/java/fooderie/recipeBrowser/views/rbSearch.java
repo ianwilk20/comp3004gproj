@@ -57,13 +57,15 @@ public class rbSearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rb_search);
 
-        BottomNavigation navigation = new BottomNavigation(this, 1);
-
         viewModel = ViewModelProviders.of(this).get(RBViewModel.class);
 
         //Get String from Meal Plan or MainActivity
         Intent intent = getIntent();
         String fromPlan = (String)intent.getSerializableExtra("FROMPLAN");
+
+        BottomNavigation navigation = new BottomNavigation(this, 1);
+        if (fromPlan != null && fromPlan.equals("yes"))
+            navigation.hideNavigation();
 
         rbSearchView = findViewById(R.id.rbSearchView);
         resultsListView = findViewById(R.id.rbListView);

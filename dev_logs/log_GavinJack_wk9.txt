@@ -1,0 +1,19 @@
+Development Log – Week #9
+Gavin Jackson, 101065531
+
+Considering the coronavirus situation workflow has been heavily impacted. Our group has been working together to finish up the 
+remaining pieces of the application. Most requirements of our application are now completed, and we are shifting our focus to 
+final touch ups. A major problem that has plagued the development of our application was a lacking flow between each member’s 
+components. As such, I worked on recreating the navigation of the application. My contribution for the ninth development week 
+was creating the bottom navigation view bar and getting all the components working together. 
+
+Monday, March 23rd, 2020
+    -	[6.0 Hr] Loads of refactoring. Changed location of multiple components, made sure everything was matching the same scheme. 
+        Made new bottom navigation view menu, worked on all activity layouts to make sure it was working properly. Changed layout of 
+        main activity as it no longer required its crazy cluster of navigation objects (as navigation was shifted to navigation bar). 
+
+Tuesday, March 24th, 2020
+    -	[2.0 Hr] Fixed bug with options activity. Required understanding of the how the activity was being loaded using preference 
+        xml rather than standard layout. Solution required taking the preferences and stopping it from loading in a layout. Instead 
+        the layout is loaded in first and a container within the layout is replaced for the preferences.
+    -	[0.5 Hr] Log Writing.

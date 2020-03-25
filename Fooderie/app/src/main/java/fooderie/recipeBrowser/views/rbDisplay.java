@@ -52,7 +52,7 @@ public class rbDisplay extends AppCompatActivity {
 
         //If directed to this activity from Meal Plan
         //Make Add button visible
-        if(fromPlan.equals("yes")){
+        if(fromPlan != null && fromPlan.equals("yes")){
             addButton.setVisibility(View.VISIBLE);
         }
 

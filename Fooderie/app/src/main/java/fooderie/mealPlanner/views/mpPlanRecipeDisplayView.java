@@ -200,7 +200,6 @@ public class mpPlanRecipeDisplayView extends AppCompatActivity {
 
     private void selectParentPlan() {
         if (m_path.size() <= 1) {
-            finish();
             return;
         }
 
