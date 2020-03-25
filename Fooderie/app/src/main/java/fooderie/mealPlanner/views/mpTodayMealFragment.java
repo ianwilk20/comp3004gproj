@@ -22,7 +22,7 @@ import com.kingfisher.easyviewindicator.RecyclerViewIndicator;
 import java.util.List;
 
 import androidx.recyclerview.widget.SnapHelper;
-import fooderie.cookingAssistant.views.CookingAssistantPreview;
+import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.viewModels.TodayMealViewModel;
 import fooderie.recipeBrowser.models.Recipe;
