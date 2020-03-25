@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_alignParentBottom="true"
         app:labelVisibilityMode="unlabeled"
+        app:itemBackground="@drawable/nothing"
         app:menu="@menu/navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

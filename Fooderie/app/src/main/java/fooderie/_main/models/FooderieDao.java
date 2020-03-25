@@ -108,6 +108,10 @@ public interface FooderieDao {
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
     LiveData<List<Recipe>> getRecipes(Long id);
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+            "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId")
+    LiveData<List<PlanMeal>> getNextWeeksMeals(Long weekNum);
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm, table_PlanRecipe pr, table_Recipe r " +
             "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId " +
             "AND pr.parentId == pm.planId AND r.recipe_id == pr.recipeId")

@@ -37,11 +37,15 @@ public class FooderieRepository {
             fooderieDao.update(s);
         });
     }
-
+    public LiveData<List<PlanMeal>> getNextWeeksMeals() {
+        return fooderieDao.getNextWeeksMeals(getNextWeekId());
+    }
     public LiveData<List<Recipe>> getNextWeeksRecipes() {
+        return fooderieDao.getNextWeeksRecipes(getNextWeekId());
+    }
+    private Long getNextWeekId() {
         Calendar c = Calendar.getInstance();
-        Long week = (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
-        return fooderieDao.getNextWeeksRecipes(week);
+        return (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
     }
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
