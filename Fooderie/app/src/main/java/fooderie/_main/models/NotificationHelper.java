@@ -54,7 +54,7 @@ public class NotificationHelper {
             @Override
             public void onChanged(@Nullable List<PlanWeek> plans) {
                 if (plans == null || plans.size() == 0) {
-                    Intent intent = new Intent(m_activity.getApplicationContext(), mpPlanRecipeDisplayView.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);;
+                    Intent intent = new Intent(m_activity.getApplicationContext(), mpPlanRecipeDisplayView.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);;
                     PendingIntent pendingIntent = PendingIntent.getActivity(m_activity, 0, intent, 0);
 
                     String title = "No Plans";
@@ -108,7 +108,7 @@ public class NotificationHelper {
 
     private void MealPlannerNotificationThree() {
         // -- Notify the user if they would like to go shopping for next weeks ingredients -- //
-        Intent intent = new Intent(m_activity, GroceryListView.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent intent = new Intent(m_activity, GroceryListView.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity( m_activity, 0, intent, 0);
 
         String title = "Shopping Time";

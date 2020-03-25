@@ -71,12 +71,17 @@ public class mpPlanRecipeDisplayView extends AppCompatActivity {
         setContentView(R.layout.activity_plan_recyclerview);
 
         BottomNavigation navigation = new BottomNavigation(this, 3);
-
         m_toolbar = findViewById(R.id.toolbar);
         m_toolbar.setTitle("");
 
-        m_toolbar.setNavigationOnClickListener( v -> selectParentPlan());
-        m_toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        Intent intent = getIntent();
+        SELECTING = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
+        if(SELECTING) {
+            navigation.hideNavigation();
+        } else {
+            m_toolbar.setNavigationOnClickListener( v -> selectParentPlan());
+            m_toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        }
 
         AppCompatActivity activity = this;
         m_itemOrderTouchHelper = new ItemTouchHelper( new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
@@ -110,9 +115,6 @@ public class mpPlanRecipeDisplayView extends AppCompatActivity {
                     moves = null;
                 }
         });
-
-        Intent intent = getIntent();
-        SELECTING = intent.getBooleanExtra(LOOKING_FOR_PLANWEEK_KEY, false);
 
         m_planAdaptor = new AdapterPlan(this, this::selectPlan, this::deletePlan, (SELECTING) ? this::selectPlanWeek : null, this::updatePlan);
         m_planRecipeAdaptor = new AdapterRecipe(this, getResources(), this::deletePlanRecipe, this::displayRecipe);
@@ -200,6 +202,8 @@ public class mpPlanRecipeDisplayView extends AppCompatActivity {
 
     private void selectParentPlan() {
         if (m_path.size() <= 1) {
+
+
             return;
         }
 

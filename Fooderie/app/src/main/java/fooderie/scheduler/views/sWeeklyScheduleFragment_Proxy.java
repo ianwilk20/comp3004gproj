@@ -43,19 +43,21 @@ public class sWeeklyScheduleFragment_Proxy extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PLANRECIPE_REQUEST_VIEW) {
-            if (resultCode != RESULT_OK)
-                return;
-
-            // -- Get PlanWeek to modify selected DB entry -- //
-            long l = data.getLongExtra(mpPlanRecipeDisplayView.PLANWEEK_KEY, -1);
-            if (l == -1 || m_scheduleToModify == null)
-                return;
-
-            m_scheduleToModify.setPlanWeekId(l);
-            m_viewModel.updateSchedule(m_scheduleToModify);
-            m_scheduleToModify = null;
+        if (requestCode != PLANRECIPE_REQUEST_VIEW || resultCode != RESULT_OK) {
+            finish();
+            return;
         }
+
+        // -- Get PlanWeek to modify selected DB entry -- //
+        long l = data.getLongExtra(mpPlanRecipeDisplayView.PLANWEEK_KEY, -1);
+        if (l == -1 || m_scheduleToModify == null)
+            return;
+
+        m_scheduleToModify.setPlanWeekId(l);
+        m_viewModel.updateSchedule(m_scheduleToModify);
+        m_scheduleToModify = null;
+
+        // -- Close the proxy -- //
         finish();
     }
 
