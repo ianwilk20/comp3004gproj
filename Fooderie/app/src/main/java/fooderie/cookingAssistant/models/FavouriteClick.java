@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.models;
+package fooderie.CookingAssistant.models;
 
 import android.os.AsyncTask;
 
@@ -16,6 +16,13 @@ public class FavouriteClick
     {
         this.selected = s;
         this.rbViewModel = rbVM;
+    }
+
+    //Returns true if the recipe is a favourite recipe, false if not
+    public boolean isFavourite(Recipe r)
+    {
+        Recipe s = FetchRecipe(r.url);
+        return s.favorite;
     }
 
     //Favourite button clicked

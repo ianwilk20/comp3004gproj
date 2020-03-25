@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.views;
+package fooderie.CookingAssistant.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ public class CookingAssistantPreview extends AppCompatActivity
     private Button startButton;
     //private TextView ingridentText;
     private ListView ingridentList;
+    public static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +55,29 @@ public class CookingAssistantPreview extends AppCompatActivity
 
     //Redirect to CookingAssistantViewer activity
     //and pass selected recipe
-    public void goToSteps(Recipe selected){
-        Intent rbIntent = new Intent(this, CookingAssistantViewer.class);
-        rbIntent.putExtra("RECIPE", selected);
-        startActivity(rbIntent);
+    public void goToSteps(Recipe selected)
+    {
+        Intent intent = new Intent(this, CookingAssistantViewer.class);
+        intent.putExtra("RECIPE", selected);
+        startActivityForResult(intent , REQUEST_CODE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        try
+        {
+            super.onActivityResult(requestCode, resultCode, intent);
 
+            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) //On return, return to whatever called preview
+            {
+                Recipe selected = (Recipe)intent.getSerializableExtra("RECIPE");
+                finish();
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+
+    }
 }

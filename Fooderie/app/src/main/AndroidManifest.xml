@@ -22,9 +22,9 @@
         <activity android:name="fooderie.mealPlanner.views.mpPlanRecipeDisplayView" />
         <activity android:name="fooderie.scheduler.views.sWeeklyScheduleFragment_Proxy" />
         <activity android:name="fooderie.groceryList.views.GroceryListView" />
-        <activity android:name="fooderie.cookingAssistant.views.CookingAssistantViewer" />
-        <activity android:name="fooderie.cookingAssistant.views.CookingAssistantPreview" />
-        <activity android:name="fooderie.cookingAssistant.views.CookingAssistantTimerView" />
+        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantViewer" />
+        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantPreview" />
+        <activity android:name="fooderie.CookingAssistant.views.CookingAssistantTimerView" />
         <activity
             android:name="fooderie._main.MainActivity"
             android:label="@string/app_name"

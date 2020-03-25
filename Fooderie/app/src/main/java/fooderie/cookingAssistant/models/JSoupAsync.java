@@ -1,4 +1,4 @@
-package fooderie.cookingAssistant.models;
+package fooderie.CookingAssistant.models;
 
 public class JSoupAsync {
     String url2 = "https://food52.com/recipes/22633-strawberry-basil-lemonade";
