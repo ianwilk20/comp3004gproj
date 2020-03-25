@@ -1,4 +1,4 @@
-package fooderie.CookingAssistant.views;
+package fooderie.cookingAssistant.views;
 
 import android.content.Intent;
 import android.os.Bundle;

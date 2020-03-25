@@ -1,10 +1,10 @@
-package fooderie.CookingAssistant.views;
+package fooderie.cookingAssistant.views;
 
 import fooderie._main.MainActivity;
 import com.example.fooderie.R;
 
-import fooderie.cookingAssistant.models.FavouriteClick;
-import fooderie.cookingAssistant.viewModels.CookingAssistantViewerViewModel;
+import fooderie.CookingAssistant.models.FavouriteClick;
+import fooderie.CookingAssistant.viewModels.CookingAssistantViewerViewModel;
 import fooderie.recipeBrowser.models.Recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,7 +45,7 @@ public class CookingAssistantViewer extends AppCompatActivity
 
     private ViewPager mSlideViewPager;
     private LinearLayout mDotLayout;
-    private SliderAdapter sliderAdapter;
+    private fooderie.CookingAssistant.views.SliderAdapter sliderAdapter;
     private TextView[] mDots;
 
     Context context;
@@ -105,7 +105,7 @@ public class CookingAssistantViewer extends AppCompatActivity
 
     public void goToTimer()
     {
-        Intent rbIntent = new Intent(this, CookingAssistantTimerView.class);
+        Intent rbIntent = new Intent(this, fooderie.CookingAssistant.views.CookingAssistantTimerView.class);
         startActivity(rbIntent);
     }
 
@@ -241,7 +241,7 @@ public class CookingAssistantViewer extends AppCompatActivity
             mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
 
             //Set our element values
-            sliderAdapter = new SliderAdapter(context, instructionList);
+            sliderAdapter = new fooderie.CookingAssistant.views.SliderAdapter(context, instructionList);
             mSlideViewPager.setAdapter((sliderAdapter));
             numSteps = instructionList.size();
             addStepStatus(numSteps, 0);

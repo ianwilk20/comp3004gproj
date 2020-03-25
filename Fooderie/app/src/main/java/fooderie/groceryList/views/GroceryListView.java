@@ -101,6 +101,7 @@ public class GroceryListView extends AppCompatActivity {
         shoppingModeBanner = findViewById(R.id.shoppingModeBanner);
         RelativeLayout emptyListLayout = (RelativeLayout) findViewById(R.id.emptyGroceryListPicture);
 
+
         groceryListViewModel = ViewModelProviders.of(this).get(GroceryListViewModel.class);
         groceryListViewModel.getUserGroceryList().observe(this, new Observer<List<UserGroceryListItem>>() {
             @Override
@@ -252,6 +253,13 @@ public class GroceryListView extends AppCompatActivity {
                 addIngredient();
             }
         });
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        if (extras != null){
+            if (extras.getInt("bClick") == 1) {addItem.performClick();}
+        }
 
         mealPlanRecipes.setOnClickListener(new View.OnClickListener() {
             @Override

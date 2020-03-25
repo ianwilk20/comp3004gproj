@@ -1,0 +1,25 @@
+Development Log – Week #10
+Ian Wilkinson, 101073244
+
+The goal for this week was to enhance the UI as well as prepare for the D4 Demo. My assigned part for the D4 demo was the youtube video.
+
+Monday, March 23, 2020 to Sunday, March 29, 2020
+ - [4 Hr] Added Grocery List Fragment and UI Improvements
+	- Grocery List "Add to List" fragment is visible from the homepage
+	- Leads user directly to "Find Ingredients" pop-up
+
+ - [1.5 Hr] UI Enhancement - Recipe Browser
+	- Followed a similar style to my Grocery List View for the RB Search
+	- For youtube video 
+
+ - [3 Hr] D4 Video Creation
+	- Created an After Effects project for our video
+	- Have taken screenshots of the application to utilize in the app video
+
+ - [0.5 Hr] Reviewing and Accepting PR's
+ - [0.5 Hr] Log Writing
+
+ 
+Next Steps:
+-Scroll View Resets when the item is "crossed off" and goes back to the top of the view 
+-Make app look nice

@@ -1,4 +1,4 @@
-Development Log – Week #8
+Development Log – Week #9
 Ian Wilkinson, 101073244
 
 The goal for this week was to fix bugs and add any features we discussed in our scrum meeting that pertain to this component of the app.
@@ -12,6 +12,17 @@ Tuesday, March 17, 2020 to Sunday, March 29, 2020
  - [0.5 Hr] Using Recipe Interface
 	- Using "Recipe" interface as opposed to the attributes directly
 	- Tested interface ensure that the new usage works with grocery list's next week meal plan's import feature
+
+ - [4 Hr] D3 Document Preparation
+	- Made the following sections for the D3 doc:
+		- Singleton Design Pattern
+		- Accomodating Design
+		- Grocery List Work Delegation
+	- Designed part of the powerpoint presentation
+
+ - [2 Hr] D3 Preparation
+	- Reviewed and wrote notes on the architecture styles and design patterns that my group partners integrated in the application
+	- Ensured a strong grasp of the material was understood for the presentation
 
  - [0.5 Hr] Reviewing and Accepting PR's
  - [0.5 Hr] Log Writing

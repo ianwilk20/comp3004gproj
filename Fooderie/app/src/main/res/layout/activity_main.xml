@@ -59,6 +59,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/TodayMealFragment"
                 tools:layout="@layout/fragment_weeklyschedule" />
 
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/AddItemFragement"
+                android:name="fooderie.groceryList.views.sGroceryListAddItemFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/WeeklyScheduleFragment"
+                tools:layout="@layout/fragment_addgrocitem"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

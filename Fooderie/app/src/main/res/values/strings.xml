@@ -44,5 +44,7 @@
     <string name="set">SET</string>
     <string name="attribution">Attribution</string>
 
+    <string name="multilinedaddgroceryfrag">Add Item\nTo List</string>
+
 
 </resources>
