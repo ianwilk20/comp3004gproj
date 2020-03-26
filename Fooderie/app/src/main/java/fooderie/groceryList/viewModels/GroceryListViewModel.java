@@ -27,11 +27,11 @@ public class GroceryListViewModel extends AndroidViewModel {
         allRecipesForNextWeek = m_repo.getNextWeeksRecipes();
     }
 
-    public void insert(UserGroceryListItem item){
+    public void insertGroceryItem(UserGroceryListItem item){
         m_repo.insert(item);
     }
 
-    public void insert(Food f){
+    public void insertFood(Food f){
         m_repo.insert(f);
     }
 

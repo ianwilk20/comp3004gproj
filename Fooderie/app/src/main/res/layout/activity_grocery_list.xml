@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="fooderie.groceryList.views.GroceryListView">
 
     <ImageView
@@ -191,7 +190,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/filterGroup"
-    android:layout_marginTop="1dp"></ListView>
+    android:layout_marginTop="1dp"
+     android:layout_above="@id/navBar"   ></ListView>
 
     <Button
         android:id="@+id/addGroceryItem"
@@ -210,10 +210,12 @@
         android:textSize="20dp" />
 
     <include
+        android:id="@+id/navBar"
         layout="@layout/content_bottom_navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         android:layout_marginBottom="0dp" />
 
 
