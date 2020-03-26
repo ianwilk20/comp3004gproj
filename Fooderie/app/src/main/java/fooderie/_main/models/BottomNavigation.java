@@ -31,7 +31,7 @@ public class BottomNavigation {
     }
 
     public void hideNavigation() {
-        navigation.setVisibility(View.INVISIBLE);
+        navigation.setVisibility(View.GONE);
     }
 
     private int getMenuItemIndex(final @NonNull MenuItem item) {

@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/myRect2"
-        android:iconifiedByDefault="false"
+        android:iconifiedByDefault="true"
         android:queryHint="What will it be?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -72,9 +72,11 @@
     <ListView
         android:id="@+id/favListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="275dp"
+        android:layout_above="@+id/include3"
         android:layout_below="@id/myRect3"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:focusableInTouchMode="false"
         android:isScrollContainer="false"></ListView>
 
@@ -83,13 +85,13 @@
         android:layout_width="match_parent"
         android:layout_height="441dp"
         android:layout_below="@id/myRect3"
+        android:focusableInTouchMode="false"
+        android:isScrollContainer="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901"
-        android:focusableInTouchMode="false"
-        android:isScrollContainer="false"
-        android:visibility="gone"></ListView>
+        app:layout_constraintVertical_bias="0.901"></ListView>
 
     <include
         android:id="@+id/include3"
