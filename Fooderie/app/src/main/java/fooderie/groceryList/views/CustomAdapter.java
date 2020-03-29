@@ -73,7 +73,6 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
 
         //The grocery item displayed - as food_name
         TextView groceryItem = (TextView) v.findViewById(R.id.groceryItem);
-        ListView groceryList = (ListView) v.findViewById(R.id.groceryListDisplay);
 
         groceryItem.setText(list.get(position).getFood_name());
 
@@ -105,16 +104,10 @@ public class CustomAdapter extends BaseAdapter implements ListAdapter {
         groceryItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemSelected = ((TextView) v).getText().toString();
-                itemSelected += " was clicked";
-                //Toast.makeText(v.getContext(), itemSelected, Toast.LENGTH_SHORT).show();
                 if ((groceryItem.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) > 0) {
                     groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), false);
-                    v.setFocusable(position);
-                    //notifyDataSetChanged();
                 } else {
                     groceryListViewModel.updateInPantryStatus(list.get(position).getFood_id(), true);
-                    //groceryList.setSelection(position);
                 }
             }
         });
