@@ -57,7 +57,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/low_fat" />
 
@@ -68,7 +68,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/low_carb" />
 
@@ -79,7 +79,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/vegan" />
 
@@ -90,7 +90,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/vegetarian" />
 
@@ -101,7 +101,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/peanut_free" />
 
@@ -112,7 +112,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/tree_nut_free" />
 
@@ -123,7 +123,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="1dp"
+                android:padding="3dp"
                 android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/alcohol_free" />
 
@@ -139,7 +139,7 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:padding="1dp"
+        android:padding="3dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="13dp"
         android:background="@color/colorPrimary_Dark"/>
