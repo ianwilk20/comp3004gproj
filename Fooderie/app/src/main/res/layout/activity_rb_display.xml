@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="fooderie.recipeBrowser.views.rbDisplay">
+
+    <View
+        android:id="@+id/myRect"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/rectangle"/>
 
     <TextView
         android:id="@+id/textView"
@@ -13,11 +20,15 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginRight="32dp"
+        android:layout_below="@id/myRect"
         android:autoSizeTextType="uniform"
         android:lineSpacingExtra="8sp"
-        android:textColor="#0A1F81"
-        android:textStyle="bold"
-        app:fontFamily="monospace"
+        android:textColor="#000000"
+        android:fontFamily="@font/montserrat_bold"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +39,9 @@
         android:layout_width="267dp"
         android:layout_height="96dp"
         android:layout_gravity="center"
+        android:layout_below="@id/textView"
         android:layout_marginStart="148dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView">
 
@@ -39,10 +52,13 @@
 
             <ImageView
                 android:id="@+id/low_fat"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/low_fat" />
 
             <ImageView
@@ -50,7 +66,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/low_carb" />
 
             <ImageView
@@ -58,7 +77,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/vegan" />
 
             <ImageView
@@ -66,7 +88,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/vegetarian" />
 
             <ImageView
@@ -74,7 +99,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/peanut_free" />
 
             <ImageView
@@ -82,7 +110,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/tree_nut_free" />
 
             <ImageView
@@ -90,7 +121,10 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:padding="1dp"
+                android:background="@color/colorPrimary_Dark"
                 android:src="@drawable/alcohol_free" />
 
         </LinearLayout>
@@ -99,68 +133,48 @@
 
     <ImageButton
         android:id="@+id/recipeImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_below="@id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:padding="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-3dp"/>
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:padding="1dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/colorPrimary_Dark"/>
 
-    <Button
-        android:id="@+id/add"
-        style="?android:attr/buttonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="276dp"
-        android:layout_marginTop="136dp"
-        android:text="Add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/website"
-        style="?android:attr/buttonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
-        android:text="Website"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.996"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/steps"
-        style="?android:attr/buttonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
-        android:text="Cooking Steps"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/myRect2"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="190dp"
+        android:layout_below="@id/myRect"
+        android:background="@drawable/rectangle"/>
 
     <TextView
+        android:id="@+id/ingredientsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="184dp"
+        android:layout_marginStart="4dp"
+        android:layout_below="@id/myRect2"
+        android:fontFamily="@font/montserrat_bold"
         android:lineSpacingExtra="8sp"
-        android:text="Ingredients:"
-        android:textColor="#0A1F81"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:fontFamily="monospace"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="Ingredients"
+        android:textColor="#000000"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <ListView
         android:id="@+id/ingredientsView"
         android:layout_width="418dp"
-        android:layout_height="200dp"
-        android:layout_below="@id/scrollView"
+        android:layout_height="150dp"
+        android:layout_below="@id/ingredientsTitle"
         android:listSelector="@android:color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -168,11 +182,18 @@
 
     </ListView>
 
+    <View
+        android:id="@+id/myRect3"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/ingredientsView"
+        android:background="@drawable/rectangle"/>
+
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="410dp"
-        android:layout_height="168dp"
-        android:layout_marginTop="366dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myRect3"
         android:stretchColumns="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/scrollView"
@@ -183,7 +204,15 @@
             <TextView
                 android:layout_column="1"
                 android:text="Nutritional Information"
-                android:textStyle="bold" />
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:lineSpacingExtra="8sp"
+                android:shadowColor="@color/text_shadow"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:textColor="#000000"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow>
@@ -191,17 +220,23 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Calories" />
+                android:text="Calories"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/ENERC_KCAL"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/ENERC_KCALunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
@@ -210,17 +245,23 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Fat" />
+                android:text="Fat"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/FAT"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/FATunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
@@ -229,17 +270,23 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Carbs" />
+                android:text="Carbs"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/CHOCDF"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/CHOCDFunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
@@ -248,17 +295,23 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Fiber" />
+                android:text="Fiber"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/FIBTG"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/FIBTGunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
@@ -267,17 +320,23 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Sugar" />
+                android:text="Sugar"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/SUGAR"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/SUGARunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
@@ -286,20 +345,66 @@
             <TextView
                 android:layout_column="1"
                 android:padding="3dip"
-                android:text="Protein" />
+                android:text="Protein"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/PROCNT"
                 android:layout_column="2"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/PROCNTunit"
                 android:layout_column="3"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
 
         </TableRow>
 
     </TableLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/add"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7.5dp"
+        android:text="Add"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/website"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7.5dp"
+        android:text="Website"/>
+
+    <Button
+        android:id="@+id/steps"
+        style="?android:attr/buttonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="7.5dp"
+        android:text="Cooking Steps"/>
+
+    <View
+        android:id="@+id/myRect4"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/tableLayout"
+        android:layout_marginTop="7dp"
+        android:layout_height="10dp"
+        android:background="@drawable/rectangle"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

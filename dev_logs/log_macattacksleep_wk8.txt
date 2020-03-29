@@ -1,0 +1,3 @@
+2.5hrs
+-refactoring of code
+-adding developers to options menu
