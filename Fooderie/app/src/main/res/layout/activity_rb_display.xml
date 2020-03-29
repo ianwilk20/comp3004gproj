@@ -166,7 +166,7 @@
         android:shadowRadius="2"
         android:text="Ingredients"
         android:textColor="#000000"
-        android:textSize="22sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
@@ -212,7 +212,7 @@
                 android:shadowDy="1"
                 android:shadowRadius="2"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow>
