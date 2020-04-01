@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.List;
 import fooderie.mealPlanner.views.mpPlanRecipeDisplayView;
 import fooderie.scheduler.models.Schedule;
 import fooderie.scheduler.models.ScheduleAndPlanWeek;
+import fooderie.scheduler.models.ScheduleNotification;
+import fooderie.scheduler.viewModels.ScheduleHelperViewModel;
 import fooderie.scheduler.viewModels.WeeklyScheduleViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -107,9 +110,22 @@ public class sWeeklyScheduleFragment extends Fragment {
             if (l == -1 || m_scheduleToModify == null)
                 return;
 
+            // -- Update the schedule and set to null -- //
             m_scheduleToModify.setPlanWeekId(l);
             m_viewModel.updateSchedule(m_scheduleToModify);
             m_scheduleToModify = null;
+
+            // -- SCHEDULE NOTIFICATIONS FOR COOKING ASSISTANT -- //
+            ScheduleHelperViewModel sh = new ViewModelProvider(this).get(ScheduleHelperViewModel.class);
+            sh.getScheduleNotifications(getViewLifecycleOwner(), (List<ScheduleNotification> list) -> {
+                if (list.size() == 0) {
+                    Log.d("sWeeklyScheduleFragment", "NO DATA");
+                    return;
+                }
+                for (ScheduleNotification x : list) {
+                    Log.d("sWeeklyScheduleFragment", x.toString());
+                }
+            });
         }
     }
 

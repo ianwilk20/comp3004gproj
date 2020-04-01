@@ -20,6 +20,7 @@ import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.scheduler.models.Schedule;
 import fooderie.scheduler.models.ScheduleAndPlanWeek;
 import fooderie.recipeBrowser.models.Recipe;
+import fooderie.scheduler.models.ScheduleNotificationFromDao;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -42,6 +43,21 @@ public interface FooderieDao {
     LiveData<List<ScheduleAndPlanWeek>> getAllSchedules();
     @Query("SELECT * FROM table_Schedule")
     List<Schedule> getAllSchedulesNonLiveData();
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT pd.name as pd_name, pd.recipeCount as pd_recipeCount, " +
+            "pm.name as pm_name, pm.hour as pm_hour, pm.minute as pm_minute, pm.recipeCount as pm_recipeCount, pm.`order` as pm_order, " +
+            "s.planWeekId as s_planWeekId, s.weekOfYearId as s_weekOfYearId " +
+            "FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+            "WHERE s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId")
+    LiveData<List<ScheduleNotificationFromDao>> getScheduleNotificationFromDao();
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("SELECT pd.name as pd_name, pd.recipeCount as pd_recipeCount, " +
+            "pm.name as pm_name, pm.hour as pm_hour, pm.minute as pm_minute, pm.recipeCount as pm_recipeCount, pm.`order` as pm_order, " +
+            "s.planWeekId as s_planWeekId, s.weekOfYearId as s_weekOfYearId " +
+            "FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
+            "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId " +
+            "AND pm.parentId == pd.planId")
+    LiveData<List<ScheduleNotificationFromDao>> getScheduleNotificationFromDao(Long weekNum);
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe dao interactions */
     @Insert
@@ -107,10 +123,6 @@ public interface FooderieDao {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_PlanRecipe pr, table_Recipe r WHERE pr.parentId == :id AND pr.recipeId == r.recipe_id")
     LiveData<List<Recipe>> getRecipes(Long id);
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm " +
-            "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId")
-    LiveData<List<PlanMeal>> getNextWeeksMeals(Long weekNum);
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM table_Schedule s, table_PlanWeek pw, table_PlanDay pd, table_PlanMeal pm, table_PlanRecipe pr, table_Recipe r " +
             "WHERE s.weekOfYearId == :weekNum AND s.planWeekId == pw.planId AND pd.parentId == pw.planId AND pm.parentId == pd.planId " +

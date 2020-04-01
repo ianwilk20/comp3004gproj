@@ -18,6 +18,8 @@ import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.scheduler.models.Schedule;
 import fooderie.scheduler.models.ScheduleAndPlanWeek;
 import fooderie.recipeBrowser.models.Recipe;
+import fooderie.scheduler.models.ScheduleNotificationFromDao;
+import fooderie.scheduler.viewModels.ScheduleHelperViewModel;
 
 
 public class FooderieRepository {
@@ -37,15 +39,14 @@ public class FooderieRepository {
             fooderieDao.update(s);
         });
     }
-    public LiveData<List<PlanMeal>> getNextWeeksMeals() {
-        return fooderieDao.getNextWeeksMeals(getNextWeekId());
+    public LiveData<List<ScheduleNotificationFromDao>> getScheduleNotificationFromDao() {
+        return fooderieDao.getScheduleNotificationFromDao();
+    }
+    public LiveData<List<ScheduleNotificationFromDao>> getScheduleNotificationFromDao(Long id) {
+        return fooderieDao.getScheduleNotificationFromDao(id);
     }
     public LiveData<List<Recipe>> getNextWeeksRecipes() {
-        return fooderieDao.getNextWeeksRecipes(getNextWeekId());
-    }
-    private Long getNextWeekId() {
-        Calendar c = Calendar.getInstance();
-        return (Long) Integer.toUnsignedLong((c.get(Calendar.WEEK_OF_YEAR )+ 1) % 53);
+        return fooderieDao.getNextWeeksRecipes(ScheduleHelperViewModel.getNextWeekId());
     }
 
     /* Entity=PlanWeek, PlanDay, PlanMeal, PlanRecipe, repository interactions */
