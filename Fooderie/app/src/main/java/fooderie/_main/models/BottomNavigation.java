@@ -68,8 +68,7 @@ public class BottomNavigation {
                 default:
                     intent = new Intent(activity, MainActivity.class);
             }
-
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
 
             int anim = (index - selectedIndex > 0) ? R.anim.slide_in_left : R.anim.slide_in_right;
