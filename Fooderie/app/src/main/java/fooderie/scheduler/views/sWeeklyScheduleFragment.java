@@ -170,10 +170,8 @@ public class sWeeklyScheduleFragment extends Fragment {
 
                     long timeInMillis = c.getTimeInMillis();
                     if (startDay.getTimeInMillis() <= timeInMillis && timeInMillis < endDay.getTimeInMillis())    //If within the next week, use the time
-                    {
-                        timeInMillis = System.currentTimeMillis();
                         ScheduleNextWeekNotifications(sn, timeInMillis);
-                    }
+
                 }
             });
 
@@ -183,27 +181,10 @@ public class sWeeklyScheduleFragment extends Fragment {
 
     private void ScheduleNextWeekNotifications(ScheduleNotification sn, Long timeInMillis)
     {
-        /*
-        //Intent intent = new Intent(m_activity, ReminderBroadcast.class);
-        Intent intent = new Intent(getActivity().getBaseContext(), BroadcastReceiver.class);
-        int requestID = (int) System.currentTimeMillis();
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-
-        long timeAtClick = System.currentTimeMillis();
-        long addTime = 1000 * 10;
-
-        //Add our new alarm
-        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtClick + addTime, pendingIntent);*/
-
-
         String title = "Fooderie Meal Plan Reminder";
         String description = "Reminder to start cooking your meal plan!";
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Create our notification builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "channel1")
                 .setContentTitle(title)
                 .setContentText(description)
@@ -214,32 +195,23 @@ public class sWeeklyScheduleFragment extends Fragment {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 
+        //Create our pending intent for where we want the notification to return
         Intent intent = new Intent(getContext(), MainActivity.class);
         PendingIntent pendIntent = PendingIntent.getActivity(getContext(), timeInMillis.intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendIntent);
-
         Notification notification = builder.build();
 
+        //Created the notification to be used later
         Intent notificationIntent = new Intent(getContext(), ReminderBroadcast.class);
         notificationIntent.putExtra(ReminderBroadcast.NOTIFICATION_ID, timeInMillis);
         notificationIntent.putExtra(ReminderBroadcast.NOTIFICATION, notification);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), timeInMillis.intValue(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        /*
+        //Set our notification in the future using the alarm manager, using the time for the alarm to override and not create multiple notifications for the same time
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timeInMillis, pendingIntent);
-        */
-        long futureInMillis = System.currentTimeMillis() + 10000;
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
-        Date d = new Date(futureInMillis);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
 
-
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
-
-        Toast.makeText(getActivity(), d.toString(), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(getActivity(), "Reminders set for " + futureInMillis + "\n" + sn.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Reminders set for " + sn.toString(), Toast.LENGTH_SHORT).show();
     }
 
 
