@@ -1,0 +1,7 @@
+2.5hrs
+-refactoring of code
+-adding developers to options menu
+
+4hrs
+-working on d3 document
+
