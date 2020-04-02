@@ -1,0 +1,19 @@
+COMP3004 Dev Log - Week #9
+Michael Ting - 101068936
+
+Overview: 
+This week was dedicated towards finishing the post notifications for when meals should start being prepared
+
+Weekly Progress:
+[2 hr]
+- Research and various test attempts, utltimately deciding on the alarm manager to trigger the notifications
+
+
+
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+

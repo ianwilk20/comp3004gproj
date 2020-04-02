@@ -15,8 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
 
 import fooderie._main.models.BottomNavigation;
+import fooderie._main.models.FooderieDao;
+import fooderie._main.models.FooderieRepository;
 import fooderie.groceryList.views.GroceryListView;
 import fooderie._main.models.NotificationHelper;
 import fooderie.options.OptionsActivity;
@@ -46,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         NotificationHelper nh = new NotificationHelper(this);
         nh.InitMealPlannerNotification();
+
+        //Schedule meal plan
+        FooderieRepository repo = new FooderieRepository(getApplication());
+
+        LiveData<List<PlanMeal>> myObject = repo.getNextWeeksMeals();
+        myObject.observe(this, (List<PlanMeal> meals) ->
+        {
+            nh.ScheduleNextWeekNotifications(meals, this);
+        });
+
     }
 
     @Override
