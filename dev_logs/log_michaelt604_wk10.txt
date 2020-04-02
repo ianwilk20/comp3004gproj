@@ -1,4 +1,4 @@
-COMP3004 Dev Log - Week #9
+COMP3004 Dev Log - Week #10
 Michael Ting - 101068936
 
 Overview: 
@@ -8,8 +8,13 @@ Weekly Progress:
 [2 hr]
 - Research and various test attempts, utltimately deciding on the alarm manager to trigger the notifications
 
+[3 hr]
+- Code polishing
 
-
+[7 hr]
+- Push notification implementation
+- Difficulities with multiple push notifications
+- Solved using the timeinmills for each date as the id
 
 [0.5 Hr]
 - Reviewed and approved vairous group member merges
