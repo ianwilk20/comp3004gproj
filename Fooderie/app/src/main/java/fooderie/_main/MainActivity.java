@@ -51,16 +51,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         NotificationHelper nh = new NotificationHelper(this);
         nh.InitMealPlannerNotification();
-
-        //Schedule meal plan
-        FooderieRepository repo = new FooderieRepository(getApplication());
-
-        LiveData<List<PlanMeal>> myObject = repo.getNextWeeksMeals();
-        myObject.observe(this, (List<PlanMeal> meals) ->
-        {
-            nh.ScheduleNextWeekNotifications(meals, this);
-        });
-
     }
 
     @Override

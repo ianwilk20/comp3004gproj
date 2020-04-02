@@ -109,8 +109,6 @@ public class NotificationHelper {
 
         long timeInMil2 = c.getTimeInMillis();
 
-
-
         //Intent intent = new Intent(m_activity, ReminderBroadcast.class);
         Intent intent = new Intent(m_activity.getBaseContext(), MainActivity.class);
         int requestID = (int) System.currentTimeMillis();

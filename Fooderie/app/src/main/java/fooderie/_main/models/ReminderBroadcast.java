@@ -1,5 +1,7 @@
 package fooderie._main.models;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +21,7 @@ public class ReminderBroadcast extends BroadcastReceiver
     String description = "Reminder to start cooking your meal plan!";
 
     PendingIntent pendingIntent;
-
+    /*
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -35,5 +37,19 @@ public class ReminderBroadcast extends BroadcastReceiver
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
+    }*/
+
+    public static String NOTIFICATION_ID = "notification_id";
+    public static String NOTIFICATION = "notification";
+
+    @Override
+    public void onReceive(final Context context, Intent intent)
+    {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification notification = intent.getParcelableExtra(NOTIFICATION);
+        int notificationId = intent.getIntExtra(NOTIFICATION_ID, 0);
+        notificationManager.notify(notificationId, notification);
     }
 }
+
