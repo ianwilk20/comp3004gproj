@@ -2,19 +2,30 @@ COMP3004 Dev Log - Week #10
 Michael Ting - 101068936
 
 Overview: 
-This week was dedicated towards finishing the post notifications for when meals should start being prepared
+This week was dedicated towards finishing the post notifications for when meals should start 
+being prepared. This implements using multiple push notifications concurrently scheduled in the future
 
 Weekly Progress:
 [2 hr]
-- Research and various test attempts, utltimately deciding on the alarm manager to trigger the notifications
+- Code polishing, fixed some visual issues as well as various group member suggestions such as 
+  rewiring the back button for the meal planner to not exit out of the app
 
-[3 hr]
-- Code polishing
+[2 hr]
+- Research and various test attempts, utltimately deciding on an alarm manager to trigger 
+  the notifications in the future
 
 [7 hr]
 - Push notification implementation
-- Difficulities with multiple push notifications
-- Solved using the timeinmills for each date as the id
+- Created a broadcast reciever class to deal with broadcasting the future notifications
+- Utilized the alarm manager to call the broadcast receiver at the appropriate time to trigger
+  the notifications in the future
+- Implemented a singlular push notifications in the future, difficulties with concurrent notifications
+- Utilized unique output ids for the pending intent for future notifications so the notifications
+  weren't getting overridden during new additional notifications.
+
+[2 hr]
+- D4 writeup
+- D4 demo practice
 
 [0.5 Hr]
 - Reviewed and approved vairous group member merges
