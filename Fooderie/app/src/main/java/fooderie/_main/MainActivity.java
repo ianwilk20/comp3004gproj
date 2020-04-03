@@ -15,8 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
 
 import fooderie._main.models.BottomNavigation;
+import fooderie._main.models.FooderieDao;
+import fooderie._main.models.FooderieRepository;
 import fooderie.groceryList.views.GroceryListView;
 import fooderie._main.models.NotificationHelper;
 import fooderie.options.OptionsActivity;

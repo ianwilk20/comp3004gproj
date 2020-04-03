@@ -1,0 +1,24 @@
+COMP3004 Dev Log - Week #10
+Michael Ting - 101068936
+
+Overview: 
+This week was dedicated towards finishing the post notifications for when meals should start being prepared
+
+Weekly Progress:
+[2 hr]
+- Research and various test attempts, utltimately deciding on the alarm manager to trigger the notifications
+
+[3 hr]
+- Code polishing
+
+[7 hr]
+- Push notification implementation
+- Difficulities with multiple push notifications
+- Solved using the timeinmills for each date as the id
+
+[0.5 Hr]
+- Reviewed and approved vairous group member merges
+
+[0.5 Hr]
+- Wrote Dev Logs
+
