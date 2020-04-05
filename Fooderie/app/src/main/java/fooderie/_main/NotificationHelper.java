@@ -1,4 +1,4 @@
-package fooderie._main.models;
+package fooderie._main;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import fooderie._main.models.FooderieRepository;
 import fooderie.groceryList.views.GroceryListView;
 import fooderie.mealPlanner.models.PlanWeek;
 import fooderie.mealPlanner.views.mpPlanRecipeDisplayView;

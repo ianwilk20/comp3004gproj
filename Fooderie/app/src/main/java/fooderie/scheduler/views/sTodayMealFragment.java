@@ -1,4 +1,4 @@
-package fooderie.mealPlanner.views;
+package fooderie.scheduler.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import java.util.List;
 import androidx.recyclerview.widget.SnapHelper;
 import fooderie.CookingAssistant.views.CookingAssistantPreview;
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.viewModels.TodayMealViewModel;
+import fooderie.scheduler.viewModels.TodayMealViewModel;
 import fooderie.recipeBrowser.models.Recipe;
 
 /**
@@ -33,7 +33,7 @@ import fooderie.recipeBrowser.models.Recipe;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class mpTodayMealFragment extends Fragment {
+public class sTodayMealFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private TodayMealViewModel m_viewModel;
 
@@ -43,12 +43,12 @@ public class mpTodayMealFragment extends Fragment {
         void onListFragmentInteraction(PlanMeal meal);
     }
 
-    public mpTodayMealFragment() {
+    public sTodayMealFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static mpTodayMealFragment newInstance(int columnCount) {
-        mpTodayMealFragment fragment = new mpTodayMealFragment();
+    public static sTodayMealFragment newInstance(int columnCount) {
+        sTodayMealFragment fragment = new sTodayMealFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

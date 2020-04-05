@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import fooderie._main.models.BottomNavigation;
+import fooderie._main.BottomNavigation;
 import fooderie.groceryList.VolleySingleton;
 import fooderie.groceryList.models.IngredientNotFoundException;
 import fooderie.groceryList.models.UserGroceryListItem;

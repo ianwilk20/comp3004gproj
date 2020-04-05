@@ -1,11 +1,10 @@
-package fooderie.mealPlanner.views;
+package fooderie.scheduler.views;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import fooderie.recipeBrowser.models.Recipe;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

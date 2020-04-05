@@ -20,7 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 import android.view.View;
 
-import fooderie._main.models.BottomNavigation;
+import fooderie._main.BottomNavigation;
 import fooderie.options.OptionsActivity;
 import com.example.fooderie.R;
 import com.google.gson.Gson;
