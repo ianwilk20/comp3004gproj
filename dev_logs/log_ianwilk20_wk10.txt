@@ -12,9 +12,31 @@ Monday, March 23, 2020 to Sunday, March 29, 2020
 	- Followed a similar style to my Grocery List View for the RB Search
 	- For youtube video 
 
- - [3 Hr] D4 Video Creation
+ - [8 Hr] D4 Video Creation
 	- Created an After Effects project for our video
 	- Have taken screenshots of the application to utilize in the app video
+
+ - [0.5 Hr] Nav Bar Fix
+	- Bug that was causing the last item of grocery list if it filled the screen to be hidden completely
+	- Resized margins for the list view so it caps out before nav bar
+	
+ - [3 Hr] Enabling Ingredient Choices
+	- Revised how the user goes about adding ingredients to their list from the "Find Ingredients" pop-up
+	- Previously it would take whatever was the first result in the db or API and use that as the ingredient selected
+	- Not bad since users could edit the ingredient name, but time consuming for them and not very usable
+	- Ex. if I searched for "Pop Chips" and I had "Pop" in the database as a food that I got back from the API previously it would conside Pop similar to Pop Chips and use
+	that as the ingredient
+	
+	- Now when the user goes to add ingredients via the "Find Ingredients" pop-up and the search for something options will be displayed if:
+		- We find ingredients similar in our db
+		- We find ingredients similar in the API
+	- But it will not show options if the ingredient is not found and we are fabricating that for the user
+	
+	- Also in this changeset is if the user is in offline mode, we will still show options if we find ingredients similar in our db, but if we don't it'll just fabricate the item they
+	entered
+	
+ - [1 Hr] Investigated Scroll Issue
+	- Not a foreseeable fix to scroll issue due to the nature of it being something that happens when notifyDataSetChanged() is called
 
  - [0.5 Hr] Reviewing and Accepting PR's
  - [0.5 Hr] Log Writing

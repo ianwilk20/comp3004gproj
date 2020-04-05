@@ -7,19 +7,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 
+import fooderie._main.BottomNavigation;
 import fooderie.recipeBrowser.models.Recipe;
 
 
 public class CookingAssistantPreview extends AppCompatActivity
 {
     private Button startButton;
-    //private TextView ingridentText;
+    private TextView title;
     private ListView ingridentList;
     public static final int REQUEST_CODE = 1;
 
@@ -38,6 +40,11 @@ public class CookingAssistantPreview extends AppCompatActivity
         ImageView recipeImage = findViewById(R.id.imgPreview);
         Picasso.get().load(selected.image).into(recipeImage);
 
+        //Get recipe name
+        title = findViewById(R.id.recipeTitle);
+        title.setText(selected.getLabel());
+
+
         //Ingredients list
         ingridentList = findViewById(R.id.ingridentView);
         ArrayAdapter<String> rbArrAdapt = new ArrayAdapter(CookingAssistantPreview.this, android.R.layout.simple_list_item_1, selected.theIngredients);
@@ -51,6 +58,9 @@ public class CookingAssistantPreview extends AppCompatActivity
                 goToSteps(selected);
             }
         });
+
+        BottomNavigation navigation = new BottomNavigation(this, 1);
+
     }
 
     //Redirect to CookingAssistantViewer activity

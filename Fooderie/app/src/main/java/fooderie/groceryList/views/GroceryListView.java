@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -21,8 +22,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -45,6 +50,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -76,6 +82,7 @@ public class GroceryListView extends AppCompatActivity {
     ProgressDialog mealPlanAddProgressDialog;
     ProgressDialog noInternetDialog;
     AlertDialog ingredientNotFoundDialog;
+    AlertDialog addItemDialog;
 
     String foodApiDomainNPath = "https://api.edamam.com/api/food-database/parser";
     String queryParams;
@@ -140,7 +147,7 @@ public class GroceryListView extends AppCompatActivity {
             shoppingModeBanner.setVisibility(View.VISIBLE);
             AlertDialog.Builder finalDialog = new AlertDialog.Builder(GroceryListView.this)
                     .setTitle("Shopping Mode Enabled")
-                    .setMessage("Shopping mode is enabled because you are not connected to the internet. Please note that we cannot verify the validity of ingredients unless they are added with an active internet connection.")
+                    .setMessage("Shopping mode is enabled because no internet connection was detected.")
                     .setCancelable(true)
                     .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -300,17 +307,16 @@ public class GroceryListView extends AppCompatActivity {
                                 String foodId = "food_" + UUID.randomUUID().toString();
                                 UserGroceryListItem fabricatedItem = new UserGroceryListItem(foodId, s);
                                 fabricatedItem.setNotes("From Your Weekly Meal Plan");
-                                groceryListViewModel.insert(fabricatedItem);
+                                groceryListViewModel.insertGroceryItem(fabricatedItem);
                                 continue;
                             } //Found match in grocery list will add duplicate
 
                             //Otherwise check if it's in the food table
-                            Food itemFromDB = null; //Search DB
+                            List<Food> itemFromDB = null; //Search DB
                             itemFromDB = FetchIngredientByLabelFromDB(s);
-                            if (itemFromDB != null) { //Found in Food DB will use that object
-                                UserGroceryListItem fabricatedItem = new UserGroceryListItem(itemFromDB.foodId, itemFromDB.label);
-                                fabricatedItem.setNotes("From Your Week Meal Plan");
-                                groceryListViewModel.insert(fabricatedItem);
+                            if (itemFromDB != null  && itemFromDB.size() != 0) { //Found in Food DB will use that object
+                                UserGroceryListItem newItem = new UserGroceryListItem(itemFromDB.get(0).foodId, itemFromDB.get(0).label);
+                                groceryListViewModel.insertGroceryItem(newItem);
                                 continue;
                             }
 
@@ -318,7 +324,7 @@ public class GroceryListView extends AppCompatActivity {
                                 String foodId = "food_" + UUID.randomUUID().toString();
                                 UserGroceryListItem item = new UserGroceryListItem(foodId, s);
                                 item.setNotes("From Your Week Meal Plan");
-                                groceryListViewModel.insert(item);
+                                groceryListViewModel.insertGroceryItem(item);
                             } else {
                                 // Fetch From API if not there...
                                 // Create our own entry into GroceryList Table fabricating food_id
@@ -382,27 +388,19 @@ public class GroceryListView extends AppCompatActivity {
                 progressDialog.show();
                 String query = grocerySearch.getQuery().toString();
                 if (query.length()>= 1 && query != null){
-                    //Try to find in grocery list (maybe trying to add a duplicate)
-                    List<UserGroceryListItem> ugiFromDB = FetchIngredientFromGroceryList(query);
-                    if (ugiFromDB != null && ugiFromDB.size() != 0 && ugiFromDB.get(0) != null){
-                        String newFoodId = ugiFromDB.get(0).getFood_id() + UUID.randomUUID().toString();
-                        UserGroceryListItem alteredIngredient = new UserGroceryListItem(newFoodId, ugiFromDB.get(0).getFood_name());
-                        groceryListViewModel.insert(alteredIngredient);
-                        return;
-                    }
 
                     //Try to find ingredient by label in our Food Table in DB
-                    Food foodReturnedFromDB = FetchIngredientByLabelFromDB(query);
-                    if (foodReturnedFromDB != null) {
-                        UserGroceryListItem newItem = new UserGroceryListItem(foodReturnedFromDB.foodId, foodReturnedFromDB.label);
-                        groceryListViewModel.insert(newItem);
+                    List<Food> foodReturnedFromDB = FetchIngredientByLabelFromDB(query);
+                    if (foodReturnedFromDB != null && foodReturnedFromDB.size() != 0) {
+                        ArrayList<Food> fromDB = new ArrayList<>(foodReturnedFromDB);
+                        createIngredientOptionsDialogAndInsert(fromDB);
                         return;
                     }
                     if (!isNetworkAvailable()){
                         String foodId = "food_" + UUID.randomUUID().toString();
                         UserGroceryListItem fabricatedItem = new UserGroceryListItem(foodId, query);
                         fabricatedItem.setNotes("Added through shopping mode");
-                        groceryListViewModel.insert(fabricatedItem);
+                        groceryListViewModel.insertGroceryItem(fabricatedItem);
                     } else {
                         //If not in our DB get it from the API, save to Food table in DB and insert first occurrence into Grocery List
                         FetchIngredientFromAPI(query); //Get Ingredients from API and save to DB
@@ -431,10 +429,10 @@ public class GroceryListView extends AppCompatActivity {
         builder.show();
     }
 
-    public Food FetchIngredientByLabelFromDB(String ingredient) {
+    public List<Food> FetchIngredientByLabelFromDB(String ingredient) {
         GetFoodByLabelAsyncTask getFoodByLabel = new GetFoodByLabelAsyncTask();
         getFoodByLabel.execute(ingredient);
-        Food fromDB = null;
+        List<Food> fromDB = null;
         try {
             fromDB = getFoodByLabel.get();
         } catch (ExecutionException e) {
@@ -495,18 +493,20 @@ public class GroceryListView extends AppCompatActivity {
                             }
 
                             Gson gson = new GsonBuilder().create();
+                            ArrayList<Food> itemsReturned = new ArrayList<Food>();
 
                             for (int i = 0; i < hintsIngredientsArray.length(); i++){
                                 JSONObject ingredientParsed = hintsIngredientsArray.getJSONObject(i); //Gets the element returned at i position in the "hints" array
                                 String stringRepOfFoodObj = ingredientParsed.getString("food");
                                 Food f = gson.fromJson(stringRepOfFoodObj, Food.class);
                                 f.label = WordUtils.capitalizeFully(f.getLabel());
-                                groceryListViewModel.insert(f); //insert Food into DB
-                                if (i == 0){
-                                    UserGroceryListItem firstItem = new UserGroceryListItem(f.foodId, f.label);
-                                    groceryListViewModel.insert(firstItem); //insert first item into Grocery List DB
-                                }
+                                groceryListViewModel.insertFood(f); //insert Food into DB
+                                itemsReturned.add(f);
                             }
+                            progressDialog.dismiss();
+
+                            createIngredientOptionsDialogAndInsert(itemsReturned);
+
                             return;
 
                         } catch (IngredientNotFoundException ne){
@@ -532,8 +532,8 @@ public class GroceryListView extends AppCompatActivity {
                     }
                 });
 
-        requestQueue.add(objectReq);
-        objectReq.setRetryPolicy(new DefaultRetryPolicy(
+                requestQueue.add(objectReq);
+                objectReq.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
@@ -565,24 +565,26 @@ public class GroceryListView extends AppCompatActivity {
                                 String foodId = "food_" + UUID.randomUUID().toString();
                                 UserGroceryListItem item = new UserGroceryListItem(foodId, ingredient);
                                 item.setNotes("From Your Week Meal Plan");
-                                groceryListViewModel.insert(item);
+                                groceryListViewModel.insertGroceryItem(item);
                             }
 
                             Gson gson = new GsonBuilder().create();
-                            UserGroceryListItem firstItem = null;
+                            UserGroceryListItem firstItem = new UserGroceryListItem("", "");
 
                             for (int i = 0; i < hintsIngredientsArray.length(); i++){
                                 JSONObject ingredientParsed = hintsIngredientsArray.getJSONObject(i); //Gets the element returned at i position in the "hints" array
                                 String stringRepOfFoodObj = ingredientParsed.getString("food");
                                 Food f = gson.fromJson(stringRepOfFoodObj, Food.class);
                                 f.label = WordUtils.capitalizeFully(f.getLabel());
-                                groceryListViewModel.insert(f); //insert Food into DB
+                                groceryListViewModel.insertFood(f); //insert Food into DB
                                 if (i == 0){
                                     firstItem = new UserGroceryListItem(f.foodId, f.label);
                                     firstItem.setNotes("From Your Weekly Meal Plan");
-                                    groceryListViewModel.insert(firstItem); //insert first item into Grocery List DB
+                                    groceryListViewModel.insertGroceryItem(firstItem); //insert first item into Grocery List DB
                                 }
                             }
+
+
                             return;
                         }
                         catch (Exception e) {
@@ -599,12 +601,12 @@ public class GroceryListView extends AppCompatActivity {
                         String foodId = "food_" + UUID.randomUUID().toString();
                         UserGroceryListItem item = new UserGroceryListItem(foodId, ingredient);
                         item.setNotes("From Your Week Meal Plan");
-                        groceryListViewModel.insert(item);
+                        groceryListViewModel.insertGroceryItem(item);
                     }
                 });
 
-        requestQueue.add(objectReq);
-        objectReq.setRetryPolicy(new DefaultRetryPolicy(
+                requestQueue.add(objectReq);
+                objectReq.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
@@ -632,6 +634,37 @@ public class GroceryListView extends AppCompatActivity {
         });
     }
 
+    public void createIngredientOptionsDialogAndInsert(ArrayList<Food> listOfIngredient){
+        if(isAlertDialogShowing(addItemDialog)){return;}
+
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(GroceryListView.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View customView = inflater.inflate(R.layout.grocery_list_item_options, null, false);
+        listDialog.setView(customView);
+        listDialog.setTitle("Choose your ingredient");
+
+        addItemDialog = listDialog.create();
+
+        ListView listOptions = (ListView) customView.findViewById(R.id.ListOfItems);
+        ArrayAdapter<Food> adapter = new ArrayAdapter<Food>(GroceryListView.this, android.R.layout.simple_list_item_1, listOfIngredient);
+        listOptions.setAdapter(adapter);
+
+
+        listOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object foodSelected = parent.getAdapter().getItem(position);
+                Food f = (Food) foodSelected;
+                UserGroceryListItem item = new UserGroceryListItem(f.foodId, f.label);
+                groceryListViewModel.insertGroceryItem(item);
+                addItemDialog.dismiss();
+            }
+        });
+
+        addItemDialog.show();
+
+    }
+
     public boolean isAlertDialogShowing(AlertDialog alertDialog){
         if (alertDialog != null){
             return alertDialog.isShowing();
@@ -640,20 +673,20 @@ public class GroceryListView extends AppCompatActivity {
         }
     }
 
-    private class GetFoodByLabelAsyncTask extends AsyncTask<String, Void, Food>{
+    private class GetFoodByLabelAsyncTask extends AsyncTask<String, Void, List<Food>>{
 
         @Override
-        protected Food doInBackground(String... strings) {
+        protected List<Food> doInBackground(String... strings) {
             int count = strings == null ? 0 : strings.length;
             List<Food> foodFromDB = null;
             for (int i = 0; i < count; i++){
                 foodFromDB = groceryListViewModel.getFoodByLabel(strings[i]);
             }
 
-            if (foodFromDB != null && foodFromDB.size() != 0 && foodFromDB.get(0) != null){
-                return foodFromDB.get(0);
-            }
-            return null;
+//            if (foodFromDB != null && foodFromDB.size() != 0 && foodFromDB.get(0) != null){
+//                return foodFromDB;
+//            }
+            return foodFromDB;
         }
     }
 

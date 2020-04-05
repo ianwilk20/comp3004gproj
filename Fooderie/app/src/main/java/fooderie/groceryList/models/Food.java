@@ -47,4 +47,9 @@ public class Food {
         category = food_category;
         categoryLabel = food_categoryLabel;
     }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 }
