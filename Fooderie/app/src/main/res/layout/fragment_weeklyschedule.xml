@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/WeeklyScheduleDescriptionTitle"
-        tools:context="fooderie.mealPlanner.views.mpTodayMealFragment"
+        tools:context="fooderie.scheduler.views.sTodayMealFragment"
         tools:listitem="@layout/fragment_todaymeal_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

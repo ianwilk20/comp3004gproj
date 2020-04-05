@@ -1,4 +1,4 @@
-package fooderie.mealPlanner.viewModels;
+package fooderie.scheduler.viewModels;
 
 import android.app.Application;
 

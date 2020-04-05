@@ -1,0 +1,42 @@
+Development Log – Week #10
+Gavin Jackson, 101065531
+
+With the last week of development extended there was additional time to iron out more problems. The focus was on polishing and 
+regression testing, ensuring the application was working as desired. On top of that there was the push to complete the final 
+deliverable.
+
+Tuesday, March 24th, 2020
+    -	[0.25 Hr] Stopped navigation bar from being displayed when accessing the recipe browser from the meal planner.
+    -	[0.25 Hr] Fixed adding activities via new intents from navigation bar. Originally the meal planner was no longer 
+        getting recipes as it did not exist on the back stack.
+    -	[0.25 Hr] Fixed meal planner back button at top left. Button would close the app when pressed at the Week plan level, 
+        now app remains opened.
+    -	[1.0 Hr] Added navigation animation. Default animation was too extensive.
+        o	Clicking any activity on bottom nav bar now slides the screen in the correct direction.
+        o	Removed flashing click animation from nav bar (breaks during screen animation).
+    -	[0.5 Hr] Stopped navigation bar from being displayed when accessing Meal Planner in selection mode. Troubling 
+        visual bug (had to use View.GONE, rather than View.HIDE).
+    -	[0.25 Hr] Fixed notifications to make their own independent stacks when selected.
+    -	[1.0 Hr] Cleaned up application. Changed Nav bar colors, added meal planner title and options title 
+        (challenging to add to options activity due to it being a preference activity).
+
+Wednesday, April 1st, 2020
+    -	[3.0 Hr] Worked with room db to figure out how to map tables from the database, and their not unique column 
+        names, to a POJO object containing two embedded tables. Required prefix in POJO object and ‘as’ statement in 
+        query. Created the framework for retrieving the planned meals and their dates (for the purpose of making scheduled 
+        meal notifications)
+    -	[1.0 Hr] Changed retrieving of scheduled dates to grab all scheduled meals instead of single week. This should 
+        simplify the process of scheduling future meals.
+
+Thursday, April 2nd, 2020
+    -	[0.25 Hr] Fixed bottom navigation, & back button navigation, for greater usability. Now the application always 
+        goes back to main before closing. Required testing with multiply different intent flags, and physical page navigation 
+        testing to see if desired outcome was achieved.
+
+Saturday, April 3rd, 2020
+    -	[0.25 Hr] Relocated today’s meal fragment to scheduler. It made more logical sense. Broke the activity inside 
+        layouts and had to be resolved.
+    -	[0.25 Hr] Due to Thursday’s changes had to fix back stack navigation problem regarding Meal Planner, like 
+        Tuesday’s problem. Had to change the back stack to always contain main navigation page and one other navigation page.
+    -	[1.0 Hr] D4 Report Writing
+    -	[0.5 Hr] Log Writing

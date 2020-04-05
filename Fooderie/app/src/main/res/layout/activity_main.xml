@@ -39,7 +39,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/TodayMealFragment"
-                android:name="fooderie.mealPlanner.views.mpTodayMealFragment"
+                android:name="fooderie.scheduler.views.sTodayMealFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

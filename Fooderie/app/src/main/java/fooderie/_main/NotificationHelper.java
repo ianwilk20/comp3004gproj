@@ -1,7 +1,6 @@
-package fooderie._main.models;
+package fooderie._main;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,8 +19,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import fooderie._main.models.FooderieRepository;
 
-import fooderie._main.MainActivity;
+
 import fooderie.groceryList.views.GroceryListView;
 import fooderie.mealPlanner.models.PlanMeal;
 import fooderie.mealPlanner.models.PlanWeek;
@@ -30,34 +30,18 @@ import fooderie.scheduler.models.Schedule;
 import fooderie.scheduler.models.ScheduleAndPlanWeek;
 import fooderie.scheduler.views.sWeeklyScheduleFragment_Proxy;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TimePicker;
-import android.widget.Toast;
 import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
-import static fooderie._main.App.CHANNEL_1_ID;
 
 public class NotificationHelper {
     private AppCompatActivity m_activity;
     private FooderieRepository m_repo;
 
-    private NotificationManagerCompat notificationManager;
 
-
-    public NotificationHelper(AppCompatActivity activity) {
+    NotificationHelper(AppCompatActivity activity) {
         m_activity = activity;
         m_repo = new FooderieRepository(activity.getApplication());
-
-        notificationManager = NotificationManagerCompat.from(m_activity);
     }
 
     // -- [START] MEAL PLANNER NOTIFICATIONS -- //

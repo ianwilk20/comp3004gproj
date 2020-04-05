@@ -1,4 +1,4 @@
-package fooderie.mealPlanner.views;
+package fooderie.scheduler.views;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +13,9 @@ import android.widget.TextView;
 import com.example.fooderie.R;
 
 import fooderie.mealPlanner.models.PlanMeal;
-import fooderie.mealPlanner.viewModels.TodayMealViewModel;
+import fooderie.scheduler.viewModels.TodayMealViewModel;
 import fooderie.recipeBrowser.models.Recipe;
 
-import java.security.acl.Owner;
 import java.util.List;
 import java.util.function.Function;
 

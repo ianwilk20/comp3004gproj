@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.example.fooderie.R;
 
 import androidx.appcompat.app.AppCompatActivity;
-import fooderie._main.models.BottomNavigation;
+import fooderie._main.BottomNavigation;
 
 public class OptionsActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package fooderie._main.models;
+package fooderie._main;
 
 import android.content.Intent;
 import android.view.Menu;
@@ -10,7 +10,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import fooderie._main.MainActivity;
 import fooderie.groceryList.views.GroceryListView;
 import fooderie.mealPlanner.views.mpPlanRecipeDisplayView;
 import fooderie.options.OptionsActivity;
@@ -68,11 +67,15 @@ public class BottomNavigation {
                 default:
                     intent = new Intent(activity, MainActivity.class);
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
 
             int anim = (index - selectedIndex > 0) ? R.anim.slide_in_left : R.anim.slide_in_right;
             activity.overridePendingTransition(anim, anim);
+
+            // -- In the event that the user is not on the home screen, make sure to close the activity --//
+            if (index != 2)
+                activity.finish();
 
             return false;
         }

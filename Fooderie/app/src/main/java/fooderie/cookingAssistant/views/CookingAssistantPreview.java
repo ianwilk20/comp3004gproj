@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fooderie.R;
 import com.squareup.picasso.Picasso;
 
-import fooderie._main.models.BottomNavigation;
+import fooderie._main.BottomNavigation;
 import fooderie.recipeBrowser.models.Recipe;
 
 
