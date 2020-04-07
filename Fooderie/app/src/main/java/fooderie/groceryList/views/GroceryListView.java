@@ -316,6 +316,7 @@ public class GroceryListView extends AppCompatActivity {
                             itemFromDB = FetchIngredientByLabelFromDB(s);
                             if (itemFromDB != null  && itemFromDB.size() != 0) { //Found in Food DB will use that object
                                 UserGroceryListItem newItem = new UserGroceryListItem(itemFromDB.get(0).foodId, itemFromDB.get(0).label);
+                                newItem.setNotes("From Your Weekly Meal Plan");
                                 groceryListViewModel.insertGroceryItem(newItem);
                                 continue;
                             }
